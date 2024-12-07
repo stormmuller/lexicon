@@ -1,0 +1,6 @@
+## Color pallete
+
+#091057
+#024CAA
+#EC8305
+#DBD3D3

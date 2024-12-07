@@ -1,0 +1,14 @@
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #091057;
+}
+
+#game {
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  position: absolute;
+}
