@@ -1,6 +1,6 @@
 import { common, game, rendering } from "@gameup/engine";
 import { createMainWorld } from "./create-main-world";
-import { WindowResizer } from "./setup/window-resizer";
+import { WindowResizer } from "./facorties/window-resizer";
 
 export async function createMainScene(wordTreeGame: game.Game) {
   const mainScene = new game.Scene("main");
@@ -21,9 +21,10 @@ export async function createMainScene(wordTreeGame: game.Game) {
   const windowResizer = new WindowResizer(
     mainWorld,
     wordTreeGame,
-    worldSpace,
+    // worldSpace,
     [...layerService.layers],
   );
+
 
   mainScene.registerUpdateable(mainWorld);
   mainScene.registerStoppable(mainWorld);

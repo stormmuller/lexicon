@@ -40,11 +40,6 @@ export class HoverSystem extends ecs.System {
       physics.BoxColliderComponent.symbol
     ) as physics.BoxColliderComponent;
 
-    // const normalizedMouseCoordinates = this._mouseCoordinates
-    //   .add(this._worldSpace.center) // Adjust to the center of the canvas
-    //   .divide(this._camera.zoom) // Scale down based on zoom
-    //   .add(this._cameraPosition); // Offset by camera position
-
     // Subtract the worldSpace center first
     let worldCoords = this._mouseCoordinates.subtract(this._worldSpace.center);
 
@@ -52,9 +47,7 @@ export class HoverSystem extends ecs.System {
     worldCoords = worldCoords.divide(this._camera.zoom);
 
     // Now invert the camera translation
-    worldCoords = worldCoords
-      .add(this._cameraPosition)
-      .add(this._worldSpace.center.divide(this._camera.zoom));
+    worldCoords = worldCoords.add(this._cameraPosition);
 
     if (
       interactiableComponent.state !== InteratiableState.hovered &&

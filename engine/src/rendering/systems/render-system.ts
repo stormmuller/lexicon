@@ -113,9 +113,10 @@ export class RenderSystem extends System {
 
     // Apply zoom and translate based on the camera position
     this._layer.context.scale(this._camera.zoom, this._camera.zoom);
+
     this._layer.context.translate(
-      -(this._cameraPosition.x + this._worldSpace.center.x / this._camera.zoom),
-      -(this._cameraPosition.y + this._worldSpace.center.y / this._camera.zoom),
+      -this._cameraPosition.x,
+      -this._cameraPosition.y,
     );
 
     // Translate to the position of the entity

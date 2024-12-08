@@ -7,6 +7,7 @@ export async function createLetter(
   y: number,
   text: string,
   fontSize: number,
+  name: string,
   fontColor: string = 'white',
   fontFamily: string = "Share Tech Mono",
 ) {
@@ -19,7 +20,7 @@ export async function createLetter(
     fontColor
   );
 
-  const entity = new ecs.Entity(`letter`, [
+  const entity = new ecs.Entity(name, [
     new common.PositionComponent(x, y),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(textRenderSource, layer.name),

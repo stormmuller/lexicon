@@ -1,3 +1,4 @@
+import { Space } from '../common';
 import { Vector2 } from '../math';
 import { ClearStrategy } from './types/clear-strategy.enum';
 
@@ -22,10 +23,10 @@ export class RenderLayer {
   resize = () => {
     this.context.canvas.width = window.innerWidth;
     this.context.canvas.height = window.innerHeight;
-    
+
     this.center = new Vector2(
       this.context.canvas.width / 2,
       this.context.canvas.height / 2,
     );
-  }
+  };
 }

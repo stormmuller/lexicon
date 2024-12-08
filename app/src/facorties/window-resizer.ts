@@ -1,40 +1,52 @@
-import { common, ecs, type game, rendering } from '@gameup/engine';
+import { common, ecs, type game, rendering } from "@gameup/engine";
 
 export class WindowResizer implements common.Stoppable {
   private _world: ecs.World;
   private _game: game.Game;
-  private _worldSpace: common.Space;
   private _layers: rendering.RenderLayer[];
 
   constructor(
     world: ecs.World,
     game: game.Game,
-    worldSpace: common.Space,
-    layers: rendering.RenderLayer[],
+    layers: rendering.RenderLayer[]
   ) {
     this._world = world;
     this._game = game;
-    this._worldSpace = worldSpace;
     this._layers = layers;
 
     this._game.onWindowResize.registerListener(this._windowResizeListener);
   }
 
   private _windowResizeListener = async () => {
-    this._worldSpace.setValue(window.innerWidth, window.innerHeight);
-
     const cameras = ecs.filterEntitiesByComponents(this._world.entities, [
       rendering.CameraComponent.symbol,
       common.PositionComponent.symbol,
     ]);
 
-    for (const camera of cameras) {
+    const cameraPositions = [];
+
+    for (let i = 0; i < cameras.length; i++) {
+      const camera = cameras[i];
+
       const cameraPosition = camera.getComponent(
-        common.PositionComponent.symbol,
+        common.PositionComponent.symbol
       ) as common.PositionComponent;
 
-      cameraPosition.x = -this._worldSpace.center.x / 2;
-      cameraPosition.y = -this._worldSpace.center.y / 2;
+      cameraPositions[i] = {
+        x: cameraPosition.x / window.innerWidth,
+        y: cameraPosition.y / window.innerHeight,
+      };
+    }
+
+    for (let i = 0; i < cameras.length; i++) {
+      const camera = cameras[i];
+
+      const cameraPosition = camera.getComponent(
+        common.PositionComponent.symbol
+      ) as common.PositionComponent;
+
+      cameraPosition.x = cameraPositions[i].x * window.innerWidth;
+      cameraPosition.y = cameraPositions[i].y * window.innerHeight;
     }
 
     for (const layer of this._layers) {

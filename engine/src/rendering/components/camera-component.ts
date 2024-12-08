@@ -6,7 +6,9 @@ export type CameraComponentOptions = {
   panSensitivity: number,
   minZoom: number,
   maxZoom: number,
-  isStatic: boolean
+  isStatic: boolean,
+  allowPanning: boolean,
+  allowZooming: boolean,
 }
 
 const defaultOptions: CameraComponentOptions = {
@@ -16,6 +18,8 @@ const defaultOptions: CameraComponentOptions = {
   maxZoom: 3,
   isStatic: false,
   zoom: 1,
+  allowPanning: true,
+  allowZooming: true
 } 
 
 export class CameraComponent implements Component {
@@ -26,6 +30,8 @@ export class CameraComponent implements Component {
   minZoom: number;
   maxZoom: number;
   isStatic: boolean;
+  allowPanning: boolean;
+  allowZooming: boolean;
 
   static symbol = Symbol('Camera');
 
@@ -46,5 +52,7 @@ export class CameraComponent implements Component {
     this.minZoom = mergedOptions.minZoom;
     this.maxZoom = mergedOptions.maxZoom;
     this.isStatic = mergedOptions.isStatic;
+    this.allowPanning = mergedOptions.allowPanning;
+    this.allowZooming = mergedOptions.allowZooming;
   }
 }

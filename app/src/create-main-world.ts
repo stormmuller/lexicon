@@ -1,8 +1,7 @@
 import { common, ecs, game, input, rendering } from "@gameup/engine";
-import { createCameras, createInputs, createLayers } from "./setup";
-import { createBlankTile } from "./setup/create-blank-tile";
-import { createLetter } from "./create-letter";
+import { createCameras, createInputs, createLayers } from "./facorties";
 import { HoverSystem } from "./board";
+import { createBoard } from "./facorties/create-board";
 
 export async function createMainWorld(
   worldSpace: common.Space,
@@ -14,8 +13,12 @@ export async function createMainWorld(
   const world = new ecs.World(game);
 
   const { worldCamera } = createCameras(world, worldSpace);
-  const { backgroundRenderLayer, foregroundRenderLayer, debugRenderLayer } =
-    createLayers(layerService);
+  const {
+    backgroundRenderLayer,
+    foregroundRenderLayer,
+    focusedRenderLayer,
+    debugRenderLayer,
+  } = createLayers(layerService);
   const inputs = createInputs(world);
   //   createAudio(world, "song-2.mp3");
 
@@ -36,6 +39,12 @@ export async function createMainWorld(
     worldSpace
   );
 
+  const focusedRenderSystem = new rendering.RenderSystem(
+    focusedRenderLayer,
+    worldCamera,
+    worldSpace
+  );
+
   const debugRenderSystem = new rendering.DebugRenderSystem(
     debugRenderLayer,
     worldCamera,
@@ -46,19 +55,12 @@ export async function createMainWorld(
 
   // const audioSystem = new audio.AudioSystem();
 
-  const gridSize = 20;
-  const tileSize = 128;
-  const padding = 16;
-
-  for (let x = 0; x < gridSize; x++) {
-    for (let y = 0; y < gridSize; y++) {
-      const calculatedX = x * (tileSize + padding);
-      const calculatedY = y * (tileSize + padding);
-      
-      await createBlankTile(imageCache, foregroundRenderLayer, world, calculatedX, calculatedY, `tile [${x};${y}]`);
-      await createLetter(foregroundRenderLayer, world, calculatedX, calculatedY, "W", 80);
-    }
-  }
+  await createBoard(
+    imageCache,
+    foregroundRenderLayer,
+    focusedRenderLayer,
+    world
+  );
 
   world.addSystems([
     inputSystem,
@@ -66,6 +68,7 @@ export async function createMainWorld(
     cameraSystem,
     backgroundRenderSystem,
     foregroundRenderSystem,
+    focusedRenderSystem,
     debugRenderSystem,
     hoverSystem,
     // audioSystem,
