@@ -1,6 +1,6 @@
 import { common, ecs, game, input, rendering } from "@gameup/engine";
 import { createCameras, createInputs, createLayers } from "./facorties";
-import { HoverSystem } from "./board";
+import { ChainSystem, HoverSystem } from "./board";
 import { createBoard } from "./facorties/create-board";
 
 export async function createMainWorld(
@@ -51,7 +51,8 @@ export async function createMainWorld(
     worldSpace
   );
 
-  const hoverSystem = new HoverSystem(worldCamera, worldSpace);
+  const hoverSystem = new HoverSystem(inputs, worldCamera, worldSpace);
+  const chainSystem = new ChainSystem(inputs, worldCamera, worldSpace);
 
   // const audioSystem = new audio.AudioSystem();
 
@@ -71,6 +72,7 @@ export async function createMainWorld(
     focusedRenderSystem,
     debugRenderSystem,
     hoverSystem,
+    chainSystem
     // audioSystem,
   ]);
 

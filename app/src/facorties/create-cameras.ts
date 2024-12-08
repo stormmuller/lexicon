@@ -6,7 +6,8 @@ export const createCameras = (world: ecs.World, worldSpace: common.Space) => {
     new rendering.CameraComponent({
       minZoom: 0.8,
       maxZoom: 1.7,
-      // allowPanning: false
+      allowPanning: false,
+      allowZooming: false,
     }),
     new common.PositionComponent(worldSpace.center.x, worldSpace.center.y),
   ]);

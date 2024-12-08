@@ -1,6 +1,7 @@
 import { common, ecs, math, physics, rendering } from "@gameup/engine";
 import { config } from "../game.config";
-import { InteractiableComponent } from "../board";
+import { ChainableComponent, HoverComponent, TileComponent } from "../board";
+import { createLetter } from "./create-letter";
 
 export async function createTile(
   letter: string,
@@ -18,31 +19,34 @@ export async function createTile(
 
   const calculatedX =
     x * (config.tileSize + config.padding) + xOffset + config.tileSize / 2;
-  const calculatedY = y * (config.tileSize + config.padding) + 100;
+  const calculatedY = y * (config.tileSize + config.padding) + config.yOffset;
 
-  const tileImage = await imageCache.getOrLoad("./Tile.png");
-  const tileHoverImage = await imageCache.getOrLoad("./Tile-hover.png");
-  const tileImageRenderSource = new rendering.ImageRenderSource(tileImage);
-  const tileHoverImageRenderSource = new rendering.ImageRenderSource(
-    tileHoverImage
-  );  
-  const textRenderSource = new rendering.TextRenderSource(
-    letter,
-    "Share Tech Mono",
-    60,
-    "white",
-    new math.Vector2(config.tileSize * 1.5 + config.padding, config.tileSize * 1.5 + config.padding)
-  );
-
-  const normalRenderSoruce = new rendering.CompositeRenderSource([tileImageRenderSource, textRenderSource]);
-  const hoverRenderSoruce = new rendering.CompositeRenderSource([tileHoverImageRenderSource, textRenderSource]);
+  const tileImageRenderSource =
+    await rendering.ImageRenderSource.fromImageCache(imageCache, "./Tile.png");
+  const tileHoverImageRenderSource =
+    await rendering.ImageRenderSource.fromImageCache(
+      imageCache,
+      "./Tile-hover.png"
+    );
+  const tileChainImageRenderSource =
+    await rendering.ImageRenderSource.fromImageCache(
+      imageCache,
+      "./Tile-chain.png"
+    );
 
   const boundingBox = new math.BoundingBox(
-    new math.Vector2(calculatedX - config.tileSize / 2, calculatedY - config.tileSize / 2),
+    new math.Vector2(
+      calculatedX - config.tileSize / 2,
+      calculatedY - config.tileSize / 2
+    ),
     new math.Vector2(config.tileSize, config.tileSize)
   );
 
   function onHoverStart(entity: ecs.Entity) {
+    const chainable = entity.getComponent<ChainableComponent>(
+      ChainableComponent.symbol
+    );
+
     const sprite = entity.getComponent(
       rendering.SpriteComponent.symbol
     ) as rendering.SpriteComponent;
@@ -51,12 +55,20 @@ export async function createTile(
       common.ScaleComponent.symbol
     ) as common.ScaleComponent;
 
-    sprite.renderSource = hoverRenderSoruce;
-    sprite.renderLayerName = focusedRenderLayer.name;
+
+    if (!chainable?.isPartOfChain) {
+      sprite.renderSource = tileHoverImageRenderSource;
+      sprite.renderLayerName = focusedRenderLayer.name;
+    }
+
     scale.set(scale.add(new math.Vector2(0.1, 0.1)));
   }
 
   function onHoverEnd(entity: ecs.Entity) {
+    const chainable = entity.getComponent<ChainableComponent>(
+      ChainableComponent.symbol
+    );
+
     const sprite = entity.getComponent(
       rendering.SpriteComponent.symbol
     ) as rendering.SpriteComponent;
@@ -65,25 +77,58 @@ export async function createTile(
       common.ScaleComponent.symbol
     ) as common.ScaleComponent;
 
-    sprite.renderSource = normalRenderSoruce;
-    sprite.renderLayerName = normalRenderLayer.name;
+    if (!chainable?.isPartOfChain) {
+      sprite.renderSource = tileImageRenderSource;
+      sprite.renderLayerName = normalRenderLayer.name;
+    }
+
     scale.set(scale.subtract(new math.Vector2(0.1, 0.1)));
   }
 
-  const entity = new ecs.Entity(`tile [${x};y${y}]`, [
+  function onAddedToChain(entity: ecs.Entity) {
+    const sprite = entity.getComponent(
+      rendering.SpriteComponent.symbol
+    ) as rendering.SpriteComponent;
+
+    sprite.renderSource = tileChainImageRenderSource;
+    sprite.renderLayerName = focusedRenderLayer.name;
+  }
+
+  function onRemovedFromChain(entity: ecs.Entity) {
+    const sprite = entity.getComponent(
+      rendering.SpriteComponent.symbol
+    ) as rendering.SpriteComponent;
+
+    sprite.renderSource = tileImageRenderSource;
+    sprite.renderLayerName = normalRenderLayer.name;
+  }
+
+  const tileEntity = new ecs.Entity(`tile [${x};y${y}]`, [
     new common.PositionComponent(calculatedX, calculatedY),
     new common.RotationComponent(0),
     new common.ScaleComponent(
-      config.tileSize / normalRenderSoruce.width,
-      config.tileSize / normalRenderSoruce.height
+      config.tileSize / tileImageRenderSource.width,
+      config.tileSize / tileImageRenderSource.height
     ),
     new rendering.SpriteComponent(
-      normalRenderSoruce,
+      tileImageRenderSource,
       normalRenderLayer.name
     ),
-    new InteractiableComponent(onHoverStart, onHoverEnd),
+    new TileComponent(letter, x, y),
+    new HoverComponent(onHoverStart, onHoverEnd),
     new physics.BoxColliderComponent(boundingBox),
+    new ChainableComponent(onAddedToChain, onRemovedFromChain),
   ]);
 
-  world.addEntity(entity);
+  world.addEntity(tileEntity);
+
+  await createLetter(
+    focusedRenderLayer,
+    world,
+    calculatedX,
+    calculatedY,
+    letter,
+    config.tileSize - 10,
+    `tile [${x};${y}]`
+  );
 }

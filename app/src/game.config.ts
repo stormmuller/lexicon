@@ -1,8 +1,9 @@
 export const config = {
   gridSize: {
-    x: 6,
-    y: 7
+    x: 7,
+    y: 8
   },
-  tileSize: 40,
-  padding: 5
+  tileSize: 35,
+  padding: 8,
+  yOffset: 50
 };
