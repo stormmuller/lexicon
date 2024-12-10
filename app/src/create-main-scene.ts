@@ -21,7 +21,6 @@ export async function createMainScene(wordTreeGame: game.Game) {
   const windowResizer = new WindowResizer(
     mainWorld,
     wordTreeGame,
-    // worldSpace,
     [...layerService.layers],
   );
 

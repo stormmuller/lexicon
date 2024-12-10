@@ -3,6 +3,6 @@ export type WindowResizeMessage = {
   height: number;
 };
 
-export function windowResizeMessageHandler(message: WindowResizeMessage) {
-  console.log(message)
+export function windowResizeMessageHandler() {
+  // console.log(message)
 }

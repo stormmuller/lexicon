@@ -1,6 +1,7 @@
 import "./createPost.js";
+import { getBoard } from "../server/get-board.js";
 
-import { Devvit, useState } from "@devvit/public-api";
+import { Devvit, useState, RedisClient } from "@devvit/public-api";
 
 // Defines the messages that are exchanged between Devvit and Web View
 type WebViewMessage =
@@ -31,13 +32,18 @@ Devvit.configure({
 
 // Add a custom post type to Devvit
 Devvit.addCustomPostType({
-  name: "Webview Example",
+  name: "Lexicon",
   height: "tall",
   render: (context) => {
     // Load username with `useAsync` hook
     const [username] = useState(async () => {
       const currUser = await context.reddit.getCurrentUser();
       return currUser?.username ?? "anon";
+    });
+
+    const [snoovatar] = useState(async () => {
+      const currUser = await context.reddit.getCurrentUser();
+      return (await currUser?.getSnoovatarUrl()) ?? "anon";
     });
 
     // Load latest counter from redis with `useAsync` hook
@@ -75,13 +81,17 @@ Devvit.addCustomPostType({
     };
 
     // When the button is clicked, send initial data to web view and show it
-    const onShowWebviewClick = () => {
+    const onShowWebviewClick = async (redis: RedisClient, postId: string) => {
       setWebviewVisible(true);
+
+      const board = await getBoard(redis, postId, { x: 7, y: 8 });
+
       context.ui.webView.postMessage("myWebView", {
-        type: "initialData",
+        type: "initial-data",
         data: {
           username: username,
-          currentCounter: counter,
+          score: counter,
+          board
         },
       });
     };
@@ -96,34 +106,42 @@ Devvit.addCustomPostType({
 
     // Render the custom post type
     return (
-      <vstack grow padding="small">
+      <vstack grow padding="xsmall">
         <vstack
           grow={!webviewVisible}
           height={webviewVisible ? "0%" : "100%"}
-          alignment="middle center"
+          alignment="top center"
         >
-          <text size="xlarge" weight="bold">
-            Example App
-          </text>
-          <spacer />
-          <vstack alignment="start middle">
-            <hstack>
-              <text size="medium">Username:</text>
-              <text size="medium" weight="bold">
-                {" "}
-                {username ?? ""}
-              </text>
-            </hstack>
-            <hstack>
-              <text size="medium">Current counter:</text>
-              <text size="medium" weight="bold">
-                {" "}
-                {counter ?? ""}
-              </text>
-            </hstack>
+          <image
+            url="images/Logo.png"
+            imageWidth={250}
+            imageHeight={250}
+            description="Lexicon Logo"
+          />
+          <vstack alignment="top center">
+            <image
+              url={snoovatar}
+              imageWidth={100}
+              imageHeight={100}
+              description="snoovatar"
+            />{" "}
+            <text size="medium" weight="bold">
+              {username ?? ""}
+            </text>
+            <text size="medium">Current score: {counter ?? ""}</text>
           </vstack>
           <spacer />
-          <button onPress={onShowWebviewClick}>Launch App</button>
+          <button
+            onPress={() =>
+              onShowWebviewClick(context.redis, context.postId ?? "anon")
+            }
+            appearance="success"
+            icon="topic-videogaming-fill"
+            size="large"
+            minWidth="300px"
+          >
+            Play!
+          </button>
         </vstack>
         <vstack grow={webviewVisible} height={webviewVisible ? "100%" : "0%"}>
           <vstack

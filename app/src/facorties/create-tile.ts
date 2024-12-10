@@ -28,11 +28,6 @@ export async function createTile(
       imageCache,
       "./Tile-hover.png"
     );
-  const tileChainImageRenderSource =
-    await rendering.ImageRenderSource.fromImageCache(
-      imageCache,
-      "./Tile-chain.png"
-    );
 
   const boundingBox = new math.BoundingBox(
     new math.Vector2(
@@ -55,8 +50,7 @@ export async function createTile(
       common.ScaleComponent.symbol
     ) as common.ScaleComponent;
 
-
-    if (!chainable?.isPartOfChain) {
+    if (common.isNil(chainable?.chain)) {
       sprite.renderSource = tileHoverImageRenderSource;
       sprite.renderLayerName = focusedRenderLayer.name;
     }
@@ -77,30 +71,12 @@ export async function createTile(
       common.ScaleComponent.symbol
     ) as common.ScaleComponent;
 
-    if (!chainable?.isPartOfChain) {
+    if (common.isNil(chainable?.chain)) {
       sprite.renderSource = tileImageRenderSource;
       sprite.renderLayerName = normalRenderLayer.name;
     }
 
     scale.set(scale.subtract(new math.Vector2(0.1, 0.1)));
-  }
-
-  function onAddedToChain(entity: ecs.Entity) {
-    const sprite = entity.getComponent(
-      rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
-
-    sprite.renderSource = tileChainImageRenderSource;
-    sprite.renderLayerName = focusedRenderLayer.name;
-  }
-
-  function onRemovedFromChain(entity: ecs.Entity) {
-    const sprite = entity.getComponent(
-      rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
-
-    sprite.renderSource = tileImageRenderSource;
-    sprite.renderLayerName = normalRenderLayer.name;
   }
 
   const tileEntity = new ecs.Entity(`tile [${x};y${y}]`, [
@@ -117,7 +93,7 @@ export async function createTile(
     new TileComponent(letter, x, y),
     new HoverComponent(onHoverStart, onHoverEnd),
     new physics.BoxColliderComponent(boundingBox),
-    new ChainableComponent(onAddedToChain, onRemovedFromChain),
+    new ChainableComponent(),
   ]);
 
   world.addEntity(tileEntity);

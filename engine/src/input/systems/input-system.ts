@@ -41,6 +41,7 @@ export class InputSystem extends System {
     inputs.mouseButtonUps = this._mouseButtonUps;
     inputs.scrollDelta = this._scrollDelta;
     inputs.mouseCoordinates = this._mouseCoordinates;
+
     this.clearInputs();
   }
 
@@ -55,10 +56,10 @@ export class InputSystem extends System {
 
   clearInputs = () => {
     this._scrollDelta = 0;
-    this._keyDowns.clear();
-    this._keyUps.clear();
-    this._mouseButtonDowns.clear();
-    this._mouseButtonUps.clear();
+    this._keyDowns = new Set();
+    this._keyUps = new Set();
+    this._mouseButtonDowns = new Set();
+    this._mouseButtonUps = new Set();
   };
 
   onWheelEventHandler = (event: WheelEvent) => {

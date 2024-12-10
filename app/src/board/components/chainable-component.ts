@@ -1,21 +1,14 @@
-import { ecs } from "@gameup/engine";
-import { OnInteractionCallback } from "../types";
+import { common, ecs } from "@gameup/engine";
+import { ChainComponent } from "./chain-component";
 
 export class ChainableComponent implements ecs.Component {
   name: symbol;
-  isPartOfChain: boolean;
-  onAddedToChain: OnInteractionCallback;
-  onRemovedFromChain: OnInteractionCallback;
+  chain: common.OrNull<ChainComponent>;
 
   static symbol = Symbol("Chainable");
 
-  constructor(
-    onAddedToChain: OnInteractionCallback,
-    onRemovedFromChain: OnInteractionCallback
-  ) {
+  constructor() {
     this.name = ChainableComponent.symbol;
-    this.isPartOfChain = false;
-    this.onAddedToChain = onAddedToChain;
-    this.onRemovedFromChain = onRemovedFromChain;
+    this.chain = null;
   }
 }

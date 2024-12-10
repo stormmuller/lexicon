@@ -1,7 +1,13 @@
 import { common, ecs, game, input, rendering } from "@gameup/engine";
-import { createCameras, createInputs, createLayers } from "./facorties";
+import {
+  createCameras,
+  createChain,
+  createInputs,
+  createLayers,
+} from "./facorties";
 import { ChainSystem, HoverSystem } from "./board";
 import { createBoard } from "./facorties/create-board";
+import { createUI } from "./ui";
 
 export async function createMainWorld(
   worldSpace: common.Space,
@@ -51,8 +57,24 @@ export async function createMainWorld(
     worldSpace
   );
 
+  const tileImageRenderSource =
+    await rendering.ImageRenderSource.fromImageCache(imageCache, "./Tile.png");
+  const tileChainImageRenderSource =
+    await rendering.ImageRenderSource.fromImageCache(
+      imageCache,
+      "./Tile-chain.png"
+    );
+
+  const chain = createChain(
+    world,
+    tileChainImageRenderSource,
+    tileImageRenderSource,
+    focusedRenderLayer,
+    foregroundRenderLayer
+  );
+
   const hoverSystem = new HoverSystem(inputs, worldCamera, worldSpace);
-  const chainSystem = new ChainSystem(inputs, worldCamera, worldSpace);
+  const chainSystem = new ChainSystem(inputs, worldCamera, worldSpace, chain);
 
   // const audioSystem = new audio.AudioSystem();
 
@@ -63,6 +85,8 @@ export async function createMainWorld(
     world
   );
 
+  createUI(world, foregroundRenderLayer);
+
   world.addSystems([
     inputSystem,
     mousePointerSystem,
@@ -72,7 +96,7 @@ export async function createMainWorld(
     focusedRenderSystem,
     debugRenderSystem,
     hoverSystem,
-    chainSystem
+    chainSystem,
     // audioSystem,
   ]);
 

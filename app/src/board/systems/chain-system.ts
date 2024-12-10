@@ -1,17 +1,22 @@
 import { common, ecs, input, physics, rendering } from "@gameup/engine";
-import { ChainableComponent, TileComponent } from "../components";
+import {
+  ChainableComponent,
+  ChainComponent,
+  TileComponent,
+} from "../components";
 
 export class ChainSystem extends ecs.System {
   private _camera: rendering.CameraComponent;
   private _cameraPosition: common.PositionComponent;
   private _worldSpace: common.Space;
   private _inputComponent: input.InputsComponent;
-  private _chain = new Array<ecs.Entity>();
+  private _chain: ChainComponent;
 
   constructor(
     inputEntity: ecs.Entity,
     cameraEntity: ecs.Entity,
-    worldSpace: common.Space
+    worldSpace: common.Space,
+    chain: ecs.Entity
   ) {
     super("chain", [
       ChainableComponent.symbol,
@@ -30,14 +35,12 @@ export class ChainSystem extends ecs.System {
     this._cameraPosition = cameraEntity.getComponent(
       common.PositionComponent.symbol
     ) as common.PositionComponent;
+
     this._worldSpace = worldSpace;
+    this._chain = chain.getComponent(ChainComponent.symbol) as ChainComponent;
   }
 
   async run(entity: ecs.Entity): Promise<void> {
-    const chainableComponent = entity.getComponent(
-      ChainableComponent.symbol
-    ) as ChainableComponent;
-
     const boxColliderComponent = entity.getComponent(
       physics.BoxColliderComponent.symbol
     ) as physics.BoxColliderComponent;
@@ -46,14 +49,9 @@ export class ChainSystem extends ecs.System {
       TileComponent.symbol
     ) as TileComponent;
 
-    const isFirstLinkInChain = this._chain.length === 0;
-
-    const previousTileEntity = isFirstLinkInChain
-      ? null
-      : this._chain[this._chain.length - 1];
-
-    const previousTileComponent =
-      previousTileEntity?.getComponent<TileComponent>(TileComponent.symbol);
+    const previousTileComponent = this._chain
+      .getTailLink()
+      ?.getComponent<TileComponent>(TileComponent.symbol);
 
     // Subtract the worldSpace center first
     let worldCoords = this._inputComponent.mouseCoordinates.subtract(
@@ -75,53 +73,39 @@ export class ChainSystem extends ecs.System {
 
     const isAdditionToChain =
       mouseButtonPressed &&
-      !chainableComponent.isPartOfChain &&
+      !this._chain.containsLink(entity) &&
       mouseIsInBoundingBox;
 
     if (isAdditionToChain) {
       if (
-        isFirstLinkInChain ||
+        this._chain.isEmpty() ||
         this._isAdjecentToLastLink(
           tileComponent,
           previousTileComponent as TileComponent
         )
       ) {
-        this._chain.push(entity);
-        chainableComponent.isPartOfChain = true;
-        chainableComponent.onAddedToChain(entity);
+        this._chain.addLink(entity);
       }
-      
+
       return;
     }
 
-    const secondLastLink = this._chain[this._chain.length - 2];
-
     const isBackTrack =
       mouseButtonPressed &&
-      chainableComponent.isPartOfChain &&
-      entity === secondLastLink &&
+      this._chain.containsLink(entity) &&
+      entity === this._chain.getSecondLastLink() &&
       mouseIsInBoundingBox;
 
     if (isBackTrack) {
-      const lastLink = this._chain.pop();
+      await this._chain.removeTail();
+    }
 
-      if (!lastLink) {
-        return;
-      }
+    const mouseButtonLifted = this._inputComponent.isMouseButtonUp(
+      input.mouseButtons.left
+    );
 
-      const lastLinkChainableComponent = lastLink.getComponent(
-        ChainableComponent.symbol
-      ) as ChainableComponent;
-      const tileComponent = lastLink.getComponent(
-        TileComponent.symbol
-      ) as TileComponent;
-
-      console.log(`Removed ${tileComponent.letter} from the chain`);
-
-      lastLinkChainableComponent.isPartOfChain = false;
-      lastLinkChainableComponent.onRemovedFromChain(lastLink);
-
-      return;
+    if (mouseButtonLifted && !this._chain.isEmpty()) {
+      await this._chain.complete();
     }
   }
 
