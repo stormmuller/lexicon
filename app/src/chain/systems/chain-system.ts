@@ -46,23 +46,18 @@ export class ChainSystem extends ecs.System {
       TileComponent.symbol
     ) as TileComponent;
 
-    const previousTileComponent = this._chain
-      .getTailLink()
-      ?.getComponent<TileComponent>(TileComponent.symbol);
-
-    // Subtract the worldSpace center first
-    let worldCoords = this._inputComponent.mouseCoordinates.subtract(
-      this._worldSpace.center
-    );
-
-    // Now invert the scale
-    worldCoords = worldCoords.divide(this._camera.zoom);
-
-    // Now invert the camera translation
-    worldCoords = worldCoords.add(this._cameraPosition);
+    const lastLink = this._chain.getTailLink();
+    const lastTileComponent = lastLink?.getComponent<TileComponent>(TileComponent.symbol);
 
     const mouseButtonPressed = this._inputComponent.isMouseButtonPressed(
       input.mouseButtons.left
+    );
+
+    const worldCoords = rendering.screenToWorldSpace(
+      this._inputComponent.mouseCoordinates,
+      this._cameraPosition,
+      this._camera.zoom,
+      this._worldSpace.center
     );
 
     const mouseIsInBoundingBox =
@@ -78,7 +73,7 @@ export class ChainSystem extends ecs.System {
         this._chain.isEmpty() ||
         this._isAdjecentToLastLink(
           tileComponent,
-          previousTileComponent as TileComponent
+          lastTileComponent as TileComponent
         )
       ) {
         this._chain.addLink(entity);

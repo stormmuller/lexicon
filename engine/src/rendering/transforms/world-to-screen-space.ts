@@ -1,6 +1,6 @@
 import { Vector2 } from '../../math';
 
-export const calculateScreenSpace = (
+export const worldToScreenSpace = (
   worldPosition: Vector2,
   cameraPosition: Vector2,
   cameraZoom: number,

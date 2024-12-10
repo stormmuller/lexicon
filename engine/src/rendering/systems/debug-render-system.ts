@@ -38,7 +38,7 @@ export class DebugRenderSystem extends System {
       DebugDotComponent.symbol,
     ) as DebugDotComponent;
 
-    const screenPosition = transforms.calculateScreenSpace(
+    const screenPosition = transforms.worldToScreenSpace(
       position,
       this._cameraPosition,
       this._cameraComponent.zoom,

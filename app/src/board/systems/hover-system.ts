@@ -39,14 +39,12 @@ export class HoverSystem extends ecs.System {
       physics.BoxColliderComponent.symbol
     ) as physics.BoxColliderComponent;
 
-    // Subtract the worldSpace center first
-    let worldCoords = this._inputComponent.mouseCoordinates.subtract(this._worldSpace.center);
-
-    // Now invert the scale
-    worldCoords = worldCoords.divide(this._camera.zoom);
-
-    // Now invert the camera translation
-    worldCoords = worldCoords.add(this._cameraPosition);
+    const worldCoords = rendering.screenToWorldSpace(
+      this._inputComponent.mouseCoordinates,
+      this._cameraPosition,
+      this._camera.zoom,
+      this._worldSpace.center
+    );
 
     if (
       !hoverComponent.isHovered &&
