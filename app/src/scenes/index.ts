@@ -1,1 +1,1 @@
-export * from './create-main-scene';
+export * from './main-scene';

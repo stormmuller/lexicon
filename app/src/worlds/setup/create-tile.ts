@@ -1,10 +1,10 @@
 import { common, ecs, math, physics, rendering } from "@gameup/engine";
-import { config } from "../game.config";
-import { TileComponent } from "../tile";
+import { config } from "../../game.config";
+import { styles } from "../../styles";
+import { ChainableComponent } from "../../chain";
 import { createLetter } from "./create-letter";
-import { styles } from "../styles";
-import { ChainableComponent } from "../chain";
-import { HoverComponent } from "../hoverable";
+import { HoverComponent } from "../../hoverable";
+import { TileComponent } from "../../tile";
 
 export async function createTile(
   letter: string,

@@ -1,6 +1,6 @@
 import { common, ecs, rendering } from "@gameup/engine";
 
-export const createLayers = (
+export const createRenderLayers = (
   layerService: rendering.LayerService,
   cameraEntity: ecs.Entity,
   worldSpace: common.Space,

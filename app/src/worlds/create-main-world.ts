@@ -1,13 +1,13 @@
 import { common, ecs, game, rendering } from "@gameup/engine";
+import { createUI } from "../ui";
+import { styles } from "../styles";
 import {
+  createBoard,
   createCameras,
   createChain,
   createInputs,
-  createLayers as createRenderLayers,
-} from "../facorties";
-import { createBoard } from "../facorties/create-board";
-import { createUI } from "../ui";
-import { styles } from "../styles";
+  createRenderLayers,
+} from "./setup";
 
 export async function createMainWorld(
   worldSpace: common.Space,

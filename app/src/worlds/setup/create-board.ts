@@ -1,8 +1,8 @@
 import { common, ecs, rendering } from "@gameup/engine";
-import { config } from "../game.config";
 import { createTile } from "./create-tile";
-import { gameState } from "../game-state";
-import { HoverSystem } from "../hoverable";
+import { config } from "../../game.config";
+import { gameState } from "../../game-state";
+import { HoverSystem } from "../../hoverable";
 
 async function createTiles(
   normalLayer: rendering.RenderLayer,

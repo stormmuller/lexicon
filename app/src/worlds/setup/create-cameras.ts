@@ -1,5 +1,5 @@
 import { common, ecs, game, rendering } from "@gameup/engine";
-import { config } from "../game.config";
+import { config } from "../../game.config";
 
 export const createCameras = (
   world: ecs.World,
