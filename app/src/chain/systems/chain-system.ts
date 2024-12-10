@@ -47,7 +47,9 @@ export class ChainSystem extends ecs.System {
     ) as TileComponent;
 
     const lastLink = this._chain.getTailLink();
-    const lastTileComponent = lastLink?.getComponent<TileComponent>(TileComponent.symbol);
+    const lastTileComponent = lastLink?.getComponent<TileComponent>(
+      TileComponent.symbol
+    );
 
     const mouseButtonPressed = this._inputComponent.isMouseButtonPressed(
       input.mouseButtons.left
@@ -63,30 +65,25 @@ export class ChainSystem extends ecs.System {
     const mouseIsInBoundingBox =
       boxColliderComponent.boundingBox.contains(worldCoords);
 
-    const isAdditionToChain =
-      mouseButtonPressed &&
-      !this._chain.containsLink(entity) &&
-      mouseIsInBoundingBox;
+    const chainContainsEntity = this._chain.containsLink(entity);
+    const entityIsPreviousLink = entity === this._chain.getSecondLastLink();
 
-    if (isAdditionToChain) {
-      if (
-        this._chain.isEmpty() ||
-        this._isAdjecentToLastLink(
-          tileComponent,
-          lastTileComponent as TileComponent
-        )
-      ) {
-        this._chain.addLink(entity);
-      }
+    const isAdditionToChain =
+      mouseButtonPressed && !chainContainsEntity && mouseIsInBoundingBox;
+
+    const isValidAdditionToChain = this._isValidAddition(
+      tileComponent,
+      lastTileComponent
+    );
+
+    if (isAdditionToChain && isValidAdditionToChain) {
+      this._chain.addLink(entity);
 
       return;
     }
 
     const isBackTrack =
-      mouseButtonPressed &&
-      this._chain.containsLink(entity) &&
-      entity === this._chain.getSecondLastLink() &&
-      mouseIsInBoundingBox;
+      mouseButtonPressed && entityIsPreviousLink && mouseIsInBoundingBox;
 
     if (isBackTrack) {
       await this._chain.removeTail();
@@ -99,6 +96,19 @@ export class ChainSystem extends ecs.System {
     if (mouseButtonLifted && !this._chain.isEmpty()) {
       await this._chain.complete();
     }
+  }
+
+  private _isValidAddition(
+    tileComponent: TileComponent,
+    lastTileComponent: common.OrNull<TileComponent> | undefined
+  ): boolean {
+    return (
+      this._chain.isEmpty() ||
+      this._isAdjecentToLastLink(
+        tileComponent,
+        lastTileComponent as TileComponent
+      )
+    );
   }
 
   private _isAdjecentToLastLink(

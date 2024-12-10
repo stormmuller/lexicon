@@ -18,7 +18,7 @@ export class HoverSystem extends ecs.System {
     ]);
 
     this._inputComponent = inputEntity.getComponent(
-      input.InputsComponent.symbol,
+      input.InputsComponent.symbol
     ) as input.InputsComponent;
 
     this._camera = cameraEntity.getComponent(
@@ -46,19 +46,16 @@ export class HoverSystem extends ecs.System {
       this._worldSpace.center
     );
 
-    if (
-      !hoverComponent.isHovered &&
-      boxColliderComponent.boundingBox.contains(worldCoords)
-    ) {
+    const mouseIsInBoundingBox =
+      boxColliderComponent.boundingBox.contains(worldCoords);
+
+    if (!hoverComponent.isHovered && mouseIsInBoundingBox) {
       hoverComponent.isHovered = true;
       hoverComponent.onHoverStart(entity);
       return;
     }
 
-    if (
-      hoverComponent.isHovered &&
-      !boxColliderComponent.boundingBox.contains(worldCoords)
-    ) {
+    if (hoverComponent.isHovered && !mouseIsInBoundingBox) {
       hoverComponent.isHovered = false;
       hoverComponent.onHoverEnd(entity);
       return;
