@@ -1,5 +1,5 @@
 import { ecs } from "@gameup/engine";
-import { OnInteractionCallback } from "../types";
+import { OnInteractionCallback } from "../../types";
 
 export class HoverComponent implements ecs.Component {
   name: symbol;

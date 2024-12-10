@@ -5,10 +5,10 @@ import {
   createInputs,
   createLayers,
 } from "./facorties";
-import { HoverSystem } from "./board";
 import { createBoard } from "./facorties/create-board";
 import { createUI } from "./ui";
 import { ChainSystem } from "./chain";
+import { HoverSystem } from "./hoverable";
 
 export async function createMainWorld(
   worldSpace: common.Space,

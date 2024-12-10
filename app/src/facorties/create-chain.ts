@@ -1,5 +1,5 @@
 import { ecs, rendering } from "@gameup/engine";
-import { TileComponent } from "../board";
+import { TileComponent } from "../tile";
 import { ChainComponent } from "../chain";
 
 export function createChain(
