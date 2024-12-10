@@ -7,10 +7,10 @@ import {
 } from "../facorties";
 import { createBoard } from "../facorties/create-board";
 import { createUI } from "../ui";
+import { styles } from "../styles";
 
 export async function createMainWorld(
   worldSpace: common.Space,
-  imageCache: rendering.ImageCache,
   layerService: rendering.LayerService,
   gameContainer: HTMLElement,
   game: game.Game
@@ -26,13 +26,19 @@ export async function createMainWorld(
     world
   );
 
-  const tileImageRenderSource =
-    await rendering.ImageRenderSource.fromImageCache(imageCache, "./Tile.png");
-  const tileChainImageRenderSource =
-    await rendering.ImageRenderSource.fromImageCache(
-      imageCache,
-      "./Tile-chain.png"
-    );
+  const tileImageRenderSource = new rendering.RoundedRectangleRenderSource(
+    styles.tile.size,
+    styles.tile.size,
+    styles.tile.borderRaduis,
+    styles.tile.backgroundColor
+  );
+
+  const tileChainImageRenderSource = new rendering.RoundedRectangleRenderSource(
+    styles.tile.size,
+    styles.tile.size,
+    styles.tile.borderRaduis,
+    styles.tile.chained.backgroundColor
+  );
 
   createChain(
     world,
@@ -46,7 +52,6 @@ export async function createMainWorld(
   );
 
   await createBoard(
-    imageCache,
     foregroundRenderLayer,
     focusedRenderLayer,
     world,

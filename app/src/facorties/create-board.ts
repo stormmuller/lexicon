@@ -5,7 +5,6 @@ import { gameState } from "../game-state";
 import { HoverSystem } from "../hoverable";
 
 async function createTiles(
-  imageCache: rendering.ImageCache,
   normalLayer: rendering.RenderLayer,
   focusedRenderLayer: rendering.RenderLayer,
   world: ecs.World
@@ -16,7 +15,6 @@ async function createTiles(
         gameState.boardLetters[x + y * x],
         x,
         y,
-        imageCache,
         normalLayer,
         focusedRenderLayer,
         world
@@ -26,7 +24,6 @@ async function createTiles(
 }
 
 export async function createBoard(
-  imageCache: rendering.ImageCache,
   normalLayer: rendering.RenderLayer,
   focusedRenderLayer: rendering.RenderLayer,
   world: ecs.World,
@@ -34,7 +31,7 @@ export async function createBoard(
   cameraEntity: ecs.Entity,
   worldSpace: common.Space
 ) {
-  createTiles(imageCache, normalLayer, focusedRenderLayer, world);
+  createTiles(normalLayer, focusedRenderLayer, world);
 
   const hoverSystem = new HoverSystem(inputsEntity, cameraEntity, worldSpace);
 

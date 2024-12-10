@@ -5,9 +5,9 @@ import { createWordHistory } from "./create-word-history";
 
 export function createUI(
   world: ecs.World,
-  backgroundRenderLayer: rendering.RenderLayer,
+  renderLayer: rendering.RenderLayer,
 ) {
-  createWordContainer(world, backgroundRenderLayer);
-  createLeaderboard(world, backgroundRenderLayer);
-  createWordHistory(world, backgroundRenderLayer);
+  createWordContainer(world, renderLayer);
+  createLeaderboard(world, renderLayer);
+  createWordHistory(world, renderLayer);
 }

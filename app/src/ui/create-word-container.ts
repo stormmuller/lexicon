@@ -7,7 +7,7 @@ export function createWordContainer(
   backgroundRenderLayer: rendering.RenderLayer
 ) {
   const boardWidth =
-    (styles.board.tileSize + styles.board.tileGap) * config.gridSize.x - styles.board.tileGap;
+    (styles.tile.size + styles.tile.gap) * config.gridSize.x - styles.tile.gap;
 
   const containerHeight = 100;
   const containerMargin = 20;
@@ -16,8 +16,8 @@ export function createWordContainer(
   const wordContainerRenderSource = new rendering.RoundedRectangleRenderSource(
     boardWidth + conainerToBoardPadding,
     containerHeight,
-    10,
-    "rgba(0, 0, 0, 0.4)"
+    styles.panel.borderRaduis,
+    styles.panel.backgroundColor
   );
 
   const container = new ecs.Entity("word container", [

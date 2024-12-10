@@ -7,9 +7,9 @@ export function createWordHistory(
   backgroundRenderLayer: rendering.RenderLayer
 ) {
   const boardWidth =
-    (styles.board.tileSize + styles.board.tileGap) * config.gridSize.x - styles.board.tileGap;
+    (styles.tile.size + styles.tile.gap) * config.gridSize.x - styles.tile.gap;
   const boardHeight =
-    (styles.board.tileSize + styles.board.tileGap) * config.gridSize.y - styles.board.tileGap;
+    (styles.tile.size + styles.tile.gap) * config.gridSize.y - styles.tile.gap;
 
   const containerBoardHeightDiff = 50;
   const containerMargin = 20;
@@ -18,14 +18,14 @@ export function createWordHistory(
   const wordContainerRenderSource = new rendering.RoundedRectangleRenderSource(
     wordHistoryContainerWidth,
     boardHeight - containerBoardHeightDiff,
-    10,
-    "rgba(0, 0, 0, 0.6)"
+    styles.panel.borderRaduis,
+    styles.panel.backgroundColor
   );
 
   const container = new ecs.Entity("word container", [
     new common.PositionComponent(
       window.innerWidth / 2 + boardWidth / 2 + wordHistoryContainerWidth / 2 + containerMargin,
-      boardHeight / 2 + config.yOffset - styles.board.tileSize / 2 
+      boardHeight / 2 + config.yOffset - styles.tile.size / 2 
     ),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(
