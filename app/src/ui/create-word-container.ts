@@ -17,7 +17,7 @@ export function createWordContainer(
     boardWidth + conainerToBoardPadding,
     containerHeight,
     10,
-    "rgba(0, 0, 0, 0.6)"
+    "rgba(0, 0, 0, 0.4)"
   );
 
   const container = new ecs.Entity("word container", [

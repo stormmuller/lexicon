@@ -1,9 +1,14 @@
-import { ecs, input } from '@gameup/engine';
+import { ecs, input } from "@gameup/engine";
 
-export const createInputs = (world: ecs.World) => {
-  const inputs = new ecs.Entity('input', [new input.InputsComponent()]);
+export const createInputs = (world: ecs.World, gameContainer: HTMLElement) => {
+  const inputsEntity = new ecs.Entity("input", [new input.InputsComponent()]);
 
-  world.addEntity(inputs);
+  const inputSystem = new input.InputSystem(gameContainer);
+  const mousePointerSystem = new input.MousePointerSystem();
 
-  return inputs;
+  world.addEntity(inputsEntity);
+
+  world.addSystems([inputSystem, mousePointerSystem]);
+
+  return inputsEntity;
 };

@@ -1,9 +1,12 @@
-import { ecs, rendering } from "@gameup/engine";
+import { common, ecs, rendering } from "@gameup/engine";
 import { TileComponent } from "../tile";
-import { ChainComponent } from "../chain";
+import { ChainComponent, ChainSystem } from "../chain";
 
 export function createChain(
   world: ecs.World,
+  inputsEntity: ecs.Entity,
+  worldCamera: ecs.Entity,
+  worldSpace: common.Space,
   tileChainImageRenderSource: rendering.RenderSource,
   tileImageRenderSource: rendering.RenderSource,
   focusedRenderLayer: rendering.RenderLayer,
@@ -48,6 +51,15 @@ export function createChain(
   ]);
 
   world.addEntity(chain);
+
+  const chainSystem = new ChainSystem(
+    inputsEntity,
+    worldCamera,
+    worldSpace,
+    chain
+  );
+
+  world.addSystem(chainSystem);
 
   return chain;
 }

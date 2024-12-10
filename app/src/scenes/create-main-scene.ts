@@ -1,6 +1,6 @@
 import { common, game, rendering } from "@gameup/engine";
-import { createMainWorld } from "./create-main-world";
-import { WindowResizer } from "./facorties/window-resizer";
+import { WindowResizer } from "../facorties/window-resizer";
+import { createMainWorld } from "../worlds";
 
 export async function createMainScene(wordTreeGame: game.Game) {
   const mainScene = new game.Scene("main");

@@ -1,5 +1,5 @@
 import { game } from "@gameup/engine";
-import { createMainScene } from "./create-main-scene";
+import { createMainScene } from "./scenes";
 
 export async function startGame() {
   const wordTreeGame = new game.Game();

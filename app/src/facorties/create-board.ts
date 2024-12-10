@@ -1,9 +1,10 @@
-import { ecs, rendering } from "@gameup/engine";
+import { common, ecs, rendering } from "@gameup/engine";
 import { config } from "../game.config";
 import { createTile } from "./create-tile";
 import { gameState } from "../game-state";
+import { HoverSystem } from "../hoverable";
 
-export async function createBoard(
+async function createTiles(
   imageCache: rendering.ImageCache,
   normalLayer: rendering.RenderLayer,
   focusedRenderLayer: rendering.RenderLayer,
@@ -22,4 +23,20 @@ export async function createBoard(
       );
     }
   }
+}
+
+export async function createBoard(
+  imageCache: rendering.ImageCache,
+  normalLayer: rendering.RenderLayer,
+  focusedRenderLayer: rendering.RenderLayer,
+  world: ecs.World,
+  inputsEntity: ecs.Entity,
+  cameraEntity: ecs.Entity,
+  worldSpace: common.Space
+) {
+  createTiles(imageCache, normalLayer, focusedRenderLayer, world);
+
+  const hoverSystem = new HoverSystem(inputsEntity, cameraEntity, worldSpace);
+
+  world.addSystem(hoverSystem);
 }
