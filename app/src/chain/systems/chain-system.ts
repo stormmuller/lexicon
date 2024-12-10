@@ -1,9 +1,6 @@
 import { common, ecs, input, physics, rendering } from "@gameup/engine";
-import {
-  ChainableComponent,
-  ChainComponent,
-  TileComponent,
-} from "../components";
+import { ChainableComponent, ChainComponent } from "../components";
+import { TileComponent } from "../../board";
 
 export class ChainSystem extends ecs.System {
   private _camera: rendering.CameraComponent;

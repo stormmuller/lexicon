@@ -1,8 +1,9 @@
 import { common, ecs, math, physics, rendering } from "@gameup/engine";
 import { config } from "../game.config";
-import { ChainableComponent, HoverComponent, TileComponent } from "../board";
+import { HoverComponent, TileComponent } from "../board";
 import { createLetter } from "./create-letter";
 import { styles } from "../styles";
+import { ChainableComponent } from "../chain";
 
 export async function createTile(
   letter: string,

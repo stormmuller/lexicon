@@ -1,5 +1,6 @@
 import { ecs, rendering } from "@gameup/engine";
-import { ChainComponent, TileComponent } from "../board";
+import { TileComponent } from "../board";
+import { ChainComponent } from "../chain";
 
 export function createChain(
   world: ecs.World,
