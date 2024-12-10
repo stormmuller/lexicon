@@ -1,14 +1,15 @@
 import { common, ecs, rendering } from "@gameup/engine";
 import { config } from "../game.config";
+import { styles } from "../styles";
 
 export function createWordHistory(
   world: ecs.World,
   backgroundRenderLayer: rendering.RenderLayer
 ) {
   const boardWidth =
-    (config.tileSize + config.padding) * config.gridSize.x - config.padding;
+    (styles.board.tileSize + styles.board.tileGap) * config.gridSize.x - styles.board.tileGap;
   const boardHeight =
-    (config.tileSize + config.padding) * config.gridSize.y - config.padding;
+    (styles.board.tileSize + styles.board.tileGap) * config.gridSize.y - styles.board.tileGap;
 
   const containerBoardHeightDiff = 50;
   const containerMargin = 20;
@@ -24,7 +25,7 @@ export function createWordHistory(
   const container = new ecs.Entity("word container", [
     new common.PositionComponent(
       window.innerWidth / 2 + boardWidth / 2 + wordHistoryContainerWidth / 2 + containerMargin,
-      boardHeight / 2 + config.yOffset - config.tileSize / 2 
+      boardHeight / 2 + config.yOffset - styles.board.tileSize / 2 
     ),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(

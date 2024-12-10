@@ -1,12 +1,13 @@
 import { common, ecs, rendering } from "@gameup/engine";
 import { config } from "../game.config";
+import { styles } from "../styles";
 
 export function createWordContainer(
   world: ecs.World,
   backgroundRenderLayer: rendering.RenderLayer
 ) {
   const boardWidth =
-    (config.tileSize + config.padding) * config.gridSize.x - config.padding;
+    (styles.board.tileSize + styles.board.tileGap) * config.gridSize.x - styles.board.tileGap;
 
   const containerHeight = 100;
   const containerMargin = 20;

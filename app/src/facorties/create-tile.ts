@@ -2,6 +2,7 @@ import { common, ecs, math, physics, rendering } from "@gameup/engine";
 import { config } from "../game.config";
 import { ChainableComponent, HoverComponent, TileComponent } from "../board";
 import { createLetter } from "./create-letter";
+import { styles } from "../styles";
 
 export async function createTile(
   letter: string,
@@ -13,13 +14,17 @@ export async function createTile(
   world: ecs.World
 ) {
   const gridWidth =
-    config.gridSize.x * (config.tileSize + config.padding) - config.padding;
+    config.gridSize.x * (styles.board.tileSize + styles.board.tileGap) -
+    styles.board.tileGap;
   const remainingXSpace = window.innerWidth - gridWidth;
   const xOffset = remainingXSpace / 2;
 
   const calculatedX =
-    x * (config.tileSize + config.padding) + xOffset + config.tileSize / 2;
-  const calculatedY = y * (config.tileSize + config.padding) + config.yOffset;
+    x * (styles.board.tileSize + styles.board.tileGap) +
+    xOffset +
+    styles.board.tileSize / 2;
+  const calculatedY =
+    y * (styles.board.tileSize + styles.board.tileGap) + config.yOffset;
 
   const tileImageRenderSource =
     await rendering.ImageRenderSource.fromImageCache(imageCache, "./Tile.png");
@@ -31,10 +36,10 @@ export async function createTile(
 
   const boundingBox = new math.BoundingBox(
     new math.Vector2(
-      calculatedX - config.tileSize / 2,
-      calculatedY - config.tileSize / 2
+      calculatedX - styles.board.tileSize / 2,
+      calculatedY - styles.board.tileSize / 2
     ),
-    new math.Vector2(config.tileSize, config.tileSize)
+    new math.Vector2(styles.board.tileSize, styles.board.tileSize)
   );
 
   function onHoverStart(entity: ecs.Entity) {
@@ -83,8 +88,8 @@ export async function createTile(
     new common.PositionComponent(calculatedX, calculatedY),
     new common.RotationComponent(0),
     new common.ScaleComponent(
-      config.tileSize / tileImageRenderSource.width,
-      config.tileSize / tileImageRenderSource.height
+      styles.board.tileSize / tileImageRenderSource.width,
+      styles.board.tileSize / tileImageRenderSource.height
     ),
     new rendering.SpriteComponent(
       tileImageRenderSource,
@@ -104,7 +109,7 @@ export async function createTile(
     calculatedX,
     calculatedY,
     letter,
-    config.tileSize - 10,
+    styles.board.tileSize - 10,
     `tile [${x};${y}]`
   );
 }
