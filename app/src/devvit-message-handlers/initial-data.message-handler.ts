@@ -1,4 +1,4 @@
-import { config } from "../game.config";
+import { gameState } from "../game-state";
 import { startGame } from "../start-game";
 
 export type InitialDataMessage = {
@@ -8,8 +8,8 @@ export type InitialDataMessage = {
 };
 
 export function initialDataMessageHandler(message: InitialDataMessage) {
-  config.board = message.board;
-  config.score = message.score;
+  gameState.boardLetters = message.board;
+  gameState.score = message.score;
   
   void startGame();
 }
