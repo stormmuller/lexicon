@@ -8,6 +8,6 @@ export const tile = {
     backgroundColor: "#5abfff",
   },
   chained: {
-    backgroundColor: "#d81159"
+    backgroundColor: "#EA8C55"
   }
 };

@@ -6,7 +6,7 @@ export class ScaleComponent extends Vector2 implements Component {
 
   static symbol = Symbol('Scale');
 
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x: number = 1, y: number = 1) {
     super(x, y);
 
     this.name = ScaleComponent.symbol;

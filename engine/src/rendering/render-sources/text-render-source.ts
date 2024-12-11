@@ -1,30 +1,31 @@
-import { Vector2 } from '../../math';
+import { BoundingBox, Vector2 } from '../../math';
 import { RenderLayer } from '../render-layer';
-import { RenderSource } from './render-source';
+import { RenderEffects, RenderSource } from './render-source';
 
 export class TextRenderSource implements RenderSource {
   text: string;
   fontFamily: string;
   color: string;
-  width: number;
-  height: number;
+  boundingBox: BoundingBox;
   fontSize: number;
   offset: Vector2;
+  renderEffects: RenderEffects;
 
   constructor(
     text: string,
     fontFamily: string = 'Arial',
     fontSize: number = 16,
     color: string = 'black',
-    offset: Vector2 = Vector2.zero()
+    offset: Vector2 = Vector2.zero(),
+    renderEffects: RenderEffects = {}
   ) {
     this.text = text;
     this.fontFamily = fontFamily;
     this.fontSize = fontSize;
     this.color = color;
-    this.width = 0; // Calculated dynamically
-    this.height = 0; // Calculated dynamically
+    this.boundingBox = new BoundingBox(Vector2.zero(), Vector2.zero()); // gets updated in the render function as text can change at runtime
     this.offset = offset;
+    this.renderEffects = renderEffects
   }
 
   render(layer: RenderLayer): void {
@@ -34,11 +35,17 @@ export class TextRenderSource implements RenderSource {
 
     // TODO: performace - cache calculated dimentions?
     const metrics = context.measureText(this.text);
-    this.width = metrics.width;
-    this.height =
+    const width = metrics.width;
+    const height =
       metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
+    this.boundingBox.dimentions = new Vector2(width, height);
+
     context.fillStyle = this.color;
-    context.fillText(this.text, -(this.width / 2) + this.offset.x, this.height / 2 + this.offset.y);
+    context.fillText(
+      this.text,
+      -(width / 2) + this.offset.x,
+      height / 2 + this.offset.y,
+    );
   }
 }

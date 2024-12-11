@@ -1,57 +1,36 @@
+import { BoundingBox } from '../../math';
 import { RenderLayer } from '../render-layer';
-import { RenderSource } from './render-source';
+import { RenderEffects, RenderSource } from './render-source';
 
 export type RenderSourceMap = {
   [key: string]: RenderSource;
 };
 
 export class CompositeRenderSource implements RenderSource {
-  renderSources: RenderSourceMap;
-  width: number;
-  height: number;
+  renderSourcesMap: RenderSourceMap;
+  renderSources: RenderSource[];
+  boundingBox: BoundingBox;
+  renderEffects: RenderEffects;
 
-  constructor(renderSources: RenderSourceMap) {
-    this.renderSources = renderSources;
-    
-    this.width = this._calculateMaxWidth();
-    this.height = this._calculateMaxHeight();
-  }
-
-  private _calculateMaxWidth() {
-    let maxWidth = 0;
-
-    for (const renderSourceName in this.renderSources) {
-      const renderSource = this.renderSources[renderSourceName];
-
-      if (renderSource.width > maxWidth) {
-        maxWidth = renderSource.width;
-      }
-    }
-
-    return maxWidth;
-  }
-
-  private _calculateMaxHeight() {
-    let maxHeight = 0;
-
-    for (const renderSourceName in this.renderSources) {
-      const renderSource = this.renderSources[renderSourceName];
-
-      if (renderSource.height > maxHeight) {
-        maxHeight = renderSource.height;
-      }
-    }
-
-    return maxHeight;
+  constructor(
+    renderSourcesMap: RenderSourceMap,
+    renderEffects: RenderEffects = {},
+  ) {
+    this.renderSourcesMap = renderSourcesMap;
+    this.renderSources = Object.values(this.renderSourcesMap);
+    this.boundingBox = BoundingBox.combineBoundingBoxes(
+      this.renderSources.map((r) => r.boundingBox),
+    );
+    this.renderEffects = renderEffects;
   }
 
   public getRenderSource<T>(key: string): T {
-    return this.renderSources[key] as T;
+    return this.renderSourcesMap[key] as T;
   }
 
   public render(layer: RenderLayer): void {
-    for (const renderSourceName in this.renderSources) {
-      const renderSource = this.renderSources[renderSourceName];
+    for (const renderSourceName in this.renderSourcesMap) {
+      const renderSource = this.renderSourcesMap[renderSourceName];
       renderSource.render(layer);
     }
   }

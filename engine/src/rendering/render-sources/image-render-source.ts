@@ -1,18 +1,26 @@
+import { BoundingBox, Vector2 } from '../../math';
 import { ImageCache } from '../asset-caches';
 import { RenderLayer } from '../render-layer';
-import { RenderSource } from './render-source';
+import { RenderEffects, RenderSource } from './render-source';
 
 export class ImageRenderSource implements RenderSource {
   image: HTMLImageElement;
-  width: number;
-  height: number;
+  boundingBox: BoundingBox;
   bleed: number;
+  renderEffects: RenderEffects;
 
-  constructor(image: HTMLImageElement, bleed: number = 1) {
+  constructor(
+    image: HTMLImageElement,
+    bleed: number = 1,
+    renderEffects: RenderEffects = {},
+  ) {
     this.image = image;
-    this.width = image.width;
-    this.height = image.height;
+    this.boundingBox = new BoundingBox(
+      Vector2.zero(),
+      new Vector2(image.width + bleed, image.height + bleed),
+    );
     this.bleed = bleed;
+    this.renderEffects = renderEffects;
   }
 
   render(layer: RenderLayer): void {
@@ -20,12 +28,16 @@ export class ImageRenderSource implements RenderSource {
       this.image,
       0,
       0,
-      this.width + this.bleed,
-      this.height + this.bleed,
+      this.image.width + this.bleed,
+      this.image.height + this.bleed,
     );
   }
 
-  public static async fromImageCache(imageCache: ImageCache, path: string, bleed: number = 1) {
+  public static async fromImageCache(
+    imageCache: ImageCache,
+    path: string,
+    bleed: number = 1,
+  ) {
     const image = await imageCache.getOrLoad(path);
     return new ImageRenderSource(image, bleed);
   }

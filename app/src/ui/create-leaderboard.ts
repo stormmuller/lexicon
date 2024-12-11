@@ -15,7 +15,7 @@ export function createLeaderboard(
   const containerMargin = 20;
   const leaderboardWidth = 140;
 
-  const wordContainerRenderSource = new rendering.RoundedRectangleRenderSource(
+  const leaderBoardPanelRenderSource = new rendering.RoundedRectangleRenderSource(
     leaderboardWidth,
     boardHeight - containerBoardHeightDiff,
     styles.panel.borderRaduis,
@@ -29,7 +29,7 @@ export function createLeaderboard(
     ),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(
-      wordContainerRenderSource,
+      leaderBoardPanelRenderSource,
       backgroundRenderLayer.name
     ),
   ]);

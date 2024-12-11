@@ -1,21 +1,19 @@
 import { Path } from '../../common';
 import { BoundingBox, calculateBoundingBox } from '../../math';
 import { RenderLayer } from '../render-layer';
-import { RenderSource } from './render-source';
+import { RenderEffects, RenderSource } from './render-source';
 
 export class PolygonRenderSource implements RenderSource {
   path: Path;
   color: string;
-  width: number;
-  height: number;
   boundingBox: BoundingBox;
+  renderEffects: RenderEffects;
 
-  constructor(path: Path, color: string = 'black') {
+  constructor(path: Path, color: string = 'black', renderEffects: RenderEffects = {}) {
     this.path = path;
     this.color = color;
     this.boundingBox = calculateBoundingBox(path);
-    this.width = this.boundingBox.dimentions.x;
-    this.height = this.boundingBox.dimentions.y;
+    this.renderEffects = renderEffects;
   }
 
   render(layer: RenderLayer): void {

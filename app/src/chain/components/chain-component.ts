@@ -1,4 +1,4 @@
-import { common, ecs } from "@gameup/engine";
+import { common, ecs, math } from "@gameup/engine";
 import { ChainableComponent } from "./chainable-component";
 
 type OnChainCompleteCallback = (links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
@@ -7,6 +7,7 @@ type OnAddedToChain = (entity: ecs.Entity) => common.SyncOrAsync<void>;
 
 export class ChainComponent implements ecs.Component {
   name: symbol;
+  public path: Array<math.Vector2>;
   private _links: Array<ecs.Entity>;
   private _onChainCompleteCallback: OnChainCompleteCallback;
   private _onRemovedFromChain: OnRemovedFromChain;
@@ -20,6 +21,7 @@ export class ChainComponent implements ecs.Component {
     onAddedToChain: OnAddedToChain
   ) {
     this.name = ChainComponent.symbol;
+    this.path = new Array();
     this._links = new Array();
     this._onChainCompleteCallback = onChainCompleteCallback;
     this._onRemovedFromChain = onRemovedFromChain;
@@ -35,10 +37,16 @@ export class ChainComponent implements ecs.Component {
       ChainableComponent.symbol
     ) as ChainableComponent;
 
+    const postitionComponent = entity.getComponent(
+      common.PositionComponent.symbol
+    ) as common.PositionComponent;
+
     chainableComponent.chain = this;
 
-    await this._onAddedToChain(entity);
     this._links.push(entity);
+    this.path.push(postitionComponent);
+
+    await this._onAddedToChain(entity);
   }
 
   public getTailLink(): common.OrNull<ecs.Entity> {
@@ -51,9 +59,11 @@ export class ChainComponent implements ecs.Component {
 
   public async removeTail(): Promise<common.OrNull<ecs.Entity>> {
     const removedLink = this._links.pop() ?? null;
+    
+    this.path.pop();
 
     if (!common.isNil(removedLink)) {
-      this._clearChainFromLink(removedLink as ecs.Entity)
+      this._clearChainFromLink(removedLink as ecs.Entity);
       await this._onRemovedFromChain(removedLink as ecs.Entity);
     }
 
@@ -74,6 +84,7 @@ export class ChainComponent implements ecs.Component {
     }
 
     this._links = new Array();
+    this.path = new Array();
   }
 
   private _clearChainFromLink(link: ecs.Entity) {

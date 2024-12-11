@@ -1,7 +1,17 @@
+import { BoundingBox } from '../../math';
 import { RenderLayer } from '../render-layer';
+
+export type GlowEffect = {
+  color: string;
+  radius: number;
+};
+
+export type RenderEffects = {
+  glow?: GlowEffect;
+};
 
 export interface RenderSource {
   render(layer: RenderLayer): void;
-  width: number;
-  height: number;
+  boundingBox: BoundingBox;
+  renderEffects: RenderEffects;
 }

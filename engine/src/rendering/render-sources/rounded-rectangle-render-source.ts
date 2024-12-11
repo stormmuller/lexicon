@@ -1,6 +1,6 @@
 import { BoundingBox, Vector2 } from '../../math';
 import { RenderLayer } from '../render-layer';
-import { RenderSource } from './render-source';
+import { RenderEffects, RenderSource } from './render-source';
 
 export class RoundedRectangleRenderSource implements RenderSource {
   width: number;
@@ -8,13 +8,24 @@ export class RoundedRectangleRenderSource implements RenderSource {
   radius: number;
   color: string;
   boundingBox: BoundingBox;
+  renderEffects: RenderEffects;
 
-  constructor(width: number, height: number, radius: number, color: string = 'black') {
+  constructor(
+    width: number,
+    height: number,
+    radius: number,
+    color: string = 'black',
+    renderEffects: RenderEffects = {},
+  ) {
     this.width = width;
     this.height = height;
     this.radius = radius;
     this.color = color;
-    this.boundingBox = new BoundingBox(new Vector2(0, 0), new Vector2(this.width, this.height));
+    this.boundingBox = new BoundingBox(
+      new Vector2(0, 0),
+      new Vector2(this.width, this.height),
+    );
+    this.renderEffects = renderEffects
   }
 
   render(layer: RenderLayer): void {
@@ -29,7 +40,13 @@ export class RoundedRectangleRenderSource implements RenderSource {
 
     // Right edge
     ctx.lineTo(this.width, this.height - this.radius);
-    ctx.arcTo(this.width, this.height, this.width - this.radius, this.height, this.radius);
+    ctx.arcTo(
+      this.width,
+      this.height,
+      this.width - this.radius,
+      this.height,
+      this.radius,
+    );
 
     // Bottom edge
     ctx.lineTo(this.radius, this.height);

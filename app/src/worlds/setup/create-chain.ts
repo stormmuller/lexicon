@@ -1,6 +1,7 @@
 import { common, ecs, rendering } from "@gameup/engine";
 import { TileComponent } from "../../tile";
 import { ChainComponent, ChainSystem } from "../../chain";
+import { styles } from "../../styles";
 
 export function createChain(
   world: ecs.World,
@@ -12,7 +13,7 @@ export function createChain(
   focusedRenderLayer: rendering.RenderLayer,
   normalRenderLayer: rendering.RenderLayer
 ) {
-  async function chainComplete(links: Array<ecs.Entity>) {
+  async function onChainComplete(links: Array<ecs.Entity>) {
     let word = "";
 
     for (const link of links) {
@@ -46,11 +47,38 @@ export function createChain(
     sprite.renderLayerName = normalRenderLayer.name;
   }
 
+  const chainComponent = new ChainComponent(
+    onChainComplete,
+    onRemovedFromChain,
+    onAddedToChain
+  );
+
+  const lineRenderSource = new rendering.LineRenderSource(
+    chainComponent.path,
+    styles.line.cornderRadius,
+    styles.line.color,
+    styles.line.thinkness,
+    {
+      glow: styles.line.glow,
+    }
+  );
+
+  const chainSprite = new rendering.SpriteComponent(
+    lineRenderSource,
+    focusedRenderLayer.name
+  );
+
+  const chainPosition = new common.PositionComponent();
+  const chainScale = new common.ScaleComponent();
+
   const chain = new ecs.Entity("chain", [
-    new ChainComponent(chainComplete, onRemovedFromChain, onAddedToChain),
+    chainPosition,
+    chainScale,
+    chainComponent,
+    chainSprite,
   ]);
 
-  world.addEntity(chain);
+  world.addEntities([chain]);
 
   const chainSystem = new ChainSystem(
     inputsEntity,

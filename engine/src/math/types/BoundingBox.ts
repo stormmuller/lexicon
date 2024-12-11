@@ -10,19 +10,19 @@ export class BoundingBox {
   }
 
   public get minX(): number {
-    return this.point.x; 
+    return this.point.x;
   }
 
   public get maxX(): number {
-    return this.point.x + this.dimentions.x; 
+    return this.point.x + this.dimentions.x;
   }
-  
+
   public get minY(): number {
-    return this.point.y; 
+    return this.point.y;
   }
 
   public get maxY(): number {
-    return this.point.y + this.dimentions.y; 
+    return this.point.y + this.dimentions.y;
   }
 
   public contains(point: Vector2): boolean {
@@ -30,5 +30,38 @@ export class BoundingBox {
     const inYBounds = point.y >= this.minY && point.y <= this.maxY;
 
     return inXBounds && inYBounds;
+  }
+
+  public static combineBoundingBoxes(
+    boundingBoxes: BoundingBox[],
+  ): BoundingBox {
+    if (boundingBoxes.length === 0) {
+      throw new Error('No bounding boxes to combine');
+    }
+
+    let minX = Number.POSITIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+
+    for (const box of boundingBoxes) {
+      if (box.minX < minX) {
+        minX = box.minX;
+      }
+      if (box.minY < minY) {
+        minY = box.minY;
+      }
+      if (box.maxX > maxX) {
+        maxX = box.maxX;
+      }
+      if (box.maxY > maxY) {
+        maxY = box.maxY;
+      }
+    }
+
+    return new BoundingBox(
+      new Vector2(minX, minY),
+      new Vector2(maxX - minX, maxY - minY),
+    );
   }
 }

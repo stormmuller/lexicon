@@ -7,6 +7,7 @@ import {
 } from '../../common';
 import { Entity, System } from '../../ecs';
 import { CameraComponent, SpriteComponent } from '../components';
+import { GlowEffect, RenderEffects } from '../render-sources';
 import { ClearStrategy, RenderLayer } from '../types';
 
 export class RenderSystem extends System {
@@ -134,10 +135,38 @@ export class RenderSystem extends System {
       -spriteComponent.anchor.y,
     );
 
+    this._renderPreProcessingEffects(
+      spriteComponent.renderSource.renderEffects,
+    );
+
     // Render the sprite
     spriteComponent.renderSource.render(this._layer);
 
+    this._resetCanvas();
+  }
+
+  private _resetCanvas() {
     // Reset transformation matrix
     this._layer.context.setTransform(1, 0, 0, 1, 0, 0);
+
+    // Reset filter
+    this._layer.context.filter = 'none';
+
+    // reset glow
+    this._layer.context.shadowColor = "rgba(0, 0, 0, 0)";
+    this._layer.context.shadowBlur = 0;
+  }
+
+  private _renderPreProcessingEffects(renderEffects: RenderEffects) {
+    this._renderGlow(renderEffects.glow);
+  }
+
+  private _renderGlow(glow?: GlowEffect) {
+    if (!glow) {
+      return;
+    }
+
+    this._layer.context.shadowColor = glow.color;
+    this._layer.context.shadowBlur = glow.radius;
   }
 }

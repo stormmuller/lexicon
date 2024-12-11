@@ -15,8 +15,8 @@ export class SpriteComponent implements Component {
     renderSource: RenderSource,
     renderLayerName: string,
     anchor: Vector2 = new Vector2(
-      renderSource.width / 2,
-      renderSource.height / 2,
+      renderSource.boundingBox.dimentions.x / 2,
+      renderSource.boundingBox.dimentions.y / 2,
     ),
     debugMode: boolean = false,
   ) {
