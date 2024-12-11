@@ -1,7 +1,8 @@
 import "./createPost.js";
 import { getBoard } from "../server/get-board.js";
 
-import { Devvit, useState, RedisClient } from "@devvit/public-api";
+import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
+import { cacheWords } from "../server/cache-words.js";
 
 // Defines the messages that are exchanged between Devvit and Web View
 type WebViewMessage =
@@ -35,6 +36,11 @@ Devvit.addCustomPostType({
   name: "Lexicon",
   height: "tall",
   render: (context) => {
+    const { data, loading, error } = useAsync(async () => {
+      await cacheWords(context.redis);
+
+      return true;
+    });
     // Load username with `useAsync` hook
     const [username] = useState(async () => {
       const currUser = await context.reddit.getCurrentUser();
