@@ -24,9 +24,16 @@ export function createChain(
       word += tileComponent.letter;
     }
 
-    const api = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
-    const response = await fetch(api);
-    console.log(await response.json());
+    window.parent.postMessage({
+      type: 'chain-complete',
+      data: { word }
+    }, '*');
+
+    console.log(`posting message "${word}"`);
+
+    // const api = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+    // const response = await fetch(api);
+    // console.log(await response.json());
   }
 
   function onAddedToChain(entity: ecs.Entity) {

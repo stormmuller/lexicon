@@ -2,33 +2,15 @@ import "./createPost.js";
 import { getBoard } from "../server/get-board.js";
 
 import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
-import { cacheWords } from "../server/cache-words.js";
-
-// Defines the messages that are exchanged between Devvit and Web View
-type WebViewMessage =
-  | {
-      type: "initialData";
-      data: {
-        username: string;
-        currentCounter: number;
-        dimentions: {
-          width: number;
-          height: number;
-        };
-      };
-    }
-  | {
-      type: "setCounter";
-      data: { newCounter: number };
-    }
-  | {
-      type: "updateCounter";
-      data: { currentCounter: number };
-    };
+import { cacheWords, wordsSetName } from "../server/cache-words.js";
+import { ChainCompleteMessage } from "./web-view-messages/chain-complete.handler.js";
+import { webViewMessageDispatcher } from './web-view-messages/web-view-message-dispatcher.js';
+import { WebViewMessage } from "./web-view-messages/web-view-message.type.js";
 
 Devvit.configure({
   redditAPI: true,
   redis: true,
+  http: true
 });
 
 // Add a custom post type to Devvit
@@ -62,28 +44,8 @@ Devvit.addCustomPostType({
     const [webviewVisible, setWebviewVisible] = useState(false);
 
     // When the web view invokes `window.parent.postMessage` this function is called
-    const onMessage = async (msg: WebViewMessage) => {
-      switch (msg.type) {
-        case "setCounter":
-          await context.redis.set(
-            `counter_${context.postId}`,
-            msg.data.newCounter.toString()
-          );
-          context.ui.webView.postMessage("myWebView", {
-            type: "updateCounter",
-            data: {
-              currentCounter: msg.data.newCounter,
-            },
-          });
-          setCounter(msg.data.newCounter);
-          break;
-        case "initialData":
-        case "updateCounter":
-          break;
-
-        default:
-          throw new Error(`Unknown message type: ${msg satisfies never}`);
-      }
+    const onMessage = async (msg: WebViewMessage<any>) => {
+      await webViewMessageDispatcher.dispatchMessage(msg.type, msg.data);
     };
 
     // When the button is clicked, send initial data to web view and show it
@@ -158,7 +120,7 @@ Devvit.addCustomPostType({
             <webview
               id="myWebView"
               url="dist/index.html"
-              onMessage={(msg) => onMessage(msg as WebViewMessage)}
+              onMessage={(msg) => onMessage(msg as WebViewMessage<any>)}
               grow
               height={webviewVisible ? "100%" : "0%"}
             />

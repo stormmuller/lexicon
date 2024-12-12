@@ -90,7 +90,7 @@ export async function createTile(
     scale.set(scale.subtract(new math.Vector2(0.5, 0.5)));
   }
 
-  const tileEntity = new ecs.Entity(`tile [${x};y${y}]`, [
+  const tileEntity = new ecs.Entity(`tile [${x};${y}]`, [
     new common.PositionComponent(calculatedX, calculatedY),
     new common.RotationComponent(0),
     new common.ScaleComponent(
