@@ -1,5 +1,5 @@
 export const tile = {
-  size: 45,
+  size: 35,
   gap: 10,
   borderRaduis: 5,
   backgroundColor: "#19193f",

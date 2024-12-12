@@ -2,10 +2,10 @@ import "./createPost.js";
 import { getBoard } from "../server/get-board.js";
 
 import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
-import { cacheWords, wordDefinitionsKeyName } from "../server/cache-words.ts";
-import { ChainCompleteMessage } from "./web-view-messages/chain-complete.handler.js";
-import { webViewMessageDispatcher } from './web-view-messages/web-view-message-dispatcher.js';
+import { cacheWords } from "../server/cache-words.ts";
+import { createWebViewMessageDispatcher } from './web-view-messages/web-view-message-dispatcher.js';
 import { WebViewMessage } from "./web-view-messages/web-view-message.type.js";
+import { Message } from "./web-view-messages/message-handler.ts";
 
 Devvit.configure({
   redditAPI: true,
@@ -23,6 +23,9 @@ Devvit.addCustomPostType({
 
       return true;
     });
+
+    const webViewMessageDispatcher = createWebViewMessageDispatcher(context.redis, context.ui.webView);
+
     // Load username with `useAsync` hook
     const [username] = useState(async () => {
       const currUser = await context.reddit.getCurrentUser();
@@ -44,8 +47,8 @@ Devvit.addCustomPostType({
     const [webviewVisible, setWebviewVisible] = useState(false);
 
     // When the web view invokes `window.parent.postMessage` this function is called
-    const onMessage = async (msg: WebViewMessage<any>) => {
-      await webViewMessageDispatcher.dispatchMessage(msg.type, msg.data);
+    const onMessage = async (msg: Message<any>) => {
+      await webViewMessageDispatcher.dispatchMessage(msg);
     };
 
     // When the button is clicked, send initial data to web view and show it

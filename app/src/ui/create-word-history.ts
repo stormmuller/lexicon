@@ -11,9 +11,9 @@ export function createWordHistory(
   const boardHeight =
     (styles.tile.size + styles.tile.gap) * config.gridSize.y - styles.tile.gap;
 
-  const containerBoardHeightDiff = 50;
+  const containerBoardHeightDiff = 5;
   const containerMargin = 20;
-  const wordHistoryContainerWidth = 140;
+  const wordHistoryContainerWidth = 180;
 
   const wordContainerRenderSource = new rendering.RoundedRectangleRenderSource(
     wordHistoryContainerWidth,

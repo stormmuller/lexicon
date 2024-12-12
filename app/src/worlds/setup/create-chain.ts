@@ -2,6 +2,7 @@ import { common, ecs, rendering } from "@gameup/engine";
 import { TileComponent } from "../../tile";
 import { ChainComponent, ChainSystem } from "../../chain";
 import { styles } from "../../styles";
+import { makeRpc } from "../../rpc/make-rpc";
 
 export function createChain(
   world: ecs.World,
@@ -23,6 +24,10 @@ export function createChain(
 
       word += tileComponent.letter;
     }
+
+    const score = await makeRpc<string>('chain-complete', { word });
+
+    console.log(`You gotz the score! ${score} ⭐`);
 
     window.parent.postMessage({
       type: 'chain-complete',

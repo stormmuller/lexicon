@@ -13,6 +13,7 @@
     "vite": "^6.0.1"
   },
   "dependencies": {
-    "@gameup/engine": "file:../engine"
+    "@gameup/engine": "file:../engine",
+    "uuid": "^11.0.3"
   }
 }

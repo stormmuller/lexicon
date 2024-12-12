@@ -11,9 +11,9 @@ export function createLeaderboard(
   const boardHeight =
     (styles.tile.size + styles.tile.gap) * config.gridSize.y - styles.tile.gap;
 
-  const containerBoardHeightDiff = 50;
+  const containerBoardHeightDiff = 5;
   const containerMargin = 20;
-  const leaderboardWidth = 140;
+  const leaderboardWidth = 180;
 
   const leaderBoardPanelRenderSource = new rendering.RoundedRectangleRenderSource(
     leaderboardWidth,

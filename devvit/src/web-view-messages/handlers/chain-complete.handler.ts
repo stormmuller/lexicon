@@ -1,11 +1,12 @@
 import { RedisClient } from "@devvit/public-api";
-import { MessageHandler } from "../message-handler.ts";
+import { Message, MessageHandler } from "../message-handler.ts";
 import { wordsKeyName } from "../../../server/cache-words.ts";
+import { calculateWordScore } from "../../../server/calculate-word-score.ts";
 
-export type ChainCompleteMessage = { word: string };
+export type ChainCompleteMessage = Message<{ word: string }>;
 export const chainCompleteMessageType = "chain-complete";
 
-export class ChainCompleteMessageHandler extends MessageHandler<ChainCompleteMessage> {
+export class ChainCompleteMessageHandler extends MessageHandler<ChainCompleteMessage, number | null> {
   private _redis: RedisClient;
 
   constructor(redis: RedisClient) {
@@ -14,15 +15,24 @@ export class ChainCompleteMessageHandler extends MessageHandler<ChainCompleteMes
     this._redis = redis;
   }
 
-  public override async handle(message: ChainCompleteMessage): Promise<void> {
+  public override async handle(message: ChainCompleteMessage) {
+    console.log(message);
+    const sanitizedWord = message.data.word.toLowerCase();
+
     const wordRank = await this._redis.zRank(
       wordsKeyName,
-      message.word.toLowerCase()
+      sanitizedWord
     );
+
     const isValidWord = wordRank !== undefined;
 
     // check if word in words db
     if (isValidWord) {
+      const score = calculateWordScore(sanitizedWord);
+
+      console.log(`score: ${score}`)
+
+      return score;
       //  true:
       //    check if in defintions db:
       //      true:
@@ -35,6 +45,7 @@ export class ChainCompleteMessageHandler extends MessageHandler<ChainCompleteMes
       //  false:
       //    return failure
     }
-    console.log(message);
+
+    return null;
   }
 }
