@@ -4,3 +4,4 @@
  - Consider adding `allowImportingTsExtensions` to the devvit tsconfig
  - [Elaborate(redis seeding example)] Ask AI was not useful, and infact it was actively harmful to my development
  - I have pi-hole + brave, so trackers are blocked, I also have extentions like password managers, etc. that log to the console. The console can be quite noisy.Consider adding a default logger that has some structured logs  e.g. using the name of the app as a prefix, allows me to understand what is and isn't from my app in the console. 
+ - add server folder to tsconfig in templates

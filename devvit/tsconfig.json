@@ -5,6 +5,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["**/node_modules", "**/.*/", "**/*.json"]
+  "include": ["./src/**/*", "./server/**/*"],
+  "exclude": ["**/node_modules", "**/.*/", "**/*.json"],
+  "types": []
 }
