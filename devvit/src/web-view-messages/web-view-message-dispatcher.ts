@@ -1,5 +1,5 @@
-import { ChainCompleteMessageHandler } from "./chain-complete.handler.js";
-import { MessageHandler } from "./message-handler.js";
+import { ChainCompleteMessageHandler } from "./handlers/index.ts";
+import { MessageHandler } from "./message-handler.ts";
 
 export class WebViewMessageDispatcher {
   private _messageHandlers: Map<string, MessageHandler<any>>;

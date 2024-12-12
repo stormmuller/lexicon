@@ -1,5 +1,5 @@
 import { RedisClient } from "@devvit/public-api";
-import { generateRandomLetter } from "./generate-random-letter";
+import { generateRandomLetter } from "./generate-random-letter.ts";
 
 interface BoardDimentations {
     x: number,
@@ -18,7 +18,7 @@ export async function getBoard(
     const numberOfLetters = boardDimentsions.x * boardDimentsions.y;
 
     for (let i = 0; i < numberOfLetters; i++) {
-        board.push(generateRandomLetter())
+        board.push(generateRandomLetter().letter)
     }
     
     await redis.hSet("boards", { [postId]: board.join('') })

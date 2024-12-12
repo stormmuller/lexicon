@@ -1,0 +1,463 @@
+[
+  {
+    "word": "for",
+    "definitions": [
+      {
+        "type": "preposition",
+        "description": "Used to indicate the object, purpose, or recipient of an action."
+      },
+      {
+        "type": "preposition",
+        "description": "In support of or in favor of."
+      }
+    ]
+  },
+  {
+    "word": "is",
+    "definitions": [
+      {
+        "type": "verb",
+        "description": "Third-person singular present indicative of 'be.'"
+      }
+    ]
+  },
+  {
+    "word": "be",
+    "definitions": [
+      {
+        "type": "verb",
+        "description": "To exist; to have reality."
+      },
+      {
+        "type": "verb",
+        "description": "To occur or take place."
+      }
+    ]
+  },
+  {
+    "word": "your",
+    "definitions": [
+      {
+        "type": "determiner",
+        "description": "Belonging to or associated with the person or people that the speaker is addressing."
+      }
+    ]
+  },
+  {
+    "word": "was",
+    "definitions": [
+      {
+        "type": "verb",
+        "description": "First- and third-person singular past tense of 'be.'"
+      }
+    ]
+  },
+  {
+    "word": "our",
+    "definitions": [
+      {
+        "type": "determiner",
+        "description": "Belonging to or associated with the speaker and one or more others."
+      }
+    ]
+  },
+  {
+    "word": "their",
+    "definitions": [
+      {
+        "type": "determiner",
+        "description": "Belonging to or associated with a group of people or things previously mentioned."
+      }
+    ]
+  },
+  {
+    "word": "january",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The first month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "ebay",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "An American multinational e-commerce company facilitating online auctions and consumer-to-consumer sales."
+      }
+    ]
+  },
+  {
+    "word": "uk",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "An abbreviation for the United Kingdom, a sovereign state in northwestern Europe."
+      }
+    ]
+  },
+  {
+    "word": "american",
+    "definitions": [
+      {
+        "type": "adjective",
+        "description": "Relating to or characteristic of the United States or its inhabitants."
+      }
+    ]
+  },
+  {
+    "word": "usa",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "United States of America, a country in North America."
+      }
+    ]
+  },
+  {
+    "word": "every",
+    "definitions": [
+      {
+        "type": "determiner",
+        "description": "Each single one of a set, without exception."
+      }
+    ]
+  },
+  {
+    "word": "december",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The twelfth month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "canada",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A country in North America, extending from the Atlantic to the Pacific."
+      }
+    ]
+  },
+  {
+    "word": "look",
+    "definitions": [
+      {
+        "type": "verb",
+        "description": "To direct one's gaze in a specified direction."
+      },
+      {
+        "type": "verb",
+        "description": "To appear or seem."
+      },
+      {
+        "type": "noun",
+        "description": "An act of looking; a glance."
+      }
+    ]
+  },
+  {
+    "word": "june",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The sixth month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "october",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The tenth month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "november",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The eleventh month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "september",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The ninth month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "july",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The seventh month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "april",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The fourth month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "america",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A landmass comprising the continents of North and South America; often used to refer to the United States."
+      }
+    ]
+  },
+  {
+    "word": "texas",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A state in the south-central region of the United States."
+      }
+    ]
+  },
+  {
+    "word": "february",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The second month of the Gregorian calendar."
+      }
+    ]
+  },
+  {
+    "word": "london",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The capital city of the United Kingdom."
+      }
+    ]
+  },
+  {
+    "word": "washington",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A state in the northwestern United States or the capital city of the United States."
+      }
+    ]
+  },
+  {
+    "word": "california",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A state on the West Coast of the United States."
+      }
+    ]
+  },
+  {
+    "word": "net",
+    "definitions": [
+      {
+        "type": "noun",
+        "description": "A piece of open-meshed material used typically for catching or holding things."
+      },
+      {
+        "type": "noun",
+        "description": "Short for the internet, referring to the global computer network."
+      }
+    ]
+  },
+  {
+    "word": "australia",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A country and continent surrounded by the Indian and Pacific oceans."
+      }
+    ]
+  },
+  {
+    "word": "david",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A male given name of Hebrew origin."
+      }
+    ]
+  },
+  {
+    "word": "feb",
+    "definitions": [
+      {
+        "type": "abbreviation",
+        "description": "A shortened form of February."
+      }
+    ]
+  },
+  {
+    "word": "sep",
+    "definitions": [
+      {
+        "type": "abbreviation",
+        "description": "A shortened form of September."
+      }
+    ]
+  },
+  {
+    "word": "france",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A country in Western Europe."
+      }
+    ]
+  },
+  {
+    "word": "microsoft",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "An American multinational technology company."
+      }
+    ]
+  },
+  {
+    "word": "url",
+    "definitions": [
+      {
+        "type": "noun",
+        "description": "Uniform Resource Locator; an address that identifies a resource on the internet."
+      }
+    ]
+  },
+  {
+    "word": "europe",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A continent to the north of Africa and west of Asia."
+      }
+    ]
+  },
+  {
+    "word": "germany",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A country in Central Europe."
+      }
+    ]
+  },
+  {
+    "word": "jul",
+    "definitions": [
+      {
+        "type": "abbreviation",
+        "description": "A shortened form of July."
+      }
+    ]
+  },
+  {
+    "word": "james",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A male given name of English origin."
+      }
+    ]
+  },
+  {
+    "word": "india",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A country in South Asia."
+      }
+    ]
+  },
+  {
+    "word": "michael",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A male given name of Hebrew origin."
+      }
+    ]
+  },
+  {
+    "word": "florida",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A state in the southeastern United States."
+      }
+    ]
+  },
+  {
+    "word": "paul",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A male given name of Latin origin."
+      }
+    ]
+  },
+  {
+    "word": "friday",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The sixth day of the week, following Thursday."
+      }
+    ]
+  },
+  {
+    "word": "sony",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A Japanese multinational conglomerate corporation."
+      }
+    ]
+  },
+  {
+    "word": "africa",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "A continent south of Europe and bordered by the Atlantic and Indian Oceans."
+      }
+    ]
+  },
+  {
+    "word": "monday",
+    "definitions": [
+      {
+        "type": "proper noun",
+        "description": "The second day of the week, following Sunday."
+      }
+    ]
+  },
+  {
+    "word": "european",
+    "definitions": [
+      {
+        "type": "adjective",
+        "description": "Relating to or characteristic of Europe or its inhabitants."
+      }
+    ]
+  }
+]

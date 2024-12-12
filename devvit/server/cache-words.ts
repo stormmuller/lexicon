@@ -1,26 +1,44 @@
 import { RedisClient } from "@devvit/public-api";
-import words from "./words.json";
+const wordDefinitions = [];
+const words = [];
+// import wordDefinitions from "./word-definitions.json";
+// import words from "./words.json";
 
-export const wordsSetName = "words";
+export const wordDefinitionsKeyName = "word-definitions";
+export const wordsKeyName = "words";
 
 export async function cacheWords(redis: RedisClient) {
-  const numberOfCachedWords = await redis.zCard(wordsSetName);
+  const numberOfCachedWordDefinitions = await redis.hLen(
+    wordDefinitionsKeyName
+  );
 
-  // const response = await fetch(
-  //   "https://api.dictionaryapi.dev/api/v2/entries/en/hello"
-  // );
-  // const result = await response.json();
-  // console.log("result: ", result);
-
-  console.log(`Skipping word loading as ${words.length} words are cached.`);
-
-  if (numberOfCachedWords === 0) {
-    console.log("Started Caching...");
+  if (numberOfCachedWordDefinitions === 0) {
+    console.log("Started Caching word definitions...");
     const start = performance.now();
-    await redis.zAdd(wordsSetName, ...words);
+    await redis.hSet(wordDefinitionsKeyName, ...wordDefinitions);
     const end = performance.now();
     console.log(
-      `Caching complete, cached ${words.length} words in ${end - start}ms.`
+      `Word definitions caching complete, cached ${
+        wordDefinitions.length
+      } words in ${end - start}ms. 🚀`
     );
+  } else {
+    console.log("Word definitions cache already warm 🔥");
+  }
+
+  const numberOfCachedWords = await redis.zCard(wordsKeyName);
+
+  if (numberOfCachedWords === 0) {
+    console.log("Started Caching words...");
+    const start = performance.now();
+    await redis.zAdd(wordsKeyName, ...words);
+    const end = performance.now();
+    console.log(
+      `Words caching complete, cached ${wordsKeyName.length} words in ${
+        end - start
+      }ms. 🚀`
+    );
+  } else {
+    console.log("Words cache already warm 🔥");
   }
 }

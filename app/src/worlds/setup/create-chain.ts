@@ -29,8 +29,6 @@ export function createChain(
       data: { word }
     }, '*');
 
-    console.log(`posting message "${word}"`);
-
     // const api = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
     // const response = await fetch(api);
     // console.log(await response.json());

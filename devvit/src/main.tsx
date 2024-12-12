@@ -2,7 +2,7 @@ import "./createPost.js";
 import { getBoard } from "../server/get-board.js";
 
 import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
-import { cacheWords, wordsSetName } from "../server/cache-words.js";
+import { cacheWords, wordDefinitionsKeyName } from "../server/cache-words.js";
 import { ChainCompleteMessage } from "./web-view-messages/chain-complete.handler.js";
 import { webViewMessageDispatcher } from './web-view-messages/web-view-message-dispatcher.js';
 import { WebViewMessage } from "./web-view-messages/web-view-message.type.js";

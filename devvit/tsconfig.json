@@ -2,7 +2,9 @@
   "extends": "@devvit/public-api/devvit.tsconfig.json",
   "compilerOptions": {
     "resolveJsonModule": true,
-    "noEmit": true
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
+  "exclude": ["**/node_modules", "**/.*/", "**/*.json"]
 }
