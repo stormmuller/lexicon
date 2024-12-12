@@ -23,8 +23,6 @@ export async function getBoard(
     }
     
     await redis.hSet("boards", { [postId]: board.join('') })
-
-    console.log(letters);
   }
 
   return board;

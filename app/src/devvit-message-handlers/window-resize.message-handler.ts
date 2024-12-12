@@ -4,5 +4,4 @@ export type WindowResizeMessage = {
 };
 
 export function windowResizeMessageHandler() {
-  // console.log(message)
 }

@@ -77,7 +77,6 @@ export class ChainComponent implements ecs.Component {
   }
 
   public async complete(): Promise<void> {
-    console.log(this._links);
     await this._onChainCompleteCallback(this._links);
 
     for (const link of this._links) {

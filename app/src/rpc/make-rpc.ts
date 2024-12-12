@@ -2,41 +2,37 @@ import { v4 as generateUuid } from 'uuid';
 
 const pendingRequests = new Map<string, any>();
 
-export async function makeRpc<TRes>(type: string, data: any): Promise<TRes> {
+type RpcCallback<TRes> = (response: TRes) => Promise<void> | void;
+
+export async function makeRpc<TRes>(type: string, data: any, responseHandler: RpcCallback<TRes>) {
   const messageId = generateUuid();
 
-  return new Promise<TRes>((resolve, reject) => {
-    pendingRequests.set(messageId, resolve);
+  pendingRequests.set(messageId, responseHandler);
 
-    // Send the message to the parent
-    try {
-      window.parent.postMessage({
-        type,
-        messageId,
-        data
-      }, '*');
-    } catch (error) {
-      pendingRequests.delete(messageId);
-      reject(error);
-    }
-  });
+  try {
+    window.parent.postMessage({
+      type,
+      messageId,
+      data
+    }, '*');
+  } catch (error) {
+    pendingRequests.delete(messageId);
+  }
 }
 
-window.addEventListener('message', (event) => {
+window.addEventListener('message', async (event) => {
   if (event.data.type !== 'devvit-message') {
     return;
   }
 
   const { data, type } = event.data.data.message;
 
-  console.log({ data, type });
-
   if (type === 'rpc-response') {
     const { messageId, response } = data;
-    const request = pendingRequests.get(messageId);
+    const responseHandler = pendingRequests.get(messageId);
 
-    if (request) {
-      request(response);
+    if (responseHandler) {
+      await responseHandler(response);
       pendingRequests.delete(messageId);
     }
   }

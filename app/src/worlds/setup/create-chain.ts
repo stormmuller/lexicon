@@ -25,18 +25,14 @@ export function createChain(
       word += tileComponent.letter;
     }
 
-    const score = await makeRpc<string>('chain-complete', { word });
-
-    console.log(`You gotz the score! ${score} ⭐`);
+    makeRpc<number>('chain-complete', { word }, (score) => {
+      console.log(`You gotz the score! ${score} ⭐`);
+    });
 
     window.parent.postMessage({
       type: 'chain-complete',
       data: { word }
     }, '*');
-
-    // const api = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
-    // const response = await fetch(api);
-    // console.log(await response.json());
   }
 
   function onAddedToChain(entity: ecs.Entity) {

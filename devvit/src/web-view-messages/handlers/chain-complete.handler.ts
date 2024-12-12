@@ -16,7 +16,6 @@ export class ChainCompleteMessageHandler extends MessageHandler<ChainCompleteMes
   }
 
   public override async handle(message: ChainCompleteMessage) {
-    console.log(message);
     const sanitizedWord = message.data.word.toLowerCase();
 
     const wordRank = await this._redis.zRank(
@@ -26,26 +25,12 @@ export class ChainCompleteMessageHandler extends MessageHandler<ChainCompleteMes
 
     const isValidWord = wordRank !== undefined;
 
-    // check if word in words db
-    if (isValidWord) {
-      const score = calculateWordScore(sanitizedWord);
-
-      console.log(`score: ${score}`)
-
-      return score;
-      //  true:
-      //    check if in defintions db:
-      //      true:
-      //        return success result + definitions
-      //      false:
-      //        look up word via definition api
-      //        save in defintion db
-      //        return success result + definitions
-    } else {
-      //  false:
-      //    return failure
+    if (!isValidWord) {
+      return null;
     }
 
-    return null;
+    const score = calculateWordScore(sanitizedWord);
+
+    return score;
   }
 }
