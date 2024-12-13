@@ -8,6 +8,7 @@ import {
   createInputs,
   createRenderLayers,
 } from "./setup";
+import { creaetWordDisplay as createWordDisplay } from "./setup/word-display";
 
 export async function createMainWorld(
   worldSpace: common.Space,
@@ -37,8 +38,11 @@ export async function createMainWorld(
     styles.tile.size,
     styles.tile.size,
     styles.tile.borderRaduis,
-    styles.tile.chained.backgroundColor
+    styles.tile.backgroundColor,
+    { width: 2, color: "yellow" }
   );
+
+  const wordComponent = createWordDisplay(world, foregroundRenderLayer);
 
   createChain(
     world,
@@ -48,7 +52,8 @@ export async function createMainWorld(
     tileChainImageRenderSource,
     tileImageRenderSource,
     focusedRenderLayer,
-    foregroundRenderLayer
+    foregroundRenderLayer,
+    wordComponent
   );
 
   await createBoard(

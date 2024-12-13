@@ -2,11 +2,17 @@ import { BoundingBox, Vector2 } from '../../math';
 import { RenderLayer } from '../render-layer';
 import { RenderEffects, RenderSource } from './render-source';
 
+type Stroke = {
+  width: number,
+  color: string
+};
+
 export class RoundedRectangleRenderSource implements RenderSource {
   width: number;
   height: number;
   radius: number;
   color: string;
+  stroke?: Stroke;
   boundingBox: BoundingBox;
   renderEffects: RenderEffects;
 
@@ -15,6 +21,7 @@ export class RoundedRectangleRenderSource implements RenderSource {
     height: number,
     radius: number,
     color: string = 'black',
+    stroke?: Stroke,
     renderEffects: RenderEffects = {},
   ) {
     this.width = width;
@@ -25,11 +32,17 @@ export class RoundedRectangleRenderSource implements RenderSource {
       new Vector2(0, 0),
       new Vector2(this.width, this.height),
     );
-    this.renderEffects = renderEffects
+    this.stroke = stroke;
+    this.renderEffects = renderEffects;
   }
 
   render(layer: RenderLayer): void {
     const ctx = layer.context;
+
+    if (this.stroke) {
+      ctx.lineWidth = this.stroke.width;
+      ctx.strokeStyle = this.stroke.color;
+    }
 
     ctx.beginPath();
     ctx.moveTo(this.radius, 0);
@@ -60,5 +73,9 @@ export class RoundedRectangleRenderSource implements RenderSource {
 
     ctx.fillStyle = this.color;
     ctx.fill();
+
+    if (this.stroke) {
+      ctx.stroke();
+    }
   }
 }

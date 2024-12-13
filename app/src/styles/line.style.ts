@@ -1,5 +1,5 @@
 export const line = {
-  thinkness: 10,
+  thinkness: 5,
   color: "white",
   cornderRadius: 1,
   glow: {

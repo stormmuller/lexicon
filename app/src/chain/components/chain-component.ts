@@ -2,8 +2,8 @@ import { common, ecs, math } from "@gameup/engine";
 import { ChainableComponent } from "./chainable-component";
 
 type OnChainCompleteCallback = (links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
-type OnRemovedFromChain = (entity: ecs.Entity) => common.SyncOrAsync<void>;
-type OnAddedToChain = (entity: ecs.Entity) => common.SyncOrAsync<void>;
+type OnRemovedFromChain = (entity: ecs.Entity, links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
+type OnAddedToChain = (entity: ecs.Entity, links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
 
 export class ChainComponent implements ecs.Component {
   name: symbol;
@@ -46,7 +46,7 @@ export class ChainComponent implements ecs.Component {
     this._links.push(entity);
     this.path.push(postitionComponent);
 
-    await this._onAddedToChain(entity);
+    await this._onAddedToChain(entity, this._links);
   }
 
   public getTailLink(): common.OrNull<ecs.Entity> {
@@ -63,8 +63,8 @@ export class ChainComponent implements ecs.Component {
     this.path.pop();
 
     if (!common.isNil(removedLink)) {
-      this._clearChainFromLink(removedLink as ecs.Entity);
-      await this._onRemovedFromChain(removedLink as ecs.Entity);
+      this._clearChainFromLink(removedLink!);
+      await this._onRemovedFromChain(removedLink!, this._links);
     }
 
     return removedLink;

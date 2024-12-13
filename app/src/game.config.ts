@@ -1,7 +1,7 @@
 export const config = {
   gridSize: {
-    x: 6,
-    y: 7,
+    x: 7,
+    y: 8,
   },
   camera: {
     minZoom: 0.8,

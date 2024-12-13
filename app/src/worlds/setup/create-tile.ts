@@ -66,7 +66,7 @@ export async function createTile(
       sprite.renderLayerName = focusedRenderLayer.name;
     }
 
-    scale.set(scale.add(new math.Vector2(0.5, 0.5)));
+    scale.set(scale.add(new math.Vector2(0.2, 0.2)));
   }
 
   function onHoverEnd(entity: ecs.Entity) {
@@ -87,7 +87,7 @@ export async function createTile(
       sprite.renderLayerName = normalRenderLayer.name;
     }
 
-    scale.set(scale.subtract(new math.Vector2(0.5, 0.5)));
+    scale.set(scale.subtract(new math.Vector2(0.2, 0.2)));
   }
 
   const tileEntity = new ecs.Entity(`tile [${x};${y}]`, [

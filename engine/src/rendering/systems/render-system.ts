@@ -136,7 +136,7 @@ export class RenderSystem extends System {
     );
 
     this._renderPreProcessingEffects(
-      spriteComponent.renderSource.renderEffects,
+      spriteComponent.renderSource.renderEffects
     );
 
     // Render the sprite
