@@ -101,7 +101,7 @@ export async function createTile(
     new TileComponent(letter, x, y),
     new HoverComponent(onHoverStart, onHoverEnd),
     new physics.BoxColliderComponent(boundingBox),
-    new ChainableComponent(),
+    new ChainableComponent()
   ]);
 
   world.addEntity(tileEntity);

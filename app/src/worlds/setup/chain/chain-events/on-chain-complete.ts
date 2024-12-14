@@ -3,6 +3,7 @@ import { makeRpc } from "../../../../rpc/make-rpc";
 import { DateComponent, ScoreComponent, WordComponent } from "../../../../word";
 import { ChainComponent } from "../../../../chain";
 import { linksToWord } from "./links-to-word";
+import { styles } from "../../../../styles";
 
 export function onChainComplete(options: {
   world: ecs.World;
@@ -31,9 +32,11 @@ export function onChainComplete(options: {
 
       const wordTextRenderSource = new rendering.TextRenderSource(
         word,
+        styles.sidePanel.width,
         "Share Tech Mono",
         20,
-        "white"
+        "white",
+        "left"
       );
       // const scoreTextRenderSource = new rendering.TextRenderSource(
       //   `+${score}`,

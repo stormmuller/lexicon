@@ -8,43 +8,80 @@ export class TextRenderSource implements RenderSource {
   color: string;
   boundingBox: BoundingBox;
   fontSize: number;
-  offset: Vector2;
+  textAlign: CanvasTextAlign;
+  textBaseline: CanvasTextBaseline;
+  maxWidth?: number;
   renderEffects: RenderEffects;
 
   constructor(
     text: string,
+    maxWidth: number,
     fontFamily: string = 'Arial',
     fontSize: number = 16,
     color: string = 'black',
-    offset: Vector2 = Vector2.zero(),
-    renderEffects: RenderEffects = {}
+    textAlign: CanvasTextAlign = 'center',
+    textBaseline: CanvasTextBaseline = 'middle',
+    renderEffects: RenderEffects = {},
   ) {
     this.text = text;
     this.fontFamily = fontFamily;
     this.fontSize = fontSize;
     this.color = color;
-    this.boundingBox = new BoundingBox(Vector2.zero(), Vector2.zero()); // gets updated in the render function as text can change at runtime
-    this.offset = offset;
-    this.renderEffects = renderEffects
+    this.textAlign = textAlign;
+    this.textBaseline = textBaseline;
+    this.maxWidth = maxWidth;
+    this.renderEffects = renderEffects;
+
+    const tempCanvas = document.createElement('canvas').getContext('2d')!;
+    tempCanvas.font = `${this.fontSize}px ${this.fontFamily}`;
+    const metrics = tempCanvas.measureText(this.text);
+    const height =
+      metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+    this.boundingBox = new BoundingBox(
+      Vector2.zero(),
+      new Vector2(maxWidth, height),
+    );
   }
 
   render(layer: RenderLayer): void {
     const context = layer.context;
 
+    // Set font and alignment
     context.font = `${this.fontSize}px ${this.fontFamily}`;
+    context.textAlign = this.textAlign;
+    context.textBaseline = this.textBaseline;
 
+    // Measure text and calculate dimensions
+    let renderText = this.text;
     const metrics = context.measureText(this.text);
-    const width = metrics.width;
+    let width = metrics.width;
     const height =
       metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-    this.boundingBox.dimentions = new Vector2(width, height);
+    // Handle maxWidth constraint
+    if (this.maxWidth && width > this.maxWidth) {
+      const ellipsis = '...';
 
+      let truncatedText = '';
+      for (let i = 0; i < this.text.length; i++) {
+        const testText = this.text.substring(0, i + 1) + ellipsis;
+        const testWidth = context.measureText(testText).width;
+
+        if (testWidth <= this.maxWidth) {
+          truncatedText = testText;
+        } else {
+          break;
+        }
+      }
+      renderText = truncatedText;
+    }
+
+    // Update bounding box dimensions
+    this.boundingBox.dimentions = new Vector2(this.maxWidth, height);
+
+    // Apply fill style and render text
     context.fillStyle = this.color;
-    context.fillText(
-      this.text,
-      -(width / 2) + this.offset.x,
-      height / 2 + this.offset.y,
-    );
+    context.fillText(renderText, 0, 0);
   }
 }
