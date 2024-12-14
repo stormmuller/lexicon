@@ -75,13 +75,25 @@ export class TextRenderSource implements RenderSource {
         }
       }
       renderText = truncatedText;
-    }
+          }
 
     // Update bounding box dimensions
     this.boundingBox.dimentions = new Vector2(this.maxWidth, height);
 
-    // Apply fill style and render text
+    // Apply fill style
     context.fillStyle = this.color;
-    context.fillText(renderText, 0, 0);
+
+    // If baseline is 'middle', adjust to visually center the text
+    if (this.textBaseline === 'middle') {
+      // Force a stable baseline for calculation
+      context.textBaseline = 'alphabetic';
+      const ascent = metrics.actualBoundingBoxAscent;
+      const descent = metrics.actualBoundingBoxDescent;
+      const verticalCenterOffset = (descent + ascent) / 2;
+      context.fillText(renderText, 0, verticalCenterOffset);
+    } else {
+      // For other baselines, just draw the text at (0,0)
+      context.fillText(renderText, 0, 0);
+    }
   }
 }
