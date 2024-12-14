@@ -1,17 +1,15 @@
+import { colors } from "./color.styles";
+
 export const tile = {
   size: 36,
   gap: 8,
   borderRaduis: 5,
-  backgroundColor: "#1d1334",
+  backgroundColor: colors.background,
   hover: {
     size: 40,
-    backgroundColor: "#5abfff",
+    backgroundColor: colors.primary,
   },
   chained: {
-    backgroundColor: "#EA8C55",
-    glow: {
-      color: "rgba(255, 255, 0, 0.5)",
-      radius: 5
-    },
+    backgroundColor: colors.accent
   }
 };

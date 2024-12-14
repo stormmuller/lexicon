@@ -1,6 +1,6 @@
 import { common, ecs, rendering } from "@gameup/engine";
 import { makeRpc } from "../../../../rpc/make-rpc";
-import { DateComponent, ScoreComponent, WordComponent } from "../../../../word";
+import { WordComponent } from "../../../../word";
 import { ChainComponent } from "../../../../chain";
 import { linksToWord } from "./links-to-word";
 import { styles } from "../../../../styles";
@@ -32,29 +32,35 @@ export function onChainComplete(options: {
 
       const wordTextRenderSource = new rendering.TextRenderSource(
         word,
-        styles.sidePanel.width,
+        styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
+        styles.sidePanel.width - styles.wordHistoryPanel.padding.x - 70,
         "Share Tech Mono",
         20,
-        "white",
-        "left"
+        styles.colors.primary,
+        "start"
       );
-      // const scoreTextRenderSource = new rendering.TextRenderSource(
-      //   `+${score}`,
-      //   "Share Tech Mono",
-      //   20,
-      //   "blue"
-      // );
-      // const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
-      //   word: wordTextRenderSource,
-      //   score: scoreTextRenderSource,
-      // });
+
+      const scoreTextRenderSource = new rendering.TextRenderSource(
+        `+${score.toString()}`,
+        styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
+        styles.sidePanel.width - styles.wordHistoryPanel.padding.x,
+        "Share Tech Mono",
+        18,
+        styles.colors.white,
+        "end"
+      );
+
+      const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
+        word: wordTextRenderSource,
+        score: scoreTextRenderSource,
+      });
 
       const wordEntity = new ecs.Entity(`word (${word},${score},${date})`, [
-        new WordComponent(word),
-        new ScoreComponent(score),
-        new DateComponent(date),
+        // new WordComponent(word),
+        // new ScoreComponent(score),
+        // new DateComponent(date),
         new rendering.SpriteComponent(
-          wordTextRenderSource,
+          scoreHistoryRenderSource,
           options.renderLayer.name
         ),
         new common.PositionComponent(),
@@ -62,8 +68,6 @@ export function onChainComplete(options: {
 
       options.words.push(wordEntity);
       options.world.addEntity(wordEntity);
-
-      console.log(`You gotz the score! ${score} ⭐`);
     });
   };
 }

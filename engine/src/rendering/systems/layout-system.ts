@@ -8,7 +8,7 @@ export class LayoutSystem extends System {
   constructor() {
     super('layout', [
       LayoutBoxComponent.symbol,
-      SpriteComponent.symbol, // TODO: we need a bounding box, but not nessarily a sprite
+      SpriteComponent.symbol, // TODO: we need a bounding box, but not necessarily a sprite
       PositionComponent.symbol,
     ]);
   }
@@ -36,17 +36,18 @@ export class LayoutSystem extends System {
         PositionComponent.symbol,
       );
 
-      const { anchor, renderSource } = spriteComponent;
+      const { renderSource } = spriteComponent;
 
-      const relativeYPosition = offset.y + renderSource.boundingBox.maxY;
-      console.log(`anchor ${anchor}`);
-      offset.y += renderSource.boundingBox.maxY + layoutBoxComponent.spaceBetween;
+      const relativeYPosition =
+        offset.y + renderSource.boundingBox.maxY + layoutBoxComponent.margin.y;
+      offset.y +=
+        renderSource.boundingBox.maxY + layoutBoxComponent.spaceBetween;
 
-      const newY = layoutPositionComponent.y - layoutSpriteComponent.anchor.y + relativeYPosition;
-
-      // const relativeXPosition = offset.x + renderSource.boundingBox.minY + anchor.x;
-      // offset.x += relativeXPosition;
-      const newX = layoutPositionComponent.x;
+      const newY =
+        layoutPositionComponent.y -
+        layoutSpriteComponent.anchor.y +
+        relativeYPosition;
+      const newX = layoutPositionComponent.x + layoutBoxComponent.margin.x;
 
       positionComponent.set(new Vector2(newX, newY));
     }

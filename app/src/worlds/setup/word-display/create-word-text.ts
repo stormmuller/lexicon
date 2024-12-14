@@ -9,6 +9,7 @@ export function createWordText(
   const textRenderSource = new rendering.TextRenderSource(
     "",
     styles.wordHistoryPanel.width,
+    styles.wordHistoryPanel.width,
     "Share Tech Mono",
     60,
     "white",

@@ -95,6 +95,10 @@ export class RenderSystem extends System {
       return; // Probably not the best way to handle layers/sprite, but the alternatives have their own issues.
     }
 
+    if (!spriteComponent.enabled) {
+      return;
+    }
+
     const position = entity.getComponent<PositionComponent>(
       PositionComponent.symbol,
     ) as PositionComponent;

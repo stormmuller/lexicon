@@ -4,6 +4,7 @@ import { line } from "./line.styles";
 import { panel } from "./panel.styles";
 import { sidePanel } from "./side-panel.styles";
 import { wordHistoryPanel } from "./word-history-panel.styles";
+import { colors } from "./color.styles";
 
 export const styles = {
     board,
@@ -12,4 +13,5 @@ export const styles = {
     line,
     sidePanel,
     wordHistoryPanel,
+    colors
 };

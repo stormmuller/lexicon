@@ -18,6 +18,7 @@ export async function createLetter(
   const textRenderSource = new rendering.TextRenderSource(
     text,
     styles.tile.size,
+    styles.tile.size,
     fontFamily,
     fontSize,
     fontColor,

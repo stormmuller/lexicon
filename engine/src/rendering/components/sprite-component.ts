@@ -8,6 +8,7 @@ export class SpriteComponent implements Component {
   anchor: Vector2;
   debugMode: boolean;
   renderLayerName: string;
+  enabled: boolean;
 
   static symbol = Symbol('Sprite');
 
@@ -18,6 +19,7 @@ export class SpriteComponent implements Component {
       renderSource.boundingBox.dimentions.x / 2,
       renderSource.boundingBox.dimentions.y / 2,
     ),
+    enabled: boolean = true,
     debugMode: boolean = false,
   ) {
     this.name = SpriteComponent.symbol;
@@ -25,5 +27,6 @@ export class SpriteComponent implements Component {
     this.anchor = anchor;
     this.debugMode = debugMode;
     this.renderLayerName = renderLayerName;
+    this.enabled = enabled;
   }
 }

@@ -1,7 +1,6 @@
-import { common, ecs, rendering } from "@gameup/engine";
+import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
 import { WordHistoryComponent } from "../../../word";
-import { LayoutBoxComponent } from "@gameup/engine/dist/rendering";
 
 export function createWordHistory(
   world: ecs.World,
@@ -29,7 +28,12 @@ export function createWordHistory(
       wordContainerRenderSource,
       backgroundRenderLayer.name
     ),
-    new LayoutBoxComponent(words, wordContainerRenderSource.boundingBox, styles.wordHistoryPanel.spaceBetween)
+    new rendering.LayoutBoxComponent(
+      words,
+      wordContainerRenderSource.boundingBox,
+      styles.wordHistoryPanel.spaceBetween,
+      new math.Vector2(0, styles.wordHistoryPanel.padding.y)
+    ),
   ]);
 
   const wordHistoryEntity = new ecs.Entity("word history", [

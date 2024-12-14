@@ -10,12 +10,14 @@ export class TextRenderSource implements RenderSource {
   fontSize: number;
   textAlign: CanvasTextAlign;
   textBaseline: CanvasTextBaseline;
-  maxWidth?: number;
+  maxWidth: number;
+  overflowWidth: number;
   renderEffects: RenderEffects;
 
   constructor(
     text: string,
     maxWidth: number,
+    overflowWidth: number = maxWidth,
     fontFamily: string = 'Arial',
     fontSize: number = 16,
     color: string = 'black',
@@ -30,6 +32,7 @@ export class TextRenderSource implements RenderSource {
     this.textAlign = textAlign;
     this.textBaseline = textBaseline;
     this.maxWidth = maxWidth;
+    this.overflowWidth = overflowWidth;
     this.renderEffects = renderEffects;
 
     const tempCanvas = document.createElement('canvas').getContext('2d')!;
@@ -58,8 +61,8 @@ export class TextRenderSource implements RenderSource {
       metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
     // Handle maxWidth constraint
-    if (this.maxWidth && width > this.maxWidth) {
-      const ellipsis = '...';
+    if (width > this.overflowWidth) {
+      const ellipsis = '…';
 
       let truncatedText = '';
       for (let i = 0; i < this.text.length; i++) {
@@ -72,12 +75,15 @@ export class TextRenderSource implements RenderSource {
           break;
         }
       }
+
       renderText = truncatedText;
-          }
+    }
 
     this.boundingBox.dimentions = new Vector2(this.maxWidth, height);
 
     context.fillStyle = this.color;
+
+    const x = this.textAlign === 'end' ? this.maxWidth : 0;
 
     // If baseline is 'middle', adjust to visually center the text
     if (this.textBaseline === 'middle') {
@@ -85,9 +91,9 @@ export class TextRenderSource implements RenderSource {
       const ascent = metrics.actualBoundingBoxAscent;
       const descent = metrics.actualBoundingBoxDescent;
       const verticalCenterOffset = (descent + ascent) / 2;
-      context.fillText(renderText, 0, verticalCenterOffset);
+      context.fillText(renderText, x, verticalCenterOffset);
     } else {
-      context.fillText(renderText, 0, 0);
+      context.fillText(renderText, x, 0);
     }
   }
 }
