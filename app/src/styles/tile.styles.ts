@@ -2,7 +2,7 @@ export const tile = {
   size: 36,
   gap: 8,
   borderRaduis: 5,
-  backgroundColor: "#19193f",
+  backgroundColor: "#1d1334",
   hover: {
     size: 40,
     backgroundColor: "#5abfff",

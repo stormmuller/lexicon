@@ -43,10 +43,7 @@ export function createChain(
     chainComponent.path,
     styles.line.cornderRadius,
     styles.line.color,
-    styles.line.thinkness,
-    {
-      glow: styles.line.glow,
-    }
+    styles.line.thinkness
   );
 
   const chainSprite = new rendering.SpriteComponent(
