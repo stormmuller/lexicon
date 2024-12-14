@@ -19,23 +19,26 @@ export function createChain(
   normalRenderLayer: rendering.RenderLayer,
   wordTextEntity: ecs.Entity
 ) {
-  const wordComponent = wordTextEntity.getComponentRequired<WordComponent>(WordComponent.symbol);
+  const wordComponent = wordTextEntity.getComponentRequired<WordComponent>(
+    WordComponent.symbol
+  );
 
   const chainComponent = new ChainComponent(
     onChainComplete({
+      world,
       renderSource: tileImageRenderSource,
       renderLayer: normalRenderLayer,
-      wordComponent
+      wordComponent,
     }),
     onRemovedFromChain({
       renderSource: tileImageRenderSource,
       renderLayer: normalRenderLayer,
-      wordComponent
+      wordComponent,
     }),
     onAddedToChain({
       renderSource: tileChainImageRenderSource,
       renderLayer: focusedRenderLayer,
-      wordComponent
+      wordComponent,
     })
   );
 

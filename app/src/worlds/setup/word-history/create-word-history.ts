@@ -1,26 +1,25 @@
 import { common, ecs, rendering } from "@gameup/engine";
-import { config } from "../../../game.config";
 import { styles } from "../../../styles";
+import { WordHistoryComponent } from "../../../word";
 
 export function createWordHistory(
   world: ecs.World,
   backgroundRenderLayer: rendering.RenderLayer
 ) {
-  const containerBoardHeightDiff = 5;
-  const containerMargin = 20;
-  const wordHistoryContainerWidth = 180;
-
   const wordContainerRenderSource = new rendering.RoundedRectangleRenderSource(
-    wordHistoryContainerWidth,
-    styles.board.height - containerBoardHeightDiff,
+    styles.sidePanel.width,
+    styles.sidePanel.height,
     styles.panel.borderRaduis,
     styles.panel.backgroundColor
   );
 
-  const container = new ecs.Entity("word container", [
+  const wordHistoryContainerEntity = new ecs.Entity("word history container", [
     new common.PositionComponent(
-      window.innerWidth / 2 + styles.board.width / 2 + wordHistoryContainerWidth / 2 + containerMargin,
-      styles.board.height / 2 + config.yOffset - styles.tile.size / 2 
+      window.innerWidth / 2 +
+        styles.board.width / 2 +
+        styles.sidePanel.width / 2 +
+        styles.sidePanel.margin,
+      styles.board.height / 2 + styles.board.marginTop - styles.tile.size / 2
     ),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(
@@ -29,7 +28,11 @@ export function createWordHistory(
     ),
   ]);
 
-  world.addEntity(container);
+  const wordHistoryEntity = new ecs.Entity("word history", [
+    new WordHistoryComponent(),
+  ]);
 
-  return container;
+  world.addEntities([wordHistoryContainerEntity, wordHistoryEntity]);
+
+  return { wordHistoryContainerEntity, wordHistoryEntity };
 }

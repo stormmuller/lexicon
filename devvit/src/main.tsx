@@ -3,14 +3,14 @@ import { getBoard } from "../server/get-board.js";
 
 import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
 import { cacheWords } from "../server/cache-words.ts";
-import { createWebViewMessageDispatcher } from './web-view-messages/web-view-message-dispatcher.js';
+import { createWebViewMessageDispatcher } from "./web-view-messages/web-view-message-dispatcher.js";
 import { WebViewMessage } from "./web-view-messages/web-view-message.type.js";
 import { Message } from "./web-view-messages/message-handler.ts";
 
 Devvit.configure({
   redditAPI: true,
   redis: true,
-  http: true
+  http: true,
 });
 
 // Add a custom post type to Devvit
@@ -24,7 +24,10 @@ Devvit.addCustomPostType({
       return true;
     });
 
-    const webViewMessageDispatcher = createWebViewMessageDispatcher(context.redis, context.ui.webView);
+    const webViewMessageDispatcher = createWebViewMessageDispatcher(
+      context.redis,
+      context.ui.webView
+    );
 
     // Load username with `useAsync` hook
     const [username] = useState(async () => {
@@ -62,7 +65,7 @@ Devvit.addCustomPostType({
         data: {
           username: username,
           score: counter,
-          board
+          board,
         },
       });
     };
@@ -77,7 +80,7 @@ Devvit.addCustomPostType({
 
     // Render the custom post type
     return (
-      <vstack grow padding="xsmall">
+      <vstack grow>
         <vstack
           grow={!webviewVisible}
           height={webviewVisible ? "0%" : "100%"}
@@ -114,20 +117,14 @@ Devvit.addCustomPostType({
             Play!
           </button>
         </vstack>
-        <vstack grow={webviewVisible} height={webviewVisible ? "100%" : "0%"}>
-          <vstack
-            border="thick"
-            borderColor="black"
+        <vstack height={webviewVisible ? "100%" : "0%"} grow>
+          <webview
+            id="myWebView"
+            url="dist/index.html"
+            onMessage={(msg) => onMessage(msg as unknown as Message<any>)}
+            grow
             height={webviewVisible ? "100%" : "0%"}
-          >
-            <webview
-              id="myWebView"
-              url="dist/index.html"
-              onMessage={(msg) => onMessage(msg as unknown as Message<any>)}
-              grow
-              height={webviewVisible ? "100%" : "0%"}
-            />
-          </vstack>
+          />
         </vstack>
       </vstack>
     );

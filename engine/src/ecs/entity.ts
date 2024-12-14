@@ -4,10 +4,16 @@ import type { Component } from './types';
 export class Entity {
   components: Set<Component>;
   name: string;
+  private _id: number;
 
   constructor(name: string, initialComponents: Component[]) {
+    this._id = Entity._generateId()
     this.components = new Set<Component>(initialComponents);
     this.name = name;
+  }
+
+  public get id(){
+    return this._id;
   }
 
   addComponent = (component: Component) => {
@@ -71,6 +77,11 @@ export class Entity {
   removeComponent = (component: Component) => {
     this.components.delete(component);
   };
+  
+  private static _idCounter: number = 0;
+  private static _generateId() {
+    return Entity._idCounter++;
+  }
 }
 
 export const filterEntitiesByComponents = (

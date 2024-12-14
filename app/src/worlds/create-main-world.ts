@@ -1,5 +1,4 @@
 import { common, ecs, game, rendering } from "@gameup/engine";
-import { createUI } from "../ui";
 import { styles } from "../styles";
 import {
   createBoard,
@@ -9,6 +8,8 @@ import {
   createRenderLayers,
 } from "./setup";
 import { createWordDisplay as createWordDisplay } from "./setup/word-display";
+import { createWordHistory } from "./setup/word-history";
+import { createLeaderboard } from "./setup/leader-board";
 
 export async function createMainWorld(
   worldSpace: common.Space,
@@ -20,12 +21,8 @@ export async function createMainWorld(
   const inputsEntity = createInputs(world, gameContainer);
 
   const { worldCamera } = createCameras(world, worldSpace, inputsEntity, game);
-  const { foregroundRenderLayer, backgroundRenderLayer, focusedRenderLayer } = createRenderLayers(
-    layerService,
-    worldCamera,
-    worldSpace,
-    world
-  );
+  const { foregroundRenderLayer, backgroundRenderLayer, focusedRenderLayer } =
+    createRenderLayers(layerService, worldCamera, worldSpace, world);
 
   const tileImageRenderSource = new rendering.RoundedRectangleRenderSource(
     styles.tile.size,
@@ -42,7 +39,14 @@ export async function createMainWorld(
     { width: 2, color: "yellow" }
   );
 
-  const { wordTextEntity } = createWordDisplay(world, foregroundRenderLayer, backgroundRenderLayer);
+  const { wordTextEntity } = createWordDisplay(
+    world,
+    foregroundRenderLayer,
+    backgroundRenderLayer
+  );
+
+  createWordHistory(world, backgroundRenderLayer);
+  createLeaderboard(world, backgroundRenderLayer);
 
   createChain(
     world,
@@ -64,8 +68,6 @@ export async function createMainWorld(
     worldCamera,
     worldSpace
   );
-
-  createUI(world, foregroundRenderLayer);
 
   return world;
 }
