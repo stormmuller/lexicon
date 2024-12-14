@@ -17,7 +17,8 @@ export function createChain(
   tileImageRenderSource: rendering.RenderSource,
   focusedRenderLayer: rendering.RenderLayer,
   normalRenderLayer: rendering.RenderLayer,
-  wordTextEntity: ecs.Entity
+  wordTextEntity: ecs.Entity,
+  words: Array<ecs.Entity>
 ) {
   const wordComponent = wordTextEntity.getComponentRequired<WordComponent>(
     WordComponent.symbol
@@ -29,6 +30,7 @@ export function createChain(
       renderSource: tileImageRenderSource,
       renderLayer: normalRenderLayer,
       wordComponent,
+      words
     }),
     onRemovedFromChain({
       renderSource: tileImageRenderSource,

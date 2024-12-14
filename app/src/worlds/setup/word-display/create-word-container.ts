@@ -6,8 +6,8 @@ export function createWordContainer(
   backgroundRenderLayer: rendering.RenderLayer
 ) {
   const wordContainerRenderSource = new rendering.RoundedRectangleRenderSource(
-    styles.wordPanel.width,
-    styles.wordPanel.height,
+    styles.wordHistoryPanel.width,
+    styles.wordHistoryPanel.height,
     styles.panel.borderRaduis,
     styles.panel.backgroundColor
   );
@@ -15,7 +15,7 @@ export function createWordContainer(
   const entity = new ecs.Entity("word container", [
     new common.PositionComponent(
       window.innerWidth / 2,
-      styles.wordPanel.height / 2 + styles.wordPanel.margin
+      styles.wordHistoryPanel.height / 2 + styles.wordHistoryPanel.margin
     ),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(

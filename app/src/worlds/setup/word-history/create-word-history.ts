@@ -1,6 +1,7 @@
 import { common, ecs, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
 import { WordHistoryComponent } from "../../../word";
+import { LayoutBoxComponent } from "@gameup/engine/dist/rendering";
 
 export function createWordHistory(
   world: ecs.World,
@@ -12,6 +13,8 @@ export function createWordHistory(
     styles.panel.borderRaduis,
     styles.panel.backgroundColor
   );
+
+  const words = new Array<ecs.Entity>();
 
   const wordHistoryContainerEntity = new ecs.Entity("word history container", [
     new common.PositionComponent(
@@ -26,6 +29,7 @@ export function createWordHistory(
       wordContainerRenderSource,
       backgroundRenderLayer.name
     ),
+    new LayoutBoxComponent(words, wordContainerRenderSource.boundingBox, styles.wordHistoryPanel.spaceBetween)
   ]);
 
   const wordHistoryEntity = new ecs.Entity("word history", [
@@ -34,5 +38,5 @@ export function createWordHistory(
 
   world.addEntities([wordHistoryContainerEntity, wordHistoryEntity]);
 
-  return { wordHistoryContainerEntity, wordHistoryEntity };
+  return { wordHistoryContainerEntity, wordHistoryEntity, words };
 }

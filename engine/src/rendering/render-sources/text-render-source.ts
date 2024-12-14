@@ -33,7 +33,6 @@ export class TextRenderSource implements RenderSource {
 
     context.font = `${this.fontSize}px ${this.fontFamily}`;
 
-    // TODO: performace - cache calculated dimentions?
     const metrics = context.measureText(this.text);
     const width = metrics.width;
     const height =

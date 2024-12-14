@@ -45,7 +45,7 @@ export async function createMainWorld(
     backgroundRenderLayer
   );
 
-  createWordHistory(world, backgroundRenderLayer);
+  const { words } = createWordHistory(world, backgroundRenderLayer);
   createLeaderboard(world, backgroundRenderLayer);
 
   createChain(
@@ -57,7 +57,8 @@ export async function createMainWorld(
     tileImageRenderSource,
     focusedRenderLayer,
     foregroundRenderLayer,
-    wordTextEntity
+    wordTextEntity,
+    words
   );
 
   await createBoard(

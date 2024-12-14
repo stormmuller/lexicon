@@ -25,6 +25,22 @@ export class BoundingBox {
     return this.point.y + this.dimentions.y;
   }
 
+  public get middleTop(): Vector2 {
+    return new Vector2(this.point.x + this.dimentions.x / 2, this.minY);
+  }
+
+  public get middleBottom(): Vector2 {
+    return new Vector2(this.point.x + this.dimentions.x / 2, this.maxY);
+  }
+
+  public get middleLeft(): Vector2 {
+    return new Vector2(this.minX, this.point.y + this.dimentions.y / 2);
+  }
+
+  public get middleRight(): Vector2 {
+    return new Vector2(this.maxX, this.point.y + this.dimentions.y / 2);
+  }
+
   public contains(point: Vector2): boolean {
     const inXBounds = point.x >= this.minX && point.x <= this.maxX;
     const inYBounds = point.y >= this.minY && point.y <= this.maxY;

@@ -9,6 +9,7 @@ export function onChainComplete(options: {
   renderSource: rendering.RenderSource;
   renderLayer: rendering.RenderLayer;
   wordComponent: WordComponent;
+  words: Array<ecs.Entity>;
 }) {
   return async (chainComponent: ChainComponent) => {
     const word = linksToWord(chainComponent.links);
@@ -28,22 +29,36 @@ export function onChainComplete(options: {
     makeRpc<number>("chain-complete", { word }, (score) => {
       const date = new Date();
 
-      const wordTextRenderSource = new rendering.TextRenderSource(word);
-      const scoreTextRenderSource = new rendering.TextRenderSource(`+${score}`);
-      const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
-        word: wordTextRenderSource,
-        score: scoreTextRenderSource
-      });
-
-      options.world.addEntity(
-        new ecs.Entity(`word (${word},${score},${date})`, [
-          new WordComponent(word),
-          new ScoreComponent(score),
-          new DateComponent(date),
-          new rendering.SpriteComponent(scoreHistoryRenderSource, options.renderLayer.name),
-          new common.PositionComponent(window.innerWidth / 2, window.innerHeight / 2)
-        ])
+      const wordTextRenderSource = new rendering.TextRenderSource(
+        word,
+        "Share Tech Mono",
+        20,
+        "white"
       );
+      // const scoreTextRenderSource = new rendering.TextRenderSource(
+      //   `+${score}`,
+      //   "Share Tech Mono",
+      //   20,
+      //   "blue"
+      // );
+      // const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
+      //   word: wordTextRenderSource,
+      //   score: scoreTextRenderSource,
+      // });
+
+      const wordEntity = new ecs.Entity(`word (${word},${score},${date})`, [
+        new WordComponent(word),
+        new ScoreComponent(score),
+        new DateComponent(date),
+        new rendering.SpriteComponent(
+          wordTextRenderSource,
+          options.renderLayer.name
+        ),
+        new common.PositionComponent(),
+      ]);
+
+      options.words.push(wordEntity);
+      options.world.addEntity(wordEntity);
 
       console.log(`You gotz the score! ${score} ⭐`);
     });

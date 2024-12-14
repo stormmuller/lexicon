@@ -12,6 +12,8 @@ export const createRenderLayers = (
   const uiRenderLayer = layerService.createLayer("ui");
   const debugRenderLayer = layerService.createLayer("debug");
 
+  const layoutSystem = new rendering.LayoutSystem();
+
   const backgroundRenderSystem = new rendering.RenderSystem(
     backgroundRenderLayer,
     cameraEntity,
@@ -37,6 +39,7 @@ export const createRenderLayers = (
   );
 
   world.addSystems([
+    layoutSystem,
     backgroundRenderSystem,
     foregroundRenderSystem,
     focusedRenderSystem,
