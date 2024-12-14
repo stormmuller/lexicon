@@ -1,14 +1,14 @@
 import { common, ecs, math } from "@gameup/engine";
 import { ChainableComponent } from "./chainable-component";
 
-type OnChainCompleteCallback = (links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
-type OnRemovedFromChain = (entity: ecs.Entity, links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
-type OnAddedToChain = (entity: ecs.Entity, links: Array<ecs.Entity>) => common.SyncOrAsync<void>;
+type OnChainCompleteCallback = (chainComponent: ChainComponent) => common.SyncOrAsync<void>;
+type OnRemovedFromChain = (linkRemoved: ecs.Entity, chainComponent: ChainComponent) => common.SyncOrAsync<void>;
+type OnAddedToChain = (linkAdded: ecs.Entity, chainComponent: ChainComponent) => common.SyncOrAsync<void>;
 
 export class ChainComponent implements ecs.Component {
   name: symbol;
   public path: Array<math.Vector2>;
-  private _links: Array<ecs.Entity>;
+  public links: Array<ecs.Entity>;
   private _onChainCompleteCallback: OnChainCompleteCallback;
   private _onRemovedFromChain: OnRemovedFromChain;
   private _onAddedToChain: OnAddedToChain;
@@ -22,14 +22,14 @@ export class ChainComponent implements ecs.Component {
   ) {
     this.name = ChainComponent.symbol;
     this.path = new Array();
-    this._links = new Array();
+    this.links = new Array();
     this._onChainCompleteCallback = onChainCompleteCallback;
     this._onRemovedFromChain = onRemovedFromChain;
     this._onAddedToChain = onAddedToChain;
   }
 
   public isEmpty(): boolean {
-    return this._links.length === 0;
+    return this.links.length === 0;
   }
 
   public async addLink(entity: ecs.Entity) {
@@ -43,28 +43,28 @@ export class ChainComponent implements ecs.Component {
 
     chainableComponent.chain = this;
 
-    this._links.push(entity);
+    this.links.push(entity);
     this.path.push(postitionComponent);
 
-    await this._onAddedToChain(entity, this._links);
+    await this._onAddedToChain(entity, this);
   }
 
   public getTailLink(): common.OrNull<ecs.Entity> {
-    return this.isEmpty() ? null : this._links[this._links.length - 1];
+    return this.isEmpty() ? null : this.links[this.links.length - 1];
   }
 
   public getSecondLastLink(): ecs.Entity {
-    return this._links[this._links.length - 2];
+    return this.links[this.links.length - 2];
   }
 
   public async removeTail(): Promise<common.OrNull<ecs.Entity>> {
-    const removedLink = this._links.pop() ?? null;
+    const removedLink = this.links.pop() ?? null;
     
     this.path.pop();
 
     if (!common.isNil(removedLink)) {
       this._clearChainFromLink(removedLink!);
-      await this._onRemovedFromChain(removedLink!, this._links);
+      await this._onRemovedFromChain(removedLink!, this);
     }
 
     return removedLink;
@@ -72,19 +72,21 @@ export class ChainComponent implements ecs.Component {
 
   public containsLink(link: ecs.Entity): boolean {
     return !common.isNil(
-      this._links.find((linkInChain) => linkInChain === link)
+      this.links.find((linkInChain) => linkInChain === link)
     );
   }
 
   public async complete(): Promise<void> {
-    await this._onChainCompleteCallback(this._links);
+    await this._onChainCompleteCallback(this);
+  }
 
-    for (const link of this._links) {
+  public clearChain() {
+    for (const link of this.links) {
       this._clearChainFromLink(link)
     }
 
-    this._links = new Array();
-    this.path = new Array();
+    this.links.length = 0;
+    this.path.length = 0;
   }
 
   private _clearChainFromLink(link: ecs.Entity) {

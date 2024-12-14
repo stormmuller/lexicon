@@ -20,7 +20,11 @@ export function createChain(
   wordComponent: WordComponent
 ) {
   const chainComponent = new ChainComponent(
-    onChainComplete,
+    onChainComplete({
+      renderSource: tileImageRenderSource,
+      renderLayer: normalRenderLayer,
+      wordComponent
+    }),
     onRemovedFromChain({
       renderSource: tileImageRenderSource,
       renderLayer: normalRenderLayer,
@@ -45,7 +49,7 @@ export function createChain(
 
   const chainSprite = new rendering.SpriteComponent(
     lineRenderSource,
-    focusedRenderLayer.name
+    normalRenderLayer.name
   );
 
   const chainPosition = new common.PositionComponent();

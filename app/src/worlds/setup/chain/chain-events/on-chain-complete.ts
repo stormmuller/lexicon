@@ -1,19 +1,31 @@
-import { ecs } from "@gameup/engine";
+import { rendering } from "@gameup/engine";
 import { makeRpc } from "../../../../rpc/make-rpc";
 import { linksToWord } from "./links-to-word";
+import { WordComponent } from "../../../../word";
+import { ChainComponent } from "../../../../chain";
 
-export async function onChainComplete(links: Array<ecs.Entity>) {
-  const word = linksToWord(links);
+export function onChainComplete(options: {
+  renderSource: rendering.RenderSource;
+  renderLayer: rendering.RenderLayer;
+  wordComponent: WordComponent;
+}) {
+  return async (chainComponent: ChainComponent) => {
+    const word = linksToWord(chainComponent.links);
 
-  makeRpc<number>("chain-complete", { word }, (score) => {
-    console.log(`You gotz the score! ${score} ⭐`);
-  });
+    for (const linkEntity of chainComponent.links) {
+      const sprite = linkEntity.getComponent(
+        rendering.SpriteComponent.symbol
+      ) as rendering.SpriteComponent;
 
-  window.parent.postMessage(
-    {
-      type: "chain-complete",
-      data: { word },
-    },
-    "*"
-  );
+      sprite.renderSource = options.renderSource;
+      sprite.renderLayerName = options.renderLayer.name;
+    }
+
+    chainComponent.clearChain();
+    options.wordComponent.word = "";
+
+    makeRpc<number>("chain-complete", { word }, (score) => {
+      console.log(`You gotz the score! ${score} ⭐`);
+    });
+  };
 }

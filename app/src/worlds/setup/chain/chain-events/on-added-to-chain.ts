@@ -1,21 +1,22 @@
 import { ecs, rendering } from "@gameup/engine";
 import { WordComponent } from "../../../../word";
 import { linksToWord } from "./links-to-word";
+import { ChainComponent } from "../../../../chain";
 
 export function onAddedToChain(options: {
   renderSource: rendering.RenderSource;
   renderLayer: rendering.RenderLayer;
   wordComponent: WordComponent;
 }) {
-  return (entity: ecs.Entity, links: Array<ecs.Entity>) => {
-    const sprite = entity.getComponent(
+  return (addedLink: ecs.Entity, chainComponent: ChainComponent) => {
+    const sprite = addedLink.getComponent(
       rendering.SpriteComponent.symbol
     ) as rendering.SpriteComponent;
 
     sprite.renderSource = options.renderSource;
     sprite.renderLayerName = options.renderLayer.name;
     
-    const word = linksToWord(links);
+    const word = linksToWord(chainComponent.links);
 
     options.wordComponent.word = word;
   };
