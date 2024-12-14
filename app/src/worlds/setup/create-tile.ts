@@ -20,11 +20,8 @@ export async function createTile(
   const xOffset = remainingXSpace / 2;
 
   const calculatedX =
-    x * (styles.tile.size + styles.tile.gap) +
-    xOffset +
-    styles.tile.size / 2;
-  const calculatedY =
-    y * (styles.tile.size + styles.tile.gap) + config.yOffset;
+    x * (styles.tile.size + styles.tile.gap) + xOffset + styles.tile.size / 2;
+  const calculatedY = y * (styles.tile.size + styles.tile.gap) + config.yOffset;
 
   const tileImageRenderSource = new rendering.RoundedRectangleRenderSource(
     styles.tile.size,
@@ -32,7 +29,7 @@ export async function createTile(
     styles.tile.borderRaduis,
     styles.tile.backgroundColor
   );
-  
+
   const tileHoverImageRenderSource = new rendering.RoundedRectangleRenderSource(
     styles.tile.size,
     styles.tile.size,
@@ -53,13 +50,13 @@ export async function createTile(
       ChainableComponent.symbol
     );
 
-    const sprite = entity.getComponent(
+    const sprite = entity.getComponentRequired<rendering.SpriteComponent>(
       rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
+    );
 
-    const scale = entity.getComponent(
+    const scale = entity.getComponentRequired<common.ScaleComponent>(
       common.ScaleComponent.symbol
-    ) as common.ScaleComponent;
+    );
 
     if (common.isNil(chainable?.chain)) {
       sprite.renderSource = tileHoverImageRenderSource;
@@ -74,13 +71,13 @@ export async function createTile(
       ChainableComponent.symbol
     );
 
-    const sprite = entity.getComponent(
+    const sprite = entity.getComponentRequired<rendering.SpriteComponent>(
       rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
+    );
 
-    const scale = entity.getComponent(
+    const scale = entity.getComponentRequired<common.ScaleComponent>(
       common.ScaleComponent.symbol
-    ) as common.ScaleComponent;
+    );
 
     if (common.isNil(chainable?.chain)) {
       sprite.renderSource = tileImageRenderSource;

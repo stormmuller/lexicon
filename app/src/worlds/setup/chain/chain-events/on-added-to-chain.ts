@@ -9,13 +9,13 @@ export function onAddedToChain(options: {
   wordComponent: WordComponent;
 }) {
   return (addedLink: ecs.Entity, chainComponent: ChainComponent) => {
-    const sprite = addedLink.getComponent(
+    const sprite = addedLink.getComponentRequired<rendering.SpriteComponent>(
       rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
+    );
 
     sprite.renderSource = options.renderSource;
     sprite.renderLayerName = options.renderLayer.name;
-    
+
     const word = linksToWord(chainComponent.links);
 
     options.wordComponent.word = word;

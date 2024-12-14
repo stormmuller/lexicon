@@ -28,9 +28,10 @@ export class WindowResizer implements common.Stoppable {
     for (let i = 0; i < cameras.length; i++) {
       const camera = cameras[i];
 
-      const cameraPosition = camera.getComponent(
-        common.PositionComponent.symbol
-      ) as common.PositionComponent;
+      const cameraPosition =
+        camera.getComponentRequired<common.PositionComponent>(
+          common.PositionComponent.symbol
+        );
 
       cameraPositions[i] = {
         x: cameraPosition.x / window.innerWidth,
@@ -41,9 +42,10 @@ export class WindowResizer implements common.Stoppable {
     for (let i = 0; i < cameras.length; i++) {
       const camera = cameras[i];
 
-      const cameraPosition = camera.getComponent(
-        common.PositionComponent.symbol
-      ) as common.PositionComponent;
+      const cameraPosition =
+        camera.getComponentRequired<common.PositionComponent>(
+          common.PositionComponent.symbol
+        );
 
       cameraPosition.x = cameraPositions[i].x * window.innerWidth;
       cameraPosition.y = cameraPositions[i].y * window.innerHeight;

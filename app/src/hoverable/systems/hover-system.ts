@@ -17,27 +17,30 @@ export class HoverSystem extends ecs.System {
       physics.BoxColliderComponent.symbol,
     ]);
 
-    this._inputComponent = inputEntity.getComponent(
-      input.InputsComponent.symbol
-    ) as input.InputsComponent;
+    this._inputComponent =
+      inputEntity.getComponentRequired<input.InputsComponent>(
+        input.InputsComponent.symbol
+      );
 
-    this._camera = cameraEntity.getComponent(
+    this._camera = cameraEntity.getComponentRequired<rendering.CameraComponent>(
       rendering.CameraComponent.symbol
-    ) as rendering.CameraComponent;
-    this._cameraPosition = cameraEntity.getComponent(
-      common.PositionComponent.symbol
-    ) as common.PositionComponent;
+    );
+    this._cameraPosition =
+      cameraEntity.getComponentRequired<common.PositionComponent>(
+        common.PositionComponent.symbol
+      );
     this._worldSpace = worldSpace;
   }
 
   async run(entity: ecs.Entity): Promise<void> {
-    const hoverComponent = entity.getComponent(
+    const hoverComponent = entity.getComponentRequired<HoverComponent>(
       HoverComponent.symbol
-    ) as HoverComponent;
+    );
 
-    const boxColliderComponent = entity.getComponent(
-      physics.BoxColliderComponent.symbol
-    ) as physics.BoxColliderComponent;
+    const boxColliderComponent =
+      entity.getComponentRequired<physics.BoxColliderComponent>(
+        physics.BoxColliderComponent.symbol
+      );
 
     const worldCoords = rendering.screenToWorldSpace(
       this._inputComponent.mouseCoordinates,

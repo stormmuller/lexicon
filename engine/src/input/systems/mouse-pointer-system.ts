@@ -20,9 +20,9 @@ export class MousePointerSystem extends System {
   };
 
   async run(entity: Entity): Promise<void> {
-    const position = entity.getComponent(
+    const position = entity.getComponentRequired<PositionComponent>(
       PositionComponent.symbol,
-    ) as PositionComponent;
+    );
 
     position.set(this._mouseCoordinates);
   }

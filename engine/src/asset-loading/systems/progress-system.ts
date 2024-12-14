@@ -7,9 +7,9 @@ export class ProgressSystem extends System {
   }
 
   async run(entity: Entity): Promise<void> {
-    const progressComponent = entity.getComponent(
+    const progressComponent = entity.getComponentRequired<ProgressComponent>(
       ProgressComponent.symbol,
-    ) as ProgressComponent;
+    );
 
     console.log(progressComponent.calculateProgress());
   }

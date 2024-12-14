@@ -1,9 +1,17 @@
 import { common, ecs, math } from "@gameup/engine";
 import { ChainableComponent } from "./chainable-component";
 
-type OnChainCompleteCallback = (chainComponent: ChainComponent) => common.SyncOrAsync<void>;
-type OnRemovedFromChain = (linkRemoved: ecs.Entity, chainComponent: ChainComponent) => common.SyncOrAsync<void>;
-type OnAddedToChain = (linkAdded: ecs.Entity, chainComponent: ChainComponent) => common.SyncOrAsync<void>;
+type OnChainCompleteCallback = (
+  chainComponent: ChainComponent
+) => common.SyncOrAsync<void>;
+type OnRemovedFromChain = (
+  linkRemoved: ecs.Entity,
+  chainComponent: ChainComponent
+) => common.SyncOrAsync<void>;
+type OnAddedToChain = (
+  linkAdded: ecs.Entity,
+  chainComponent: ChainComponent
+) => common.SyncOrAsync<void>;
 
 export class ChainComponent implements ecs.Component {
   name: symbol;
@@ -33,13 +41,14 @@ export class ChainComponent implements ecs.Component {
   }
 
   public async addLink(entity: ecs.Entity) {
-    const chainableComponent = entity.getComponent(
+    const chainableComponent = entity.getComponentRequired<ChainableComponent>(
       ChainableComponent.symbol
-    ) as ChainableComponent;
+    );
 
-    const postitionComponent = entity.getComponent(
-      common.PositionComponent.symbol
-    ) as common.PositionComponent;
+    const postitionComponent =
+      entity.getComponentRequired<common.PositionComponent>(
+        common.PositionComponent.symbol
+      );
 
     chainableComponent.chain = this;
 
@@ -59,7 +68,7 @@ export class ChainComponent implements ecs.Component {
 
   public async removeTail(): Promise<common.OrNull<ecs.Entity>> {
     const removedLink = this.links.pop() ?? null;
-    
+
     this.path.pop();
 
     if (!common.isNil(removedLink)) {
@@ -82,7 +91,7 @@ export class ChainComponent implements ecs.Component {
 
   public clearChain() {
     for (const link of this.links) {
-      this._clearChainFromLink(link)
+      this._clearChainFromLink(link);
     }
 
     this.links.length = 0;
@@ -90,9 +99,9 @@ export class ChainComponent implements ecs.Component {
   }
 
   private _clearChainFromLink(link: ecs.Entity) {
-    const chainableComponent = link.getComponent(
+    const chainableComponent = link.getComponentRequired<ChainableComponent>(
       ChainableComponent.symbol
-    ) as ChainableComponent;
+    );
 
     chainableComponent.chain = null;
   }

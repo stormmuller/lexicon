@@ -1,6 +1,6 @@
 import { common, ecs, rendering } from "@gameup/engine";
-import { config } from "../game.config";
-import { styles } from "../styles";
+import { styles } from "../../../styles";
+import { config } from "../../../game.config";
 
 export function createWordContainer(
   world: ecs.World,

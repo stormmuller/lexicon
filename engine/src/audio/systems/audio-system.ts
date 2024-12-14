@@ -7,9 +7,9 @@ export class AudioSystem extends System {
   }
 
   async run(entity: Entity): Promise<void> {
-    const soundComponent = entity.getComponent(
+    const soundComponent = entity.getComponentRequired<SoundComponent>(
       SoundComponent.symbol,
-    ) as SoundComponent;
+    );
 
     if (soundComponent.playSound) {
       soundComponent.sound.play();

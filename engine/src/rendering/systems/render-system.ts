@@ -22,9 +22,9 @@ export class RenderSystem extends System {
     this._layer = layer;
     this._worldSpace = worldSpace;
 
-    const cameraPosition = cameraEntity.getComponent(
+    const cameraPosition = cameraEntity.getComponentRequired<PositionComponent>(
       PositionComponent.symbol,
-    ) as PositionComponent;
+    );
 
     if (isNil(cameraPosition)) {
       throw new Error(
@@ -32,9 +32,9 @@ export class RenderSystem extends System {
       );
     }
 
-    const camera = cameraEntity.getComponent(
+    const camera = cameraEntity.getComponentRequired<CameraComponent>(
       CameraComponent.symbol,
-    ) as CameraComponent;
+    );
 
     if (isNil(camera)) {
       throw new Error(
@@ -136,7 +136,7 @@ export class RenderSystem extends System {
     );
 
     this._renderPreProcessingEffects(
-      spriteComponent.renderSource.renderEffects
+      spriteComponent.renderSource.renderEffects,
     );
 
     // Render the sprite
@@ -153,7 +153,7 @@ export class RenderSystem extends System {
     this._layer.context.filter = 'none';
 
     // reset glow
-    this._layer.context.shadowColor = "rgba(0, 0, 0, 0)";
+    this._layer.context.shadowColor = 'rgba(0, 0, 0, 0)';
     this._layer.context.shadowBlur = 0;
   }
 

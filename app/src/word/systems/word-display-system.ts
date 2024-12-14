@@ -10,13 +10,14 @@ export class WordDisplaySystem extends ecs.System {
   }
 
   async run(entity: ecs.Entity): Promise<void> {
-    const spriteComponent = entity.getComponent(
-      rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
+    const spriteComponent =
+      entity.getComponentRequired<rendering.SpriteComponent>(
+        rendering.SpriteComponent.symbol
+      );
 
-    const wordComponent = entity.getComponent(
+    const wordComponent = entity.getComponentRequired<WordComponent>(
       WordComponent.symbol
-    ) as WordComponent;
+    );
 
     if (!(spriteComponent.renderSource instanceof rendering.TextRenderSource)) {
       // This enetity does not have a text render source (it might be some other render source e.g. Image)

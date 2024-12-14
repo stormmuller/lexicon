@@ -11,24 +11,24 @@ export class CameraSystem extends System {
   constructor(inputEntity: Entity, time: Time) {
     super('camera', [CameraComponent.symbol, PositionComponent.symbol]);
 
-    this._inputComponent = inputEntity.getComponent(
+    this._inputComponent = inputEntity.getComponentRequired<InputsComponent>(
       InputsComponent.symbol,
-    ) as InputsComponent;
+    );
     this._time = time;
   }
 
   async run(entity: Entity): Promise<void> {
-    const cameraComponent = entity.getComponent(
+    const cameraComponent = entity.getComponentRequired<CameraComponent>(
       CameraComponent.symbol,
-    ) as CameraComponent;
+    );
 
     if (cameraComponent.isStatic) {
       return;
     }
 
-    const position = entity.getComponent(
+    const position = entity.getComponentRequired<PositionComponent>(
       PositionComponent.symbol,
-    ) as PositionComponent;
+    );
 
     if (cameraComponent.allowZooming) {
       cameraComponent.zoom = math.clamp(

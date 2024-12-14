@@ -18,13 +18,13 @@ export class DebugRenderSystem extends System {
 
     this._layer = layer;
 
-    this._cameraComponent = camera.getComponent(
+    this._cameraComponent = camera.getComponentRequired<CameraComponent>(
       CameraComponent.symbol,
-    ) as CameraComponent;
+    );
 
-    this._cameraPosition = camera.getComponent(
+    this._cameraPosition = camera.getComponentRequired<PositionComponent>(
       PositionComponent.symbol,
-    ) as PositionComponent;
+    );
 
     this._worldSpace = worldSpace;
   }

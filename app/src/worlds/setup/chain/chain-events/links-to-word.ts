@@ -5,11 +5,11 @@ export function linksToWord(links: Array<ecs.Entity>) {
   let word = "";
 
   for (const link of links) {
-      const tileComponent = link.getComponent(
-          TileComponent.symbol
-      ) as TileComponent;
+    const tileComponent = link.getComponentRequired<TileComponent>(
+      TileComponent.symbol
+    );
 
-      word += tileComponent.letter;
+    word += tileComponent.letter;
   }
 
   return word;

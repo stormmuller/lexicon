@@ -4,14 +4,14 @@ import { ChainComponent } from "../../../../chain";
 import { linksToWord } from "./links-to-word";
 
 export function onRemovedFromChain(options: {
-  renderSource: rendering.RenderSource,
-  renderLayer: rendering.RenderLayer,
-  wordComponent: WordComponent
+  renderSource: rendering.RenderSource;
+  renderLayer: rendering.RenderLayer;
+  wordComponent: WordComponent;
 }) {
   return (removedlink: ecs.Entity, chainComponent: ChainComponent) => {
-    const sprite = removedlink.getComponent(
+    const sprite = removedlink.getComponentRequired<rendering.SpriteComponent>(
       rendering.SpriteComponent.symbol
-    ) as rendering.SpriteComponent;
+    );
 
     sprite.renderSource = options.renderSource;
     sprite.renderLayerName = options.renderLayer.name;

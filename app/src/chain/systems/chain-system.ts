@@ -21,30 +21,35 @@ export class ChainSystem extends ecs.System {
       physics.BoxColliderComponent.symbol,
     ]);
 
-    this._inputComponent = inputEntity.getComponent(
-      input.InputsComponent.symbol
-    ) as input.InputsComponent;
+    this._inputComponent =
+      inputEntity.getComponentRequired<input.InputsComponent>(
+        input.InputsComponent.symbol
+      );
 
-    this._camera = cameraEntity.getComponent(
+    this._camera = cameraEntity.getComponentRequired<rendering.CameraComponent>(
       rendering.CameraComponent.symbol
-    ) as rendering.CameraComponent;
+    );
 
-    this._cameraPosition = cameraEntity.getComponent(
-      common.PositionComponent.symbol
-    ) as common.PositionComponent;
+    this._cameraPosition =
+      cameraEntity.getComponentRequired<common.PositionComponent>(
+        common.PositionComponent.symbol
+      );
 
     this._worldSpace = worldSpace;
-    this._chain = chain.getComponent(ChainComponent.symbol) as ChainComponent;
+    this._chain = chain.getComponentRequired<ChainComponent>(
+      ChainComponent.symbol
+    );
   }
 
   async run(entity: ecs.Entity): Promise<void> {
-    const boxColliderComponent = entity.getComponent(
-      physics.BoxColliderComponent.symbol
-    ) as physics.BoxColliderComponent;
+    const boxColliderComponent =
+      entity.getComponentRequired<physics.BoxColliderComponent>(
+        physics.BoxColliderComponent.symbol
+      );
 
-    const tileComponent = entity.getComponent(
+    const tileComponent = entity.getComponentRequired<TileComponent>(
       TileComponent.symbol
-    ) as TileComponent;
+    );
 
     const lastLink = this._chain.getTailLink();
     const lastTileComponent = lastLink?.getComponent<TileComponent>(

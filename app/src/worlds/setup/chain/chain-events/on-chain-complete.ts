@@ -13,9 +13,9 @@ export function onChainComplete(options: {
     const word = linksToWord(chainComponent.links);
 
     for (const linkEntity of chainComponent.links) {
-      const sprite = linkEntity.getComponent(
+      const sprite = linkEntity.getComponentRequired<rendering.SpriteComponent>(
         rendering.SpriteComponent.symbol
-      ) as rendering.SpriteComponent;
+      );
 
       sprite.renderSource = options.renderSource;
       sprite.renderLayerName = options.renderLayer.name;
