@@ -47,12 +47,10 @@ export class TextRenderSource implements RenderSource {
   render(layer: RenderLayer): void {
     const context = layer.context;
 
-    // Set font and alignment
     context.font = `${this.fontSize}px ${this.fontFamily}`;
     context.textAlign = this.textAlign;
     context.textBaseline = this.textBaseline;
 
-    // Measure text and calculate dimensions
     let renderText = this.text;
     const metrics = context.measureText(this.text);
     let width = metrics.width;
@@ -77,22 +75,18 @@ export class TextRenderSource implements RenderSource {
       renderText = truncatedText;
           }
 
-    // Update bounding box dimensions
     this.boundingBox.dimentions = new Vector2(this.maxWidth, height);
 
-    // Apply fill style
     context.fillStyle = this.color;
 
     // If baseline is 'middle', adjust to visually center the text
     if (this.textBaseline === 'middle') {
-      // Force a stable baseline for calculation
       context.textBaseline = 'alphabetic';
       const ascent = metrics.actualBoundingBoxAscent;
       const descent = metrics.actualBoundingBoxDescent;
       const verticalCenterOffset = (descent + ascent) / 2;
       context.fillText(renderText, 0, verticalCenterOffset);
     } else {
-      // For other baselines, just draw the text at (0,0)
       context.fillText(renderText, 0, 0);
     }
   }
