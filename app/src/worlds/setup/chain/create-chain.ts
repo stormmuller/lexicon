@@ -17,8 +17,10 @@ export function createChain(
   tileImageRenderSource: rendering.RenderSource,
   focusedRenderLayer: rendering.RenderLayer,
   normalRenderLayer: rendering.RenderLayer,
-  wordComponent: WordComponent
+  wordTextEntity: ecs.Entity
 ) {
+  const wordComponent = wordTextEntity.getComponentRequired<WordComponent>(WordComponent.symbol);
+
   const chainComponent = new ChainComponent(
     onChainComplete({
       renderSource: tileImageRenderSource,

@@ -1,42 +1,17 @@
-import { common, ecs, rendering } from "@gameup/engine";
-import { WordComponent, WordDisplaySystem } from "../../../word";
+import { ecs, rendering } from "@gameup/engine";
+import { createWordContainer } from "./create-word-container";
+import { createWordText } from "./create-word-text";
 
-export function creaetWordDisplay(
+export function createWordDisplay(
   world: ecs.World,
-  renderLayer: rendering.RenderLayer
+  foregroundRenderLayer: rendering.RenderLayer,
+  backgroundRenderLayer: rendering.RenderLayer
 ) {
-  const textRenderSource = new rendering.TextRenderSource(
-    "",
-    "Share Tech Mono",
-    60,
-    "white"
-  );
+  const wordContainerEntity = createWordContainer(world, backgroundRenderLayer);
+  const wordTextEntity = createWordText(world, foregroundRenderLayer);
 
-  const containerHeight = 100;
-  const containerMargin = 20;
-
-  const spriteComponent = new rendering.SpriteComponent(
-    textRenderSource,
-    renderLayer.name
-  );
-  const wordComponent = new WordComponent();
-  const positionComponent = new common.PositionComponent(
-    window.innerWidth / 2,
-    containerMargin + containerHeight / 2
-  );
-  const scaleComponent = new common.ScaleComponent();
-
-  const entity = new ecs.Entity("word display", [
-    positionComponent,
-    scaleComponent,
-    spriteComponent,
-    wordComponent,
-  ]);
-
-  const wordDisplaySystem = new WordDisplaySystem();
-
-  world.addEntity(entity);
-  world.addSystem(wordDisplaySystem);
-
-  return wordComponent;
+  return {
+    wordContainerEntity,
+    wordTextEntity,
+  };
 }

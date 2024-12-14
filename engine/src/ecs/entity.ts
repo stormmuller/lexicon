@@ -1,5 +1,5 @@
-import { OrNull } from "../common";
-import type { Component } from "./types";
+import { OrNull } from '../common';
+import type { Component } from './types';
 
 export class Entity {
   components: Set<Component>;
@@ -50,7 +50,21 @@ export class Entity {
     return null;
   };
 
-  getComponents = <T extends Component>(componentNames: symbol[]): OrNull<T>[] => {
+  getComponentRequired = <T extends Component>(componentName: symbol): T => {
+    const component = this.getComponent<T>(componentName);
+
+    if (component === null) {
+      throw new Error(
+        `Tried to get required component "${componentName.toString()}" but it is null on the entity "${this.name}"`,
+      );
+    }
+
+    return component;
+  };
+
+  getComponents = <T extends Component>(
+    componentNames: symbol[],
+  ): OrNull<T>[] => {
     return componentNames.map(this.getComponent<T>);
   };
 
@@ -61,9 +75,8 @@ export class Entity {
 
 export const filterEntitiesByComponents = (
   entities: Set<Entity>,
-  componentSymbols: symbol[]
+  componentSymbols: symbol[],
 ): Entity[] => {
-  
   // TODO: performance - cache these look ups if possible
 
   const result: Entity[] = [];
@@ -79,7 +92,7 @@ export const filterEntitiesByComponents = (
 
 export const getComponentsFromEntities = <T extends Component>(
   name: symbol,
-  entites: Entity[]
+  entites: Entity[],
 ): OrNull<T>[] => {
   const components = entites.map((entity) => entity.getComponent<T>(name));
 

@@ -8,7 +8,7 @@ import {
   createInputs,
   createRenderLayers,
 } from "./setup";
-import { creaetWordDisplay as createWordDisplay } from "./setup/word-display";
+import { createWordDisplay as createWordDisplay } from "./setup/word-display";
 
 export async function createMainWorld(
   worldSpace: common.Space,
@@ -20,7 +20,7 @@ export async function createMainWorld(
   const inputsEntity = createInputs(world, gameContainer);
 
   const { worldCamera } = createCameras(world, worldSpace, inputsEntity, game);
-  const { foregroundRenderLayer, focusedRenderLayer } = createRenderLayers(
+  const { foregroundRenderLayer, backgroundRenderLayer, focusedRenderLayer } = createRenderLayers(
     layerService,
     worldCamera,
     worldSpace,
@@ -42,7 +42,7 @@ export async function createMainWorld(
     { width: 2, color: "yellow" }
   );
 
-  const wordComponent = createWordDisplay(world, foregroundRenderLayer);
+  const { wordTextEntity } = createWordDisplay(world, foregroundRenderLayer, backgroundRenderLayer);
 
   createChain(
     world,
@@ -53,7 +53,7 @@ export async function createMainWorld(
     tileImageRenderSource,
     focusedRenderLayer,
     foregroundRenderLayer,
-    wordComponent
+    wordTextEntity
   );
 
   await createBoard(

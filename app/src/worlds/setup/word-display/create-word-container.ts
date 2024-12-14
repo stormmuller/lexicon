@@ -20,7 +20,7 @@ export function createWordContainer(
     styles.panel.backgroundColor
   );
 
-  const container = new ecs.Entity("word container", [
+  const entity = new ecs.Entity("word container", [
     new common.PositionComponent(
       window.innerWidth / 2,
       containerHeight / 2 + containerMargin
@@ -32,7 +32,7 @@ export function createWordContainer(
     ),
   ]);
 
-  world.addEntity(container);
+  world.addEntity(entity);
 
-  return container;
+  return entity;
 }
