@@ -90,13 +90,20 @@ export class LayoutSystem extends System {
         layoutBoxComponent.alignChildren === 'start'
           ? -(layoutRenderSource.boundingBox.maxX / 2)
           : layoutBoxComponent.alignChildren === 'end'
-            ? +(layoutRenderSource.boundingBox.maxX / 2)
+            ? layoutRenderSource.boundingBox.maxX / 2
+            : 0;
+
+      const baselineOffset = 
+        layoutBoxComponent.baselineChildren === 'top'
+          ? -(entityHeight / 2)
+          : layoutBoxComponent.baselineChildren === 'bottom'
+            ? entityHeight / 2
             : 0;
 
       const newY =
         layoutPositionComponent.y -
         layoutSpriteComponent.anchor.y +
-        offsetY + 0;
+        offsetY + baselineOffset;
         // entityHeight;
 
       const newX = layoutPositionComponent.x + margin.x + alignmentOffset;

@@ -6,11 +6,8 @@ import {
 import { makeRpc } from "../../../../rpc/make-rpc";
 import { WordComponent } from "../../../../word";
 import { ChainComponent } from "../../../../chain";
-// import { linksToWord } from "./links-to-word";
 import { styles } from "../../../../styles";
 import { TileComponent } from "../../../../tile";
-
-const textSize = 18;
 
 export function onChainComplete(options: {
   world: ecs.World;
@@ -55,7 +52,7 @@ export function onChainComplete(options: {
           styles.sidePanel.width - styles.sidePanel.padding.x * 2,
           styles.sidePanel.width - styles.sidePanel.padding.x * 2 - 40,
           "Share Tech Mono",
-          textSize,
+          18,
           styles.colors.primary,
           "start"
         );
@@ -65,7 +62,7 @@ export function onChainComplete(options: {
           styles.sidePanel.width - styles.sidePanel.padding.x * 2,
           styles.sidePanel.width - styles.sidePanel.padding.x,
           "Share Tech Mono",
-          textSize,
+          18,
           styles.colors.white,
           "end"
         );
@@ -79,7 +76,7 @@ export function onChainComplete(options: {
           new rendering.SpriteComponent(
             scoreHistoryRenderSource,
             options.renderLayer.name,
-            { anchor: new math.Vector2(0, -(textSize / 2)) }
+            { anchor: math.Vector2.zero() }
           ),
           new common.PositionComponent(),
         ]);
