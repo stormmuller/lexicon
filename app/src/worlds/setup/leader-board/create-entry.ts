@@ -16,13 +16,19 @@ export function createEntries(
 
   const entries = Array<ecs.Entity>();
 
+  const playerIndex = Math.floor(amount / 2);
+
   for (let index = 0; index < amount; index++) {
+    const type = index === playerIndex ? "player" : "normal";
+
     entries.push(
       createEntry(
         index,
+        amount,
         foregroundRenderLayer,
         backgroundRenderLayer,
-        world
+        world,
+        type
       )
     );
   }
@@ -32,17 +38,19 @@ export function createEntries(
 
 export function createEntry(
   index: number,
+  total: number,
   foregroundRenderLayer: rendering.RenderLayer,
   backgroundRenderLayer: rendering.RenderLayer,
-  world: ecs.World
+  world: ecs.World,
+  type: "normal" | "player" = "normal"
 ) {
   const rankTextRenderSource = new rendering.TextRenderSource(
     "20",
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
-    18,
-    styles.colors.grey,
+    type === "player" ? 20 : 16,
+    type === "player" ? styles.colors.white : styles.colors.primary,
     "start"
   );
 
@@ -52,7 +60,7 @@ export function createEntry(
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
     16,
-    styles.colors.primary,
+    type === "player" ? styles.colors.darkgrey : styles.colors.primary,
     "end"
   );
 
@@ -75,8 +83,8 @@ export function createEntry(
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
-    20,
-    styles.colors.primary,
+    type === "player" ? 25 : 20,
+    type === "player" ? styles.colors.darkgrey : styles.colors.primary,
     "end"
   );
 
@@ -91,10 +99,11 @@ export function createEntry(
 
   const containerRenderSource = new rendering.RoundedRectangleRenderSource(
     styles.sidePanel.width,
-    // Math.floor(styles.sidePanel.height / total + 1),
-    50,
+    Math.floor(
+      (styles.sidePanel.height - styles.sidePanel.padding.y * 2) / total
+    ),
     0,
-    index % 2 === 0 ? "green" : "red"
+    type === "player" ? styles.colors.accent : "transparent"
   );
 
   const leaderboardEntryContainerEntity = new ecs.Entity(
@@ -111,8 +120,9 @@ export function createEntry(
         [nameAndRankEntity, scoreEntity],
         containerRenderSource.boundingBox,
         5,
-        new math.Vector2(styles.sidePanel.padding.x, 0),
-        "center"
+        new math.Vector2(styles.sidePanel.padding.x, 10),
+        "center",
+        "bottom"
       ),
     ]
   );
