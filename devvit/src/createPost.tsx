@@ -7,7 +7,7 @@ Devvit.configure({
 
 // Adds a new menu item to the subreddit allowing to create a new post
 Devvit.addMenuItem({
-  label: "Start a game of Lexicon! 🎮",
+  label: "Start a game of Lexicon! 🚀",
   location: "subreddit",
   onPress: async (_event, context) => {
     const { reddit, ui } = context;
@@ -19,7 +19,7 @@ Devvit.addMenuItem({
       preview: (
         <vstack height="100%" width="100%" alignment="middle center">
           <image
-            url="images/Logo.png"
+            url="images/lexicon-logo.png"
             imageWidth={250}
             imageHeight={250}
             description="Lexicon Logo"

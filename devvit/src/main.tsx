@@ -1,7 +1,13 @@
 import "./createPost.js";
 import { getOrCreateBoard } from "../server/get-board.js";
 
-import { Devvit, useState, RedisClient, useAsync, useChannel } from "@devvit/public-api";
+import {
+  Devvit,
+  useState,
+  RedisClient,
+  useAsync,
+  useChannel,
+} from "@devvit/public-api";
 import { cacheWords } from "../server/cache-words.ts";
 import { createWebViewMessageDispatcher } from "./rpc/rpc-dispatcher.ts";
 import { Rpc } from "./rpc/rpc-handler.ts";
@@ -24,9 +30,7 @@ Devvit.addCustomPostType({
       return true;
     });
 
-    const webViewMessageDispatcher = createWebViewMessageDispatcher(
-      context
-    );
+    const webViewMessageDispatcher = createWebViewMessageDispatcher(context);
 
     // Load username with `useAsync` hook
     const [username] = useState(async () => {
@@ -54,9 +58,9 @@ Devvit.addCustomPostType({
 
       await webViewMessageDispatcher.dispatchMessage({
         ...msg,
-        postId: context.postId ?? 'unknown',
-        userId: context.userId ?? 'anon',
-        username
+        postId: context.postId ?? "unknown",
+        userId: context.userId ?? "anon",
+        username,
       });
     };
 
@@ -94,15 +98,15 @@ Devvit.addCustomPostType({
         <vstack
           grow={!webviewVisible}
           height={webviewVisible ? "0%" : "100%"}
-          alignment="top center"
+          alignment="center middle"
         >
           <image
-            url="images/Logo.png"
-            imageWidth={250}
-            imageHeight={250}
+            url="images/lexicon-logo.png"
+            imageWidth={200}
+            imageHeight={200}
             description="Lexicon Logo"
           />
-          <vstack alignment="top center">
+          <vstack alignment="center bottom">
             <image
               url={snoovatar}
               imageWidth={100}
@@ -113,19 +117,19 @@ Devvit.addCustomPostType({
               {username ?? ""}
             </text>
             <text size="medium">Current score: {counter ?? ""}</text>
+            <spacer />
+            <button
+              onPress={() =>
+                onShowWebviewClick(context.redis, context.postId ?? "anon")
+              }
+              appearance="success"
+              icon="topic-videogaming-fill"
+              size="large"
+              minWidth="300px"
+            >
+              Play!
+            </button>
           </vstack>
-          <spacer />
-          <button
-            onPress={() =>
-              onShowWebviewClick(context.redis, context.postId ?? "anon")
-            }
-            appearance="success"
-            icon="topic-videogaming-fill"
-            size="large"
-            minWidth="300px"
-          >
-            Play!
-          </button>
         </vstack>
         <vstack height={webviewVisible ? "100%" : "0%"} grow>
           <webview

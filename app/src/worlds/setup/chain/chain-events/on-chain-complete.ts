@@ -47,8 +47,8 @@ export function onChainComplete(options: {
 
         const wordTextRenderSource = new rendering.TextRenderSource(
           word,
-          styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
-          styles.sidePanel.width - styles.wordHistoryPanel.padding.x - 70,
+          styles.sidePanel.width - styles.sidePanel.padding.x * 2,
+          styles.sidePanel.width - styles.sidePanel.padding.x - 70,
           "Share Tech Mono",
           20,
           styles.colors.primary,
@@ -57,8 +57,8 @@ export function onChainComplete(options: {
 
         const scoreTextRenderSource = new rendering.TextRenderSource(
           `+${score.toString()}`,
-          styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
-          styles.sidePanel.width - styles.wordHistoryPanel.padding.x,
+          styles.sidePanel.width - styles.sidePanel.padding.x * 2,
+          styles.sidePanel.width - styles.sidePanel.padding.x,
           "Share Tech Mono",
           18,
           styles.colors.white,

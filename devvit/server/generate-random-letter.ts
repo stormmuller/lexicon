@@ -20,7 +20,7 @@ export function generateRandomLetter() {
   // Find the letter corresponding to the random value
   for (const { letter, score, cumulative } of cumulativeWeights) {
     if (randomValue <= cumulative) {
-      return { letter, score };
+      return { letter: letter.toUpperCase(), score };
     }
   }
 

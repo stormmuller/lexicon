@@ -1,9 +1,11 @@
-import { common, ecs, rendering } from "@gameup/engine";
+import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
+import { createEntries } from "./create-entry";
 
 export function createLeaderboard(
   world: ecs.World,
-  backgroundRenderLayer: rendering.RenderLayer
+  backgroundRenderLayer: rendering.RenderLayer,
+  foregroundRenderLayer: rendering.RenderLayer
 ) {
   const leaderBoardPanelRenderSource =
     new rendering.RoundedRectangleRenderSource(
@@ -13,7 +15,9 @@ export function createLeaderboard(
       styles.panel.backgroundColor
     );
 
-  const container = new ecs.Entity("word container", [
+  const leaderBoardEntries = createEntries(foregroundRenderLayer, world); 
+
+  const leaderboardEntity = new ecs.Entity("leaderboard container", [
     new common.PositionComponent(
       window.innerWidth / 2 -
         styles.board.width / 2 -
@@ -26,9 +30,15 @@ export function createLeaderboard(
       leaderBoardPanelRenderSource,
       backgroundRenderLayer.name
     ),
+    new rendering.LayoutBoxComponent(
+      leaderBoardEntries,
+      leaderBoardPanelRenderSource.boundingBox,
+      styles.wordHistoryPanel.spaceBetween,
+      new math.Vector2(0, styles.sidePanel.padding.y)
+    ),
   ]);
 
-  world.addEntity(container);
+  world.addEntity(leaderboardEntity);
 
-  return container;
+  return leaderboardEntity;
 }

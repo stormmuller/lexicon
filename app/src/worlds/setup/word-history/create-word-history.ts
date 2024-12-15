@@ -32,7 +32,7 @@ export function createWordHistory(
       words,
       wordContainerRenderSource.boundingBox,
       styles.wordHistoryPanel.spaceBetween,
-      new math.Vector2(0, styles.wordHistoryPanel.padding.y)
+      new math.Vector2(0, styles.sidePanel.padding.y)
     ),
   ]);
 

@@ -46,7 +46,7 @@ export async function createMainWorld(
   );
 
   const { words } = createWordHistory(world, backgroundRenderLayer);
-  createLeaderboard(world, backgroundRenderLayer);
+  createLeaderboard(world, backgroundRenderLayer, foregroundRenderLayer);
 
   createChain(
     world,
