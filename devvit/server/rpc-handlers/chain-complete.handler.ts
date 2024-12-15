@@ -112,20 +112,14 @@ export class ChainCompleteMessageHandler extends RpcHandler<
     const lowerUsers = await this._redis.zRange(
       leaderboardKey,
       lowerBound,
-      rank - 1,
-      {
-        by: "score",
-      }
+      rank - 1
     );
 
     // Get two users higher (ensure bounds are valid)
     const higherUsers = await this._redis.zRange(
       leaderboardKey,
       rank + 1,
-      rank + numberOfPlayersOnLeaderBoardAfter,
-      {
-        by: "score",
-      }
+      rank + numberOfPlayersOnLeaderBoardAfter
     );
 
     const leaderboard = this._buildLeaderBoard(lowerUsers, higherUsers, username, userScore, rank);
