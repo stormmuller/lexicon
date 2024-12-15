@@ -1,4 +1,4 @@
-export interface Message<TData> {
+export interface Rpc<TData> {
   type: string,
   messageId: string,
   postId: string,
@@ -7,7 +7,7 @@ export interface Message<TData> {
 }
 
 
-export abstract class MessageHandler<TMessage extends Message<any>, TRes> {
+export abstract class RpcHandler<TMessage extends Rpc<any>, TRes> {
   private _type: string;
 
   constructor(type: string) {

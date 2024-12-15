@@ -1,6 +1,5 @@
 import { RedisClient } from "@devvit/public-api";
 import { generateRandomLetter } from "./generate-random-letter.ts";
-import { letters } from "./letters.ts";
 
 interface BoardDimentations {
   x: number;

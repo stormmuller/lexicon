@@ -1,11 +1,13 @@
 {
   "private": true,
-  "name": "game",
+  "name": "@gameup/devvit",
   "version": "0.0.0",
   "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
-    "dev": "devvit playtest makesomenoisedevvit"
+    "dev": "devvit playtest makesomenoisedevvit",
+    "copy-webview": "bash scripts/copy-webview.sh",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@devvit/public-api": "0.11.3"

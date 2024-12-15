@@ -3,16 +3,16 @@ import {
   ChainCompleteRpcRequest,
   ChainCompleteRpcResponse,
 } from "@gameup/rpc-types";
-import { Message, MessageHandler } from "../message-handler.ts";
-import { wordsKeyName } from "../../../server/cache-words.ts";
-import { calculateWordScore } from "../../../server/calculate-word-score.ts";
-import { getBoard } from "../../../server/get-board.ts";
-import { configuration } from "../../configuration.ts";
+import { Rpc, RpcHandler } from "../../src/rpc/rpc-handler.ts";
+import { wordsKeyName } from "../cache-words.ts";
+import { calculateWordScore } from "../calculate-word-score.ts";
+import { getBoard } from "../get-board.ts";
+import { configuration } from "../../src/configuration.ts";
 
-export type ChainCompleteMessage = Message<ChainCompleteRpcRequest>;
+export type ChainCompleteMessage = Rpc<ChainCompleteRpcRequest>;
 export const chainCompleteMessageType = "chain-complete";
 
-export class ChainCompleteMessageHandler extends MessageHandler<
+export class ChainCompleteMessageHandler extends RpcHandler<
   ChainCompleteMessage,
   ChainCompleteRpcResponse
 > {

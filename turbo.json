@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "copy-webview": {
+      "dependsOn": ["app#build"],
+      "cache": false,
+      "outputs": []
+    },
+    "dev": {
+      "dependsOn": ["build", "check-types", "copy-webview"],
+      "persistent": true,
+      "cache": false
+    }
+  }
+}

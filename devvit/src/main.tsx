@@ -1,15 +1,16 @@
 import "./createPost.js";
 import { getOrCreateBoard } from "../server/get-board.js";
 
-import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
+import { Devvit, useState, RedisClient, useAsync, useChannel } from "@devvit/public-api";
 import { cacheWords } from "../server/cache-words.ts";
-import { createWebViewMessageDispatcher } from "./web-view-messages/web-view-message-dispatcher.js";
-import { Message } from "./web-view-messages/message-handler.ts";
+import { createWebViewMessageDispatcher } from "./rpc/rpc-dispatcher.ts";
+import { Rpc } from "./rpc/rpc-handler.ts";
 import { configuration } from "./configuration.ts";
 
 Devvit.configure({
   redditAPI: true,
   redis: true,
+  realtime: true,
   http: true,
 });
 
@@ -25,8 +26,7 @@ Devvit.addCustomPostType({
     });
 
     const webViewMessageDispatcher = createWebViewMessageDispatcher(
-      context.redis,
-      context.ui.webView
+      context
     );
 
     // Load username with `useAsync` hook
@@ -50,7 +50,7 @@ Devvit.addCustomPostType({
     const [webviewVisible, setWebviewVisible] = useState(false);
 
     // When the web view invokes `window.parent.postMessage` this function is called
-    const onMessage = async (msg: Message<any>) => {
+    const onMessage = async (msg: Rpc<any>) => {
       // TODO: Validate that all messages are in a decent format (i.e. has a messageId, type and data payload)
 
       await webViewMessageDispatcher.dispatchMessage({
@@ -131,7 +131,7 @@ Devvit.addCustomPostType({
           <webview
             id="myWebView"
             url="dist/index.html"
-            onMessage={(msg) => onMessage(msg as unknown as Message<any>)}
+            onMessage={(msg) => onMessage(msg as unknown as Rpc<any>)}
             grow
             height={webviewVisible ? "100%" : "0%"}
           />

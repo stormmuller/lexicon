@@ -1,10 +1,10 @@
-import { RedisClient } from "@devvit/public-api";
+import { RedisClient, Devvit } from "@devvit/public-api";
 import { WebViewUIClient } from "@devvit/public-api/types/web-view-ui-client.js";
-import { ChainCompleteMessageHandler } from "./handlers/index.ts";
-import { Message, MessageHandler } from "./message-handler.ts";
+import { ChainCompleteMessageHandler } from "../../server/rpc-handlers/index.ts";
+import { Rpc, RpcHandler } from "./rpc-handler.ts";
 
-export class WebViewMessageDispatcher {
-  private _messageHandlers: Map<string, MessageHandler<any, any>>;
+export class RpcDispatcher {
+  private _messageHandlers: Map<string, RpcHandler<any, any>>;
   private _webView: WebViewUIClient;
 
   constructor(webView: WebViewUIClient) {
@@ -12,14 +12,14 @@ export class WebViewMessageDispatcher {
     this._webView = webView;
   }
 
-  public registerHandler<TMessage extends Message<any>, TRes>(
-    handler: MessageHandler<TMessage, TRes>
+  public registerHandler<TMessage extends Rpc<any>, TRes>(
+    handler: RpcHandler<TMessage, TRes>
   ) {
     this._messageHandlers.set(handler.type, handler);
     return this;
   }
 
-  public async dispatchMessage<TMessage extends Message<any>>(message: TMessage) {
+  public async dispatchMessage<TMessage extends Rpc<any>>(message: TMessage) {
     const handler = this._messageHandlers.get(message.type);
 
     if (!handler) {
@@ -35,8 +35,8 @@ export class WebViewMessageDispatcher {
   }
 }
 
-export function createWebViewMessageDispatcher(redis: RedisClient, webview: WebViewUIClient) {
-  return new WebViewMessageDispatcher(webview).registerHandler(
-    new ChainCompleteMessageHandler(redis)
+export function createWebViewMessageDispatcher(context: Devvit.Context) {
+  return new RpcDispatcher(context.ui.webView).registerHandler(
+    new ChainCompleteMessageHandler(context.redis)
   );
 }

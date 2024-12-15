@@ -7,3 +7,4 @@
  - add server folder to tsconfig in templates
  - need a useMemo hook
  - web view init message + default for testing outside of devvit
+ - devvit hot reloading does not work when changing server functions

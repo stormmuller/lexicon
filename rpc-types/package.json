@@ -7,6 +7,7 @@
     "test": "vitest",
     "test:ui": "vitest --reporter=html",
     "build": "tsc",
+    "check-types": "tsc --noEmit",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "prettier": "prettier . --check",
