@@ -96,8 +96,8 @@ export class LayoutSystem extends System {
       const newY =
         layoutPositionComponent.y -
         layoutSpriteComponent.anchor.y +
-        offsetY +
-        entityHeight;
+        offsetY + 0;
+        // entityHeight;
 
       const newX = layoutPositionComponent.x + margin.x + alignmentOffset;
 

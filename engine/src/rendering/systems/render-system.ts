@@ -46,7 +46,7 @@ export class RenderSystem extends System {
     this._camera = camera;
   }
 
-  override async beforeAll (entities: Entity[]) {
+  override async beforeAll(entities: Entity[]) {
     if (
       isNil(this._layer.clearStrategy) ||
       this._layer.clearStrategy === ClearStrategy.BLANK
@@ -84,7 +84,7 @@ export class RenderSystem extends System {
     });
 
     return sortedEntities;
-  };
+  }
 
   async run(entity: Entity): Promise<void> {
     const spriteComponent = entity.getComponent<SpriteComponent>(
@@ -143,8 +143,23 @@ export class RenderSystem extends System {
       spriteComponent.renderSource.renderEffects,
     );
 
-    // Render the sprite
-    spriteComponent.renderSource.render(this._layer);
+    if (
+      spriteComponent.debugMode === 'on' ||
+      spriteComponent.debugMode === 'colorOnly'
+    ) {
+      this._layer.context.fillStyle = this._getRandomMagentaShade();
+      this._layer.context.fillRect(
+        spriteComponent.renderSource.boundingBox.minX,
+        spriteComponent.renderSource.boundingBox.minY,
+        spriteComponent.renderSource.boundingBox.maxX,
+        spriteComponent.renderSource.boundingBox.maxY,
+      );
+    }
+
+    if (spriteComponent.debugMode !== 'colorOnly') {
+      // Render the sprite
+      spriteComponent.renderSource.render(this._layer);
+    }
 
     this._resetCanvas();
   }
@@ -172,5 +187,17 @@ export class RenderSystem extends System {
 
     this._layer.context.shadowColor = glow.color;
     this._layer.context.shadowBlur = glow.radius;
+  }
+
+  private _getRandomMagentaShade(): string {
+    const red = 255;
+    const green = Math.floor(Math.random() * 128);
+    const blue = 255;
+
+    // Convert RGB to Hex
+    const toHex = (color: number) => color.toString(16).padStart(2, '0');
+
+    const hexColor = `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
+    return hexColor;
   }
 }

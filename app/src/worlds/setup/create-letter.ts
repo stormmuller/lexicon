@@ -1,6 +1,5 @@
-import { common, ecs, rendering } from "@gameup/engine";
+import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../styles";
-import { Vector2 } from "@gameup/engine/dist/math";
 
 export async function createLetter(
   layer: rendering.RenderLayer,
@@ -10,8 +9,8 @@ export async function createLetter(
   text: string,
   fontSize: number,
   name: string,
-  fontColor: string = 'white',
-  fontFamily: string = "Share Tech Mono",
+  fontColor: string = "white",
+  fontFamily: string = "Share Tech Mono"
 ) {
   await document.fonts.ready;
 
@@ -28,7 +27,9 @@ export async function createLetter(
   const entity = new ecs.Entity(name, [
     new common.PositionComponent(x, y),
     new common.RotationComponent(0),
-    new rendering.SpriteComponent(textRenderSource, layer.name, Vector2.zero())
+    new rendering.SpriteComponent(textRenderSource, layer.name, {
+      anchor: math.Vector2.zero()
+    })
   ]);
 
   world.addEntity(entity);

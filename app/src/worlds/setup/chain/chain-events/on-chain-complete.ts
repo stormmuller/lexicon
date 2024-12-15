@@ -1,11 +1,16 @@
 import { common, ecs, math, rendering } from "@gameup/engine";
-import { ChainCompleteRpcRequest, ChainCompleteRpcResponse } from "@gameup/rpc-types";
+import {
+  ChainCompleteRpcRequest,
+  ChainCompleteRpcResponse,
+} from "@gameup/rpc-types";
 import { makeRpc } from "../../../../rpc/make-rpc";
 import { WordComponent } from "../../../../word";
 import { ChainComponent } from "../../../../chain";
 // import { linksToWord } from "./links-to-word";
 import { styles } from "../../../../styles";
 import { TileComponent } from "../../../../tile";
+
+const textSize = 18;
 
 export function onChainComplete(options: {
   world: ecs.World;
@@ -47,10 +52,10 @@ export function onChainComplete(options: {
 
         const wordTextRenderSource = new rendering.TextRenderSource(
           word,
-          styles.sidePanel.width - (styles.sidePanel.padding.x * 2),
-          styles.sidePanel.width - (styles.sidePanel.padding.x * 2) - 40,
+          styles.sidePanel.width - styles.sidePanel.padding.x * 2,
+          styles.sidePanel.width - styles.sidePanel.padding.x * 2 - 40,
           "Share Tech Mono",
-          18,
+          textSize,
           styles.colors.primary,
           "start"
         );
@@ -60,7 +65,7 @@ export function onChainComplete(options: {
           styles.sidePanel.width - styles.sidePanel.padding.x * 2,
           styles.sidePanel.width - styles.sidePanel.padding.x,
           "Share Tech Mono",
-          18,
+          textSize,
           styles.colors.white,
           "end"
         );
@@ -74,10 +79,9 @@ export function onChainComplete(options: {
           new rendering.SpriteComponent(
             scoreHistoryRenderSource,
             options.renderLayer.name,
-            math.Vector2.zero()
+            { anchor: new math.Vector2(0, -(textSize / 2)) }
           ),
           new common.PositionComponent(),
-          new rendering.DebugDotComponent()
         ]);
 
         options.words.push(wordEntity);

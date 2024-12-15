@@ -2,11 +2,22 @@ import { Component } from '../../ecs';
 import { Vector2 } from '../../math';
 import { RenderSource } from '../render-sources/render-source';
 
+type DebugMode = 'off' | 'on' | 'colorOnly';
+
+const getDefaultOptions = (renderSource: RenderSource) => ({
+  anchor: new Vector2(
+    renderSource.boundingBox.dimentions.x / 2,
+    renderSource.boundingBox.dimentions.y / 2,
+  ),
+  enabled: true,
+  debugMode: 'off' as DebugMode,
+});
+
 export class SpriteComponent implements Component {
   name: symbol;
   renderSource: RenderSource;
   anchor: Vector2;
-  debugMode: boolean;
+  debugMode: DebugMode;
   renderLayerName: string;
   enabled: boolean;
 
@@ -15,18 +26,24 @@ export class SpriteComponent implements Component {
   constructor(
     renderSource: RenderSource,
     renderLayerName: string,
-    anchor: Vector2 = new Vector2(
-      renderSource.boundingBox.dimentions.x / 2,
-      renderSource.boundingBox.dimentions.y / 2,
-    ),
-    enabled: boolean = true,
-    debugMode: boolean = false,
+    options: {
+      anchor?: Vector2,
+      enabled?: boolean,
+      debugMode?: DebugMode,
+    } = {}
   ) {
+    const defaultOptions = getDefaultOptions(renderSource);
+
+    const mergedOptions = {
+      ...defaultOptions,
+      ...options
+    };
+
     this.name = SpriteComponent.symbol;
     this.renderSource = renderSource;
-    this.anchor = anchor;
-    this.debugMode = debugMode;
+    this.anchor = mergedOptions.anchor;
+    this.debugMode = mergedOptions.debugMode;
     this.renderLayerName = renderLayerName;
-    this.enabled = enabled;
+    this.enabled = mergedOptions.enabled;
   }
 }
