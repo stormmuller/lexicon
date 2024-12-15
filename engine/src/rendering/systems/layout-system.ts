@@ -1,4 +1,4 @@
-import { PositionComponent, ScaleComponent } from '../../common';
+import { PositionComponent } from '../../common';
 import { Entity, System } from '../../ecs';
 import { Vector2 } from '../../math';
 import { SpriteComponent } from '../components';
@@ -86,13 +86,20 @@ export class LayoutSystem extends System {
       spriteComponent.enabled = true;
 
       const entityHeight = spriteComponent.renderSource.boundingBox.maxY;
+      const alignmentOffset =
+        layoutBoxComponent.alignChildren === 'start'
+          ? -(layoutRenderSource.boundingBox.maxX / 2)
+          : layoutBoxComponent.alignChildren === 'end'
+            ? +(layoutRenderSource.boundingBox.maxX / 2)
+            : 0;
 
       const newY =
         layoutPositionComponent.y -
         layoutSpriteComponent.anchor.y +
         offsetY +
         entityHeight;
-      const newX = layoutPositionComponent.x + margin.x;
+
+      const newX = layoutPositionComponent.x + margin.x + alignmentOffset;
 
       positionComponent.set(new Vector2(newX, newY));
 

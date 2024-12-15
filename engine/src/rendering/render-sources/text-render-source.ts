@@ -69,7 +69,7 @@ export class TextRenderSource implements RenderSource {
         const testText = this.text.substring(0, i + 1) + ellipsis;
         const testWidth = context.measureText(testText).width;
 
-        if (testWidth <= this.maxWidth) {
+        if (testWidth <= this.overflowWidth) {
           truncatedText = testText;
         } else {
           break;

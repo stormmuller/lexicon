@@ -47,10 +47,10 @@ export function onChainComplete(options: {
 
         const wordTextRenderSource = new rendering.TextRenderSource(
           word,
-          styles.sidePanel.width - styles.sidePanel.padding.x * 2,
-          styles.sidePanel.width - styles.sidePanel.padding.x - 70,
+          styles.sidePanel.width - (styles.sidePanel.padding.x * 2),
+          styles.sidePanel.width - (styles.sidePanel.padding.x * 2) - 40,
           "Share Tech Mono",
-          20,
+          18,
           styles.colors.primary,
           "start"
         );
@@ -73,9 +73,11 @@ export function onChainComplete(options: {
         const wordEntity = new ecs.Entity(`word (${word},${score},${date})`, [
           new rendering.SpriteComponent(
             scoreHistoryRenderSource,
-            options.renderLayer.name
+            options.renderLayer.name,
+            math.Vector2.zero()
           ),
           new common.PositionComponent(),
+          new rendering.DebugDotComponent()
         ]);
 
         options.words.push(wordEntity);

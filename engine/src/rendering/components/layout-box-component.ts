@@ -2,7 +2,7 @@ import { ecs } from '../..';
 import { Component } from '../../ecs';
 import { BoundingBox, Vector2 } from '../../math';
 
-export type LayoutBoxDirection = 'horizontal' | 'vertical';
+export type Alignment = 'start' | 'end' | 'center';
 
 export class LayoutBoxComponent implements Component {
   public name: symbol;
@@ -10,7 +10,7 @@ export class LayoutBoxComponent implements Component {
   boundingBox: BoundingBox;
   spaceBetween: number;
   margin: Vector2;
-  layoutBoxDirection: LayoutBoxDirection;
+  alignChildren: Alignment;
 
   static symbol = Symbol('LayoutBox');
 
@@ -19,13 +19,13 @@ export class LayoutBoxComponent implements Component {
     boundingBox: BoundingBox,
     spaceBetween: number = 0,
     margin: Vector2 = Vector2.zero(),
-    layoutBoxDirection: LayoutBoxDirection = 'vertical',
+    alignChildren: Alignment = 'start',
   ) {
     this.name = LayoutBoxComponent.symbol;
     this.sortedEntities = sortedEntities;
     this.boundingBox = boundingBox;
     this.spaceBetween = spaceBetween;
     this.margin = margin;
-    this.layoutBoxDirection = layoutBoxDirection;
+    this.alignChildren = alignChildren;
   }
 }

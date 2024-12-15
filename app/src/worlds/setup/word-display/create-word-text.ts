@@ -1,4 +1,4 @@
-import { common, ecs, rendering } from "@gameup/engine";
+import { common, ecs, math, rendering } from "@gameup/engine";
 import { WordComponent, WordDisplaySystem } from "../../../word";
 import { styles } from "../../../styles";
 
@@ -12,8 +12,7 @@ export function createWordText(
     styles.wordHistoryPanel.width,
     "Share Tech Mono",
     60,
-    "white",
-    "center",
+    "white"
   );
 
   const containerHeight = 100;
@@ -21,11 +20,12 @@ export function createWordText(
 
   const spriteComponent = new rendering.SpriteComponent(
     textRenderSource,
-    renderLayer.name
+    renderLayer.name,
+    math.Vector2.zero()
   );
   const wordComponent = new WordComponent();
   const positionComponent = new common.PositionComponent(
-    window.innerWidth / 2 + styles.wordHistoryPanel.width / 2,
+    window.innerWidth / 2,
     containerMargin + containerHeight / 2
   );
   const scaleComponent = new common.ScaleComponent();
@@ -34,7 +34,7 @@ export function createWordText(
     positionComponent,
     scaleComponent,
     spriteComponent,
-    wordComponent,
+    wordComponent
   ]);
 
   const wordDisplaySystem = new WordDisplaySystem();
