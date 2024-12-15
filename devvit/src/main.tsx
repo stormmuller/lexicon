@@ -10,7 +10,6 @@ import { configuration } from "./configuration.ts";
 Devvit.configure({
   redditAPI: true,
   redis: true,
-  realtime: true,
   http: true,
 });
 
@@ -19,7 +18,7 @@ Devvit.addCustomPostType({
   name: "Lexicon",
   height: "tall",
   render: (context) => {
-    const { data, loading, error } = useAsync(async () => {
+    useAsync(async () => {
       await cacheWords(context.redis);
 
       return true;
@@ -57,6 +56,7 @@ Devvit.addCustomPostType({
         ...msg,
         postId: context.postId ?? 'unknown',
         userId: context.userId ?? 'anon',
+        username
       });
     };
 

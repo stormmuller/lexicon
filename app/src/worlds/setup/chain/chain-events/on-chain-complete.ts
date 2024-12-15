@@ -40,8 +40,10 @@ export function onChainComplete(options: {
     makeRpc<ChainCompleteRpcRequest, ChainCompleteRpcResponse>(
       "chain-complete",
       { tiles },
-      ({ word, score }) => {
+      ({ word, score, leaderboard }) => {
         const date = new Date();
+
+        console.log(`💯leaderboard: ${JSON.stringify(leaderboard, null, 2)}`);
 
         const wordTextRenderSource = new rendering.TextRenderSource(
           word,

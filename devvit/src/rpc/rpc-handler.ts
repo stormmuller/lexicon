@@ -3,6 +3,7 @@ export interface Rpc<TData> {
   messageId: string,
   postId: string,
   userId: string,
+  username: string;
   data: TData
 }
 
