@@ -1,11 +1,11 @@
 import "./createPost.js";
-import { getBoard } from "../server/get-board.js";
+import { getOrCreateBoard } from "../server/get-board.js";
 
 import { Devvit, useState, RedisClient, useAsync } from "@devvit/public-api";
 import { cacheWords } from "../server/cache-words.ts";
 import { createWebViewMessageDispatcher } from "./web-view-messages/web-view-message-dispatcher.js";
-import { WebViewMessage } from "./web-view-messages/web-view-message.type.js";
 import { Message } from "./web-view-messages/message-handler.ts";
+import { configuration } from "./configuration.ts";
 
 Devvit.configure({
   redditAPI: true,
@@ -51,14 +51,24 @@ Devvit.addCustomPostType({
 
     // When the web view invokes `window.parent.postMessage` this function is called
     const onMessage = async (msg: Message<any>) => {
-      await webViewMessageDispatcher.dispatchMessage(msg);
+      // TODO: Validate that all messages are in a decent format (i.e. has a messageId, type and data payload)
+
+      await webViewMessageDispatcher.dispatchMessage({
+        ...msg,
+        postId: context.postId ?? 'unknown',
+        userId: context.userId ?? 'anon',
+      });
     };
 
     // When the button is clicked, send initial data to web view and show it
     const onShowWebviewClick = async (redis: RedisClient, postId: string) => {
       setWebviewVisible(true);
 
-      const board = await getBoard(redis, postId, { x: 7, y: 8 });
+      const board = await getOrCreateBoard(
+        redis,
+        postId,
+        configuration.boardDimentions
+      );
 
       context.ui.webView.postMessage("myWebView", {
         type: "initial-data",

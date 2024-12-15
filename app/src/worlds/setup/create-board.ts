@@ -12,7 +12,7 @@ async function createTiles(
   for (let x = 0; x < config.gridSize.x; x++) {
     for (let y = 0; y < config.gridSize.y; y++) {
       await createTile(
-        gameState.boardLetters[x + y * x],
+        gameState.boardLetters[x + y * config.gridSize.x],
         x,
         y,
         normalLayer,

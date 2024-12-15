@@ -1,6 +1,8 @@
 export interface Message<TData> {
   type: string,
   messageId: string,
+  postId: string,
+  userId: string,
   data: TData
 }
 

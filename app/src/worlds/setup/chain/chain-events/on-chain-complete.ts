@@ -1,9 +1,11 @@
-import { common, ecs, rendering } from "@gameup/engine";
+import { common, ecs, math, rendering } from "@gameup/engine";
+import { ChainCompleteRpcRequest, ChainCompleteRpcResponse } from "@gameup/rpc-types";
 import { makeRpc } from "../../../../rpc/make-rpc";
 import { WordComponent } from "../../../../word";
 import { ChainComponent } from "../../../../chain";
-import { linksToWord } from "./links-to-word";
+// import { linksToWord } from "./links-to-word";
 import { styles } from "../../../../styles";
+import { TileComponent } from "../../../../tile";
 
 export function onChainComplete(options: {
   world: ecs.World;
@@ -13,7 +15,15 @@ export function onChainComplete(options: {
   words: Array<ecs.Entity>;
 }) {
   return async (chainComponent: ChainComponent) => {
-    const word = linksToWord(chainComponent.links);
+    const tiles = Array<math.Vector2>();
+
+    for (const link of chainComponent.links) {
+      const tileComponent = link.getComponentRequired<TileComponent>(
+        TileComponent.symbol
+      );
+
+      tiles.push(new math.Vector2(tileComponent.x, tileComponent.y));
+    }
 
     for (const linkEntity of chainComponent.links) {
       const sprite = linkEntity.getComponentRequired<rendering.SpriteComponent>(
@@ -27,47 +37,48 @@ export function onChainComplete(options: {
     chainComponent.clearChain();
     options.wordComponent.word = "";
 
-    makeRpc<number>("chain-complete", { word }, (score) => {
-      const date = new Date();
+    makeRpc<ChainCompleteRpcRequest, ChainCompleteRpcResponse>(
+      "chain-complete",
+      { tiles },
+      ({ word, score }) => {
+        const date = new Date();
 
-      const wordTextRenderSource = new rendering.TextRenderSource(
-        word,
-        styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
-        styles.sidePanel.width - styles.wordHistoryPanel.padding.x - 70,
-        "Share Tech Mono",
-        20,
-        styles.colors.primary,
-        "start"
-      );
+        const wordTextRenderSource = new rendering.TextRenderSource(
+          word,
+          styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
+          styles.sidePanel.width - styles.wordHistoryPanel.padding.x - 70,
+          "Share Tech Mono",
+          20,
+          styles.colors.primary,
+          "start"
+        );
 
-      const scoreTextRenderSource = new rendering.TextRenderSource(
-        `+${score.toString()}`,
-        styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
-        styles.sidePanel.width - styles.wordHistoryPanel.padding.x,
-        "Share Tech Mono",
-        18,
-        styles.colors.white,
-        "end"
-      );
+        const scoreTextRenderSource = new rendering.TextRenderSource(
+          `+${score.toString()}`,
+          styles.sidePanel.width - styles.wordHistoryPanel.padding.x * 2,
+          styles.sidePanel.width - styles.wordHistoryPanel.padding.x,
+          "Share Tech Mono",
+          18,
+          styles.colors.white,
+          "end"
+        );
 
-      const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
-        word: wordTextRenderSource,
-        score: scoreTextRenderSource,
-      });
+        const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
+          word: wordTextRenderSource,
+          score: scoreTextRenderSource,
+        });
 
-      const wordEntity = new ecs.Entity(`word (${word},${score},${date})`, [
-        // new WordComponent(word),
-        // new ScoreComponent(score),
-        // new DateComponent(date),
-        new rendering.SpriteComponent(
-          scoreHistoryRenderSource,
-          options.renderLayer.name
-        ),
-        new common.PositionComponent(),
-      ]);
+        const wordEntity = new ecs.Entity(`word (${word},${score},${date})`, [
+          new rendering.SpriteComponent(
+            scoreHistoryRenderSource,
+            options.renderLayer.name
+          ),
+          new common.PositionComponent(),
+        ]);
 
-      options.words.push(wordEntity);
-      options.world.addEntity(wordEntity);
-    });
+        options.words.push(wordEntity);
+        options.world.addEntity(wordEntity);
+      }
+    );
   };
 }

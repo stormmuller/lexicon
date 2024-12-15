@@ -4,7 +4,7 @@ const pendingRequests = new Map<string, any>();
 
 type RpcCallback<TRes> = (response: TRes) => Promise<void> | void;
 
-export async function makeRpc<TRes>(type: string, data: any, responseHandler: RpcCallback<TRes>) {
+export async function makeRpc<TReq, TRes>(type: string, data: TReq, responseHandler: RpcCallback<TRes>) {
   const messageId = generateUuid();
 
   pendingRequests.set(messageId, responseHandler);
