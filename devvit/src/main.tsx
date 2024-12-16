@@ -1,5 +1,5 @@
 import "./createPost.js";
-import { getOrCreateBoard } from "../server/get-board.js";
+import { getOrCreateBoard } from "./server/get-board.ts";
 
 import {
   Devvit,
@@ -8,7 +8,7 @@ import {
   useAsync,
   useChannel,
 } from "@devvit/public-api";
-import { cacheWords } from "../server/cache-words.ts";
+import { cacheWords } from "./server/cache-words.ts";
 import { createWebViewMessageDispatcher } from "./rpc/rpc-dispatcher.ts";
 import { Rpc } from "./rpc/rpc-handler.ts";
 import { configuration } from "./configuration.ts";

@@ -52,7 +52,6 @@ export class WindowResizer implements common.Stoppable {
     }
 
     for (const layer of this._layers) {
-      console.log(`Resizing layer ${layer.name}`);
       layer.resize();
     }
   };

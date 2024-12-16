@@ -1,6 +1,5 @@
 import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
-import { Vector2 } from "@gameup/engine/dist/math";
 
 export function createEntries(
   foregroundRenderLayer: rendering.RenderLayer,
@@ -45,21 +44,21 @@ export function createEntry(
   type: "normal" | "player" = "normal"
 ) {
   const rankTextRenderSource = new rendering.TextRenderSource(
-    "20",
+    "",
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
-    type === "player" ? 20 : 16,
-    type === "player" ? styles.colors.white : styles.colors.primary,
+    type === "player" ? 16 : 14,
+    type === "player" ? styles.colors.white : styles.colors.grey,
     "start"
   );
 
   const usernameTextRenderSource = new rendering.TextRenderSource(
-    `username`,
+    "",
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
-    styles.sidePanel.width - styles.sidePanel.padding.x,
+    styles.sidePanel.width - styles.sidePanel.padding.x * 2 - 20,
     "Share Tech Mono",
-    16,
+    12,
     type === "player" ? styles.colors.darkgrey : styles.colors.primary,
     "end"
   );
@@ -73,13 +72,13 @@ export function createEntry(
     new rendering.SpriteComponent(
       leaderboardEntryRenderSource,
       foregroundRenderLayer.name,
-      { anchor: Vector2.zero() }
+      { anchor: math.Vector2.zero() }
     ),
     new common.PositionComponent(),
   ]);
 
   const scoreTextRenderSource = new rendering.TextRenderSource(
-    `1250`,
+    "-",
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
@@ -92,7 +91,7 @@ export function createEntry(
     new rendering.SpriteComponent(
       scoreTextRenderSource,
       foregroundRenderLayer.name,
-      { anchor: Vector2.zero() }
+      { anchor: math.Vector2.zero() }
     ),
     new common.PositionComponent(),
   ]);
@@ -114,12 +113,12 @@ export function createEntry(
       new rendering.SpriteComponent(
         containerRenderSource,
         backgroundRenderLayer.name,
-        { anchor: Vector2.zero() }
+        { anchor: math.Vector2.zero() }
       ),
       new rendering.LayoutBoxComponent(
         [nameAndRankEntity, scoreEntity],
         containerRenderSource.boundingBox,
-        5,
+        15,
         new math.Vector2(styles.sidePanel.padding.x, 10),
         "center",
         "bottom"

@@ -28,7 +28,9 @@ export class World implements Updateable, Stoppable {
         throw new Error(`Unable to get entities for system ${system.name}`);
       }
 
-      systemPromises.push(system.runSystem(entities));
+      const enabledEntities = entities.filter(e => e.enabled);
+
+      systemPromises.push(system.runSystem(enabledEntities));
     }
 
     await Promise.all(systemPromises);

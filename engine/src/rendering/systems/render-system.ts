@@ -60,21 +60,21 @@ export class RenderSystem extends System {
     }
 
     const sortedEntities = entities.sort((entity1, entity2) => {
-      const position1 = entity1.getComponent<PositionComponent>(
+      const position1 = entity1.getComponentRequired<PositionComponent>(
         PositionComponent.symbol,
-      ) as PositionComponent;
+      );
 
-      const spriteComponent1 = entity1.getComponent<SpriteComponent>(
+      const spriteComponent1 = entity1.getComponentRequired<SpriteComponent>(
         SpriteComponent.symbol,
-      ) as SpriteComponent;
+      );
 
-      const position2 = entity2.getComponent<PositionComponent>(
+      const position2 = entity2.getComponentRequired<PositionComponent>(
         PositionComponent.symbol,
-      ) as PositionComponent;
+      );
 
-      const spriteComponent2 = entity2.getComponent<SpriteComponent>(
+      const spriteComponent2 = entity2.getComponentRequired<SpriteComponent>(
         SpriteComponent.symbol,
-      ) as SpriteComponent;
+      );
 
       return (
         position1.y -
@@ -87,9 +87,9 @@ export class RenderSystem extends System {
   }
 
   async run(entity: Entity): Promise<void> {
-    const spriteComponent = entity.getComponent<SpriteComponent>(
+    const spriteComponent = entity.getComponentRequired<SpriteComponent>(
       SpriteComponent.symbol,
-    ) as SpriteComponent;
+    );
 
     if (spriteComponent.renderLayerName !== this._layer.name) {
       return; // Probably not the best way to handle layers/sprite, but the alternatives have their own issues.
@@ -99,13 +99,13 @@ export class RenderSystem extends System {
       return;
     }
 
-    const position = entity.getComponent<PositionComponent>(
+    const position = entity.getComponentRequired<PositionComponent>(
       PositionComponent.symbol,
-    ) as PositionComponent;
+    );
 
     const scale = entity.getComponent<ScaleComponent>(
       ScaleComponent.symbol,
-    ) as ScaleComponent;
+    );
 
     const rotation = entity.getComponent<RotationComponent>(
       RotationComponent.symbol,

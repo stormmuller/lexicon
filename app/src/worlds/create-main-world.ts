@@ -10,8 +10,12 @@ import {
 } from "./setup";
 import { createWordDisplay as createWordDisplay } from "./setup/word-display";
 import { createWordHistory } from "./setup/word-history";
-import { createLeaderboard } from "./setup/leader-board";
-import { onAddedToChain, onChainComplete, onRemovedFromChain } from "./setup/chain/events";
+import { createLeaderboard } from "./setup/leaderboard";
+import {
+  onAddedToChain,
+  onChainComplete,
+  onRemovedFromChain,
+} from "./setup/chain/events";
 
 export async function createMainWorld(
   worldSpace: common.Space,
@@ -51,7 +55,7 @@ export async function createMainWorld(
   );
 
   const { words } = createWordHistory(world, backgroundRenderLayer);
-  createLeaderboard(
+  const { leaderboardUpdater } = createLeaderboard(
     world,
     backgroundRenderLayer,
     foregroundRenderLayer
@@ -61,8 +65,9 @@ export async function createMainWorld(
     world,
     renderSource: tileImageRenderSource,
     renderLayer: foregroundRenderLayer,
-    words,
     wordTextEntity,
+    wordsCollection: words,
+    leaderboardUpdater
   });
 
   const onRemovedFromChainCallback = onRemovedFromChain({

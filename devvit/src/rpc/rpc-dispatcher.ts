@@ -1,6 +1,6 @@
 import { RedisClient, Devvit } from "@devvit/public-api";
 import { WebViewUIClient } from "@devvit/public-api/types/web-view-ui-client.js";
-import { ChainCompleteMessageHandler } from "../../server/rpc-handlers/index.ts";
+import { ChainCompleteMessageHandler } from "../server/rpc-handlers/index.ts";
 import { Rpc, RpcHandler } from "./rpc-handler.ts";
 
 export class RpcDispatcher {

@@ -8,17 +8,20 @@ import { WordComponent } from "../../../../word";
 import { ChainComponent, OnChainCompleteCallback } from "../../../../chain";
 import { styles } from "../../../../styles";
 import { TileComponent } from "../../../../tile";
+import { LeaderboardUpdater } from "../../../../leaderboard";
 
 export function onChainComplete(options: {
   world: ecs.World;
   renderSource: rendering.RenderSource;
   renderLayer: rendering.RenderLayer;
   wordTextEntity: ecs.Entity;
-  words: Array<ecs.Entity>;
+  wordsCollection: Array<ecs.Entity>;
+  leaderboardUpdater: LeaderboardUpdater;
 }): OnChainCompleteCallback {
-  const wordComponent = options.wordTextEntity.getComponentRequired<WordComponent>(
-    WordComponent.symbol
-  );
+  const wordComponent =
+    options.wordTextEntity.getComponentRequired<WordComponent>(
+      WordComponent.symbol
+    );
 
   return async (chainComponent: ChainComponent) => {
     const tiles = Array<math.Vector2>();
@@ -50,6 +53,8 @@ export function onChainComplete(options: {
         const date = new Date();
 
         console.log(`💯leaderboard: ${JSON.stringify(leaderboard, null, 2)}`);
+
+        options.leaderboardUpdater.update(leaderboard);
 
         const wordTextRenderSource = new rendering.TextRenderSource(
           word,
@@ -85,7 +90,7 @@ export function onChainComplete(options: {
           new common.PositionComponent(),
         ]);
 
-        options.words.push(wordEntity);
+        options.wordsCollection.push(wordEntity);
         options.world.addEntity(wordEntity);
       }
     );

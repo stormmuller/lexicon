@@ -1,6 +1,9 @@
 import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
 import { createEntries } from "./create-entry";
+import {
+  LeaderboardUpdater,
+} from "../../../leaderboard";
 
 export function createLeaderboard(
   world: ecs.World,
@@ -44,5 +47,7 @@ export function createLeaderboard(
 
   world.addEntity(leaderboardEntity);
 
-  return { leaderboardEntity, leaderBoardEntryEntities };
+  const leaderboardUpdater = new LeaderboardUpdater(leaderBoardEntryEntities);
+
+  return { leaderboardEntity, leaderBoardEntryEntities, leaderboardUpdater };
 }

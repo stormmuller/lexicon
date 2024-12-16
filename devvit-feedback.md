@@ -4,7 +4,8 @@
  - Consider adding `allowImportingTsExtensions` to the devvit tsconfig
  - [Elaborate(redis seeding example)] Ask AI was not useful, and infact it was actively harmful to my development
  - I have pi-hole + brave, so trackers are blocked, I also have extentions like password managers, etc. that log to the console. The console can be quite noisy.Consider adding a default logger that has some structured logs  e.g. using the name of the app as a prefix, allows me to understand what is and isn't from my app in the console. 
- - add server folder to tsconfig in templates
+ - Not obvious that the server folder needs to be inside the `src` folder. i.e. what does "project-directory" mean?
  - need a useMemo hook
  - web view init message + default for testing outside of devvit
- - devvit hot reloading does not work when changing server functions
+ - devvit hot reloading does not work when changing server functions (at least in sub dirs)
+ - would like `zrevrank` or a reverse option like we do for range

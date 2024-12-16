@@ -4,15 +4,21 @@ import type { Component } from './types';
 export class Entity {
   components: Set<Component>;
   name: string;
+  enabled: boolean;
   private _id: number;
 
-  constructor(name: string, initialComponents: Component[]) {
-    this._id = Entity._generateId()
+  constructor(
+    name: string,
+    initialComponents: Component[],
+    enabled: boolean = true,
+  ) {
+    this._id = Entity._generateId();
     this.components = new Set<Component>(initialComponents);
     this.name = name;
+    this.enabled = enabled;
   }
 
-  public get id(){
+  public get id() {
     return this._id;
   }
 
@@ -77,7 +83,7 @@ export class Entity {
   removeComponent = (component: Component) => {
     this.components.delete(component);
   };
-  
+
   private static _idCounter: number = 0;
   private static _generateId() {
     return Entity._idCounter++;

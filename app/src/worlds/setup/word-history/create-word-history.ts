@@ -1,6 +1,5 @@
 import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
-import { WordHistoryComponent } from "../../../word";
 
 export function createWordHistory(
   world: ecs.World,
@@ -38,11 +37,7 @@ export function createWordHistory(
     ),
   ]);
 
-  const wordHistoryEntity = new ecs.Entity("word history", [
-    new WordHistoryComponent(),
-  ]);
+  world.addEntities([wordHistoryContainerEntity]);
 
-  world.addEntities([wordHistoryContainerEntity, wordHistoryEntity]);
-
-  return { wordHistoryContainerEntity, wordHistoryEntity, words };
+  return { wordHistoryContainerEntity, words };
 }

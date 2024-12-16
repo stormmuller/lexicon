@@ -14,7 +14,6 @@ export class Game implements Stoppable {
     this.onWindowResize = new Event('window-resize');
 
     window.addEventListener('resize', () => {
-      console.log('window resized');
       this.onWindowResize.raise;
     });
   }
