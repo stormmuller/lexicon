@@ -13,7 +13,10 @@ export class Game implements Stoppable {
     this._scenes = new Set<Scene>();
     this.onWindowResize = new Event('window-resize');
 
-    window.addEventListener('resize', this.onWindowResize.raise);
+    window.addEventListener('resize', () => {
+      console.log('window resized');
+      this.onWindowResize.raise;
+    });
   }
 
   run = async (time = 0) => {

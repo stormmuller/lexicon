@@ -1,47 +1,27 @@
 import { common, ecs, rendering } from "@gameup/engine";
-import { ChainComponent, ChainSystem } from "../../../chain";
-import { styles } from "../../../styles";
 import {
-  onAddedToChain,
-  onChainComplete,
-  onRemovedFromChain,
-} from "./chain-events";
-import { WordComponent } from "../../../word";
+  ChainComponent,
+  ChainSystem,
+  OnAddedToChainCallback,
+  OnChainCompleteCallback,
+  OnRemovedFromChainCallback,
+} from "../../../chain";
+import { styles } from "../../../styles";
 
 export function createChain(
   world: ecs.World,
   inputsEntity: ecs.Entity,
   worldCamera: ecs.Entity,
   worldSpace: common.Space,
-  tileChainImageRenderSource: rendering.RenderSource,
-  tileImageRenderSource: rendering.RenderSource,
-  focusedRenderLayer: rendering.RenderLayer,
   normalRenderLayer: rendering.RenderLayer,
-  wordTextEntity: ecs.Entity,
-  words: Array<ecs.Entity>
+  onChainComplete: OnChainCompleteCallback,
+  onRemovedFromChain: OnRemovedFromChainCallback,
+  onAddedToChain: OnAddedToChainCallback
 ) {
-  const wordComponent = wordTextEntity.getComponentRequired<WordComponent>(
-    WordComponent.symbol
-  );
-
   const chainComponent = new ChainComponent(
-    onChainComplete({
-      world,
-      renderSource: tileImageRenderSource,
-      renderLayer: normalRenderLayer,
-      wordComponent,
-      words
-    }),
-    onRemovedFromChain({
-      renderSource: tileImageRenderSource,
-      renderLayer: normalRenderLayer,
-      wordComponent,
-    }),
-    onAddedToChain({
-      renderSource: tileChainImageRenderSource,
-      renderLayer: focusedRenderLayer,
-      wordComponent,
-    })
+    onChainComplete,
+    onRemovedFromChain,
+    onAddedToChain
   );
 
   const lineRenderSource = new rendering.LineRenderSource(

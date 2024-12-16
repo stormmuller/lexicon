@@ -1,14 +1,14 @@
 import { common, ecs, math } from "@gameup/engine";
 import { ChainableComponent } from "./chainable-component";
 
-type OnChainCompleteCallback = (
+export type OnChainCompleteCallback = (
   chainComponent: ChainComponent
 ) => common.SyncOrAsync<void>;
-type OnRemovedFromChain = (
+export type OnRemovedFromChainCallback = (
   linkRemoved: ecs.Entity,
   chainComponent: ChainComponent
 ) => common.SyncOrAsync<void>;
-type OnAddedToChain = (
+export type OnAddedToChainCallback = (
   linkAdded: ecs.Entity,
   chainComponent: ChainComponent
 ) => common.SyncOrAsync<void>;
@@ -18,15 +18,15 @@ export class ChainComponent implements ecs.Component {
   public path: Array<math.Vector2>;
   public links: Array<ecs.Entity>;
   private _onChainCompleteCallback: OnChainCompleteCallback;
-  private _onRemovedFromChain: OnRemovedFromChain;
-  private _onAddedToChain: OnAddedToChain;
+  private _onRemovedFromChain: OnRemovedFromChainCallback;
+  private _onAddedToChain: OnAddedToChainCallback;
 
   static symbol = Symbol("Chain");
 
   constructor(
     onChainCompleteCallback: OnChainCompleteCallback,
-    onRemovedFromChain: OnRemovedFromChain,
-    onAddedToChain: OnAddedToChain
+    onRemovedFromChain: OnRemovedFromChainCallback,
+    onAddedToChain: OnAddedToChainCallback
   ) {
     this.name = ChainComponent.symbol;
     this.path = new Array();

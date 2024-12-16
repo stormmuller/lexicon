@@ -37,8 +37,9 @@ export class ImageRenderSource implements RenderSource {
     imageCache: ImageCache,
     path: string,
     bleed: number = 1,
+    renderEffects: RenderEffects = {},
   ) {
     const image = await imageCache.getOrLoad(path);
-    return new ImageRenderSource(image, bleed);
+    return new ImageRenderSource(image, bleed, renderEffects);
   }
 }

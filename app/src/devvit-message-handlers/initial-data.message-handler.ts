@@ -11,5 +11,5 @@ export function initialDataMessageHandler(message: InitialDataMessage) {
   gameState.boardLetters = message.board;
   gameState.score = message.score;
   
-  void startGame();
+  startGame();
 }

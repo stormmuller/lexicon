@@ -1,7 +1,7 @@
 import { audio, ecs } from '@gameup/engine';
 
 export const createAudio = (world: ecs.World, soundName: string) => {
-  const soundPath = `./audio/music/${soundName}`;
+  const soundPath = `${soundName}`;
 
   const music = new ecs.Entity('music', [
     new audio.SoundComponent(
