@@ -1,4 +1,5 @@
 import { Component } from '../../ecs';
+import { degreesToRadians } from '../../math';
 
 export class RotationComponent implements Component {
   name: symbol;
@@ -8,6 +9,6 @@ export class RotationComponent implements Component {
 
   constructor(degrees: number) {
     this.name = RotationComponent.symbol;
-    this.radians = (degrees * Math.PI) / 180;
+    this.radians = degreesToRadians(degrees);
   }
 }

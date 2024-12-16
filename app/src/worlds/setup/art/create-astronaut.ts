@@ -1,4 +1,4 @@
-import { common, ecs, rendering } from "@gameup/engine";
+import { animations, common, ecs, math, rendering } from "@gameup/engine";
 
 export async function createAstronaut(
   imageCache: rendering.ImageCache,
@@ -18,11 +18,44 @@ export async function createAstronaut(
       }
     );
 
+  const positionComponent = new common.PositionComponent(
+    window.innerWidth - 100,
+    110
+  );
+  
+  const rotationComponent = new common.RotationComponent(0);
+
+  const animationComponent = new animations.AnimationComponent([
+    {
+      startValue: 110,
+      endValue: 250,
+      elapsed: 0,
+      duration: 10000,
+      updateCallback: (value: number) => {
+        positionComponent.y = value
+      },
+      loop: "pingpong",
+      easing: animations.easeInOutSine,
+    },
+    {
+      startValue: 0,
+      endValue: math.degreesToRadians(-20),
+      elapsed: 0,
+      duration: 20000,
+      updateCallback: (value: number) => {
+        rotationComponent.radians = value
+      },
+      loop: "pingpong",
+      easing: animations.easeInOutBack,
+    }
+  ]);
+
   const astronautEntity = new ecs.Entity("astronaut art", [
-    new common.PositionComponent(window.innerWidth - 100, 110),
+    positionComponent,
     new common.ScaleComponent(),
-    new common.RotationComponent(0),
+    rotationComponent,
     new rendering.SpriteComponent(astronautRenderSource, renderLayer.name),
+    animationComponent
   ]);
 
   world.addEntity(astronautEntity);
