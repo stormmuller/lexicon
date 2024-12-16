@@ -2,8 +2,6 @@ import { common, ecs, math, rendering } from "@gameup/engine";
 import { WordComponent, WordDisplaySystem } from "../../../word";
 import { styles } from "../../../styles";
 
-const fontSize = 60;
-
 export function createWordText(
   world: ecs.World,
   renderLayer: rendering.RenderLayer

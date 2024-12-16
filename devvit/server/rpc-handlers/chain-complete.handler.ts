@@ -2,7 +2,7 @@ import { RedisClient } from "@devvit/public-api";
 import {
   ChainCompleteRpcRequest,
   ChainCompleteRpcResponse,
-} from "@gameup/rpc-types";
+} from "@lexicon/common";
 import { Rpc, RpcHandler } from "../../src/rpc/rpc-handler.ts";
 import { wordsKeyName } from "../cache-words.ts";
 import { calculateWordScore } from "../calculate-word-score.ts";

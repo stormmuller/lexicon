@@ -2,7 +2,7 @@ import { common, ecs, math, rendering } from "@gameup/engine";
 import {
   ChainCompleteRpcRequest,
   ChainCompleteRpcResponse,
-} from "@gameup/rpc-types";
+} from "@lexicon/common";
 import { makeRpc } from "../../../../rpc/make-rpc";
 import { WordComponent } from "../../../../word";
 import { ChainComponent, OnChainCompleteCallback } from "../../../../chain";

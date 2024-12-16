@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@gameup/rpc-types": "file:../rpc-types",
+    "@lexicon/common": "file:../common",
     "typescript": "~5.6.2",
     "vite": "^6.0.1"
   },

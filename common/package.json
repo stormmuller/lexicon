@@ -1,5 +1,5 @@
 {
-  "name": "@gameup/rpc-types",
+  "name": "@lexicon/common",
   "version": "1.0.0",
   "main": "dist/index.js",
   "private": true,

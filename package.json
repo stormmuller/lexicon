@@ -11,7 +11,7 @@
     "app",
     "devvit",
     "engine",
-    "rpc-types"
+    "common"
   ],
   "author": "",
   "license": "ISC",
