@@ -1,4 +1,4 @@
-import { animations, common, ecs, game, rendering } from "@gameup/engine";
+import { animations, common, ecs, game, rendering, timer } from "@gameup/engine";
 import { styles } from "../styles";
 import {
   createArt,
@@ -29,6 +29,9 @@ export async function createMainWorld(
 
   const animationSystem = new animations.AnimationSystem(game.time);
   world.addSystem(animationSystem);
+
+  const timerSystem = new timer.TimerSystem(game.time);
+  world.addSystem(timerSystem);
 
   const { worldCamera } = createCameras(world, worldSpace, inputsEntity, game);
   const {

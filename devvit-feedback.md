@@ -9,3 +9,4 @@
  - web view init message + default for testing outside of devvit
  - devvit hot reloading does not work when changing server functions (at least in sub dirs)
  - would like `zrevrank` or a reverse option like we do for range
+ - There have been times where I build in one terminal and I actually have devvit running in a different terminal. The errors sometimes reference prisma which may be concening as it is ORM related errors not being sanitized? Might be worth testing this scenario. I have a screenshot of the error if needed.

@@ -6,6 +6,9 @@ export const wordDefinitionsKeyName = "word-definitions";
 export const wordsKeyName = "words";
 
 export async function cacheWords(redis: RedisClient) {
+  await redis.del(wordDefinitionsKeyName);
+  await redis.del(wordsKeyName);
+
   const numberOfCachedWordDefinitions = await redis.hLen(
     wordDefinitionsKeyName
   );

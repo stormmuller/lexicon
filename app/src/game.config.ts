@@ -8,5 +8,6 @@ export const config = {
     maxZoom: 1.7,
     allowPanning: false,
     allowZooming: false,
-  }
+  },
+  leaderboardRefresh: 15_000
 };

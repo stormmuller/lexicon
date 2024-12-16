@@ -1,4 +1,4 @@
-import { common, ecs, math, rendering } from "@gameup/engine";
+import { common, ecs, math, rendering, timer } from "@gameup/engine";
 import { styles } from "../../../styles";
 import { createEntries } from "./create-entry";
 import { LeaderboardUpdater } from "../../../leaderboard";
@@ -8,6 +8,7 @@ import {
   GetLeaderboardRpcResponse,
   rpc_getLeaderboard,
 } from "@lexicon/common";
+import { config } from "../../../game.config";
 
 export function createLeaderboard(
   world: ecs.World,
@@ -28,6 +29,17 @@ export function createLeaderboard(
     world
   );
 
+  const leaderboardUpdater = new LeaderboardUpdater(leaderBoardEntryEntities);
+  const periodicLeaderboardUpdateComponent = new timer.TimerComponent([
+    {
+      callback: updateLeaderboard(leaderboardUpdater),
+      delay: config.leaderboardRefresh,
+      repeat: true,
+      interval: config.leaderboardRefresh,
+      elapsed: 0
+    },
+  ]);
+
   const leaderboardEntity = new ecs.Entity("leaderboard container", [
     new common.PositionComponent(
       window.innerWidth / 2 -
@@ -47,19 +59,24 @@ export function createLeaderboard(
       0,
       new math.Vector2(0, styles.sidePanel.padding.y)
     ),
+    periodicLeaderboardUpdateComponent
   ]);
 
   world.addEntity(leaderboardEntity);
 
-  const leaderboardUpdater = new LeaderboardUpdater(leaderBoardEntryEntities);
-
-  makeRpc<GetLeaderboardRpcRequest, GetLeaderboardRpcResponse>(
-    rpc_getLeaderboard,
-    null,
-    ({ leaderboard }) => {
-      leaderboardUpdater.update(leaderboard);
-    }
-  );
+  updateLeaderboard(leaderboardUpdater);
 
   return { leaderboardEntity, leaderBoardEntryEntities, leaderboardUpdater };
+}
+
+function updateLeaderboard(leaderboardUpdater: LeaderboardUpdater) {
+  return () => {
+    makeRpc<GetLeaderboardRpcRequest, GetLeaderboardRpcResponse>(
+      rpc_getLeaderboard,
+      null,
+      ({ leaderboard }) => {
+        leaderboardUpdater.update(leaderboard);
+      }
+    );
+  };
 }

@@ -10,3 +10,4 @@ export * as math from './math';
 export * as physics from './physics';
 export * as rendering from './rendering';
 export * as ui from './ui';
+export * as timer from './timer';
