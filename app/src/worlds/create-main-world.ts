@@ -26,7 +26,7 @@ export async function createMainWorld(
   const world = new ecs.World(game);
   const inputsEntity = createInputs(world, gameContainer);
   const imageCache = new rendering.ImageCache();
-  
+
   const animationSystem = new animations.AnimationSystem(game.time);
   world.addSystem(animationSystem);
 
@@ -52,7 +52,7 @@ export async function createMainWorld(
     styles.tile.size,
     styles.tile.borderRaduis,
     styles.tile.backgroundColor,
-    { width: 2, color: "yellow" }
+    { width: 2, color: styles.line.color }
   );
 
   const { wordTextEntity } = createWordDisplay(

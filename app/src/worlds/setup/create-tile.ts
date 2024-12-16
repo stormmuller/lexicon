@@ -21,7 +21,8 @@ export async function createTile(
 
   const calculatedX =
     x * (styles.tile.size + styles.tile.gap) + xOffset + styles.tile.size / 2;
-  const calculatedY = y * (styles.tile.size + styles.tile.gap) + config.yOffset;
+  const calculatedY =
+    y * (styles.tile.size + styles.tile.gap) + styles.board.marginTop;
 
   const tileImageRenderSource = new rendering.RoundedRectangleRenderSource(
     styles.tile.size,
@@ -101,7 +102,7 @@ export async function createTile(
     new TileComponent(letter, x, y),
     new HoverComponent(onHoverStart, onHoverEnd),
     new physics.BoxColliderComponent(boundingBox),
-    new ChainableComponent()
+    new ChainableComponent(),
   ]);
 
   world.addEntity(tileEntity);

@@ -2,7 +2,7 @@ import { colors } from "./color.styles";
 
 export const tile = {
   size: 36,
-  gap: 8,
+  gap: 10,
   borderRaduis: 5,
   backgroundColor: colors.background,
   hover: {

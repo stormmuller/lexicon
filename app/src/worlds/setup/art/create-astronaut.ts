@@ -30,7 +30,7 @@ export async function createAstronaut(
       startValue: 110,
       endValue: 250,
       elapsed: 0,
-      duration: 10000,
+      duration: 20 * 1000,
       updateCallback: (value: number) => {
         positionComponent.y = value
       },
@@ -41,7 +41,7 @@ export async function createAstronaut(
       startValue: 0,
       endValue: math.degreesToRadians(-20),
       elapsed: 0,
-      duration: 20000,
+      duration: 40 * 1000,
       updateCallback: (value: number) => {
         rotationComponent.radians = value
       },

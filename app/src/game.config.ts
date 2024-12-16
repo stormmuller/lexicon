@@ -8,6 +8,5 @@ export const config = {
     maxZoom: 1.7,
     allowPanning: false,
     allowZooming: false,
-  },
-  yOffset: 160,
+  }
 };
