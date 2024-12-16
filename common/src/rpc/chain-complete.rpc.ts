@@ -9,3 +9,5 @@ export type ChainCompleteRpcResponse = {
   score: number;
   leaderboard: Array<LeaderboardEntry>;
 };
+
+export const rpc_chainComplete = 'chain-complete';

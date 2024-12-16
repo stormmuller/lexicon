@@ -1,6 +1,9 @@
-import { RedisClient, Devvit } from "@devvit/public-api";
+import { Devvit } from "@devvit/public-api";
 import { WebViewUIClient } from "@devvit/public-api/types/web-view-ui-client.js";
-import { ChainCompleteMessageHandler } from "../server/rpc-handlers/index.ts";
+import {
+  ChainCompleteMessageHandler,
+  GetLeaderboardMessageHandler,
+} from "../server/rpc-handlers/index.ts";
 import { Rpc, RpcHandler } from "./rpc-handler.ts";
 
 export class RpcDispatcher {
@@ -28,15 +31,15 @@ export class RpcDispatcher {
 
     const response = await handler.handle(message);
 
-    this._webView.postMessage('myWebView', {
-      type: 'rpc-response',
+    this._webView.postMessage("myWebView", {
+      type: "rpc-response",
       data: { messageId: message.messageId, response },
     });
   }
 }
 
 export function createWebViewMessageDispatcher(context: Devvit.Context) {
-  return new RpcDispatcher(context.ui.webView).registerHandler(
-    new ChainCompleteMessageHandler(context.redis)
-  );
+  return new RpcDispatcher(context.ui.webView)
+    .registerHandler(new ChainCompleteMessageHandler(context.redis))
+    .registerHandler(new GetLeaderboardMessageHandler(context.redis));
 }

@@ -1,9 +1,13 @@
 import { common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
 import { createEntries } from "./create-entry";
+import { LeaderboardUpdater } from "../../../leaderboard";
+import { makeRpc } from "../../../rpc";
 import {
-  LeaderboardUpdater,
-} from "../../../leaderboard";
+  GetLeaderboardRpcRequest,
+  GetLeaderboardRpcResponse,
+  rpc_getLeaderboard,
+} from "@lexicon/common";
 
 export function createLeaderboard(
   world: ecs.World,
@@ -48,6 +52,14 @@ export function createLeaderboard(
   world.addEntity(leaderboardEntity);
 
   const leaderboardUpdater = new LeaderboardUpdater(leaderBoardEntryEntities);
+
+  makeRpc<GetLeaderboardRpcRequest, GetLeaderboardRpcResponse>(
+    rpc_getLeaderboard,
+    null,
+    ({ leaderboard }) => {
+      leaderboardUpdater.update(leaderboard);
+    }
+  );
 
   return { leaderboardEntity, leaderBoardEntryEntities, leaderboardUpdater };
 }

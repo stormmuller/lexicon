@@ -2,6 +2,7 @@ import { common, ecs, math, rendering } from "@gameup/engine";
 import {
   ChainCompleteRpcRequest,
   ChainCompleteRpcResponse,
+  rpc_chainComplete,
 } from "@lexicon/common";
 import { makeRpc } from "../../../../rpc/make-rpc";
 import { WordComponent } from "../../../../word";
@@ -47,7 +48,7 @@ export function onChainComplete(options: {
     wordComponent.word = "";
 
     makeRpc<ChainCompleteRpcRequest, ChainCompleteRpcResponse>(
-      "chain-complete",
+      rpc_chainComplete,
       { tiles },
       ({ word, score, leaderboard }) => {
         const date = new Date();
