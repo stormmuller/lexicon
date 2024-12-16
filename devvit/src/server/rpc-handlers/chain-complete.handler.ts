@@ -12,9 +12,6 @@ import { configuration } from "../../configuration.ts";
 
 export type ChainCompleteMessage = Rpc<ChainCompleteRpcRequest>;
 export const chainCompleteMessageType = "chain-complete";
-export const leaderboardKey = "leaderboard";
-const numberOfPlayersOnLeaderBoardBefore = 2;
-const numberOfPlayersOnLeaderBoardAfter = 2;
 
 export class ChainCompleteMessageHandler extends RpcHandler<
   ChainCompleteMessage,
@@ -28,33 +25,11 @@ export class ChainCompleteMessageHandler extends RpcHandler<
     this._redis = redis;
   }
 
-  private _rankLeaderboard(
-    leaderboard: {
-      member: string;
-      score: number;
-    }[],
-    username: string,
-    userRank: number
-  ) {
-    const userIndex = leaderboard.findIndex(
-      (entry) => entry.member === username
-    );
-    if (userIndex === -1) throw new Error("User not found in leaderboard");
-
-    const rankOffset = userRank - (userIndex + 1);
-
-    const updatedLeaderboard = leaderboard.map((entry, index) => ({
-      rank: index + 1 + rankOffset,
-      username: entry.member,
-      score: entry.score,
-    }));
-
-    return updatedLeaderboard;
-  }
-
   public override async handle(message: ChainCompleteMessage) {
     let { data, postId, username } = message;
     const { tiles } = data;
+    // username = 'test-4';
+    const leaderboardKey = `leaderboard:${postId}`;
 
     const board = await getBoard(this._redis, postId);
 
@@ -84,7 +59,7 @@ export class ChainCompleteMessageHandler extends RpcHandler<
     let userScore = (await this._redis.zScore(leaderboardKey, username)) || 0;
     userScore += wordScore;
 
-    await this._redis.zAdd("leaderboard", {
+    await this._redis.zAdd(leaderboardKey, {
       member: username,
       score: userScore,
     });
@@ -96,8 +71,6 @@ export class ChainCompleteMessageHandler extends RpcHandler<
     if (rank === null || rank === undefined) {
       throw new Error(`User ${username} does not exist in the leaderboard.`);
     }
-
-    const windowSize = 5;
 
     let start = revRank - 2;
     let stop = revRank + 2;
@@ -142,5 +115,30 @@ export class ChainCompleteMessageHandler extends RpcHandler<
     );
 
     return { word, score: wordScore, leaderboard: rankedLeaderboard };
+  }
+
+  private _rankLeaderboard(
+    leaderboard: {
+      member: string;
+      score: number;
+    }[],
+    username: string,
+    userRank: number
+  ) {
+    const userIndex = leaderboard.findIndex(
+      (entry) => entry.member === username
+    );
+
+    if (userIndex === -1) throw new Error("User not found in leaderboard");
+
+    const rankOffset = userRank - (userIndex + 1);
+
+    const updatedLeaderboard = leaderboard.map((entry, index) => ({
+      rank: index + 1 + rankOffset,
+      username: entry.member,
+      score: entry.score,
+    }));
+
+    return updatedLeaderboard;
   }
 }

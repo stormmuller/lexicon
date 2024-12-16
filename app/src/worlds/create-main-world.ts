@@ -28,10 +28,14 @@ export async function createMainWorld(
   const imageCache = new rendering.ImageCache();
 
   const { worldCamera } = createCameras(world, worldSpace, inputsEntity, game);
-  const { foregroundRenderLayer, backgroundRenderLayer, focusedRenderLayer } =
-    createRenderLayers(layerService, worldCamera, worldSpace, world);
+  const {
+    foregroundRenderLayer,
+    backgroundRenderLayer,
+    focusedRenderLayer,
+    artRenderLayer,
+  } = createRenderLayers(layerService, worldCamera, worldSpace, world);
 
-  void createArt(imageCache, backgroundRenderLayer, world);
+  void createArt(imageCache, artRenderLayer, world);
 
   const tileImageRenderSource = new rendering.RoundedRectangleRenderSource(
     styles.tile.size,
@@ -67,7 +71,7 @@ export async function createMainWorld(
     renderLayer: foregroundRenderLayer,
     wordTextEntity,
     wordsCollection: words,
-    leaderboardUpdater
+    leaderboardUpdater,
   });
 
   const onRemovedFromChainCallback = onRemovedFromChain({

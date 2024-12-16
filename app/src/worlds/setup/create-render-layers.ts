@@ -6,6 +6,7 @@ export const createRenderLayers = (
   worldSpace: common.Space,
   world: ecs.World
 ) => {
+  const artRenderLayer = layerService.createLayer("art");
   const backgroundRenderLayer = layerService.createLayer("background");
   const foregroundRenderLayer = layerService.createLayer("foreground");
   const focusedRenderLayer = layerService.createLayer("focused");
@@ -13,6 +14,12 @@ export const createRenderLayers = (
   const debugRenderLayer = layerService.createLayer("debug");
 
   const layoutSystem = new rendering.LayoutSystem();
+
+  const artRenderSystem = new rendering.RenderSystem(
+    artRenderLayer,
+    cameraEntity,
+    worldSpace
+  );
 
   const backgroundRenderSystem = new rendering.RenderSystem(
     backgroundRenderLayer,
@@ -40,6 +47,7 @@ export const createRenderLayers = (
 
   world.addSystems([
     layoutSystem,
+    artRenderSystem,
     backgroundRenderSystem,
     foregroundRenderSystem,
     focusedRenderSystem,
@@ -47,6 +55,7 @@ export const createRenderLayers = (
   ]);
 
   return {
+    artRenderLayer,
     backgroundRenderLayer,
     foregroundRenderLayer,
     focusedRenderLayer,
