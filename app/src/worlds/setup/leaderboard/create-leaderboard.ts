@@ -64,7 +64,7 @@ export function createLeaderboard(
 
   world.addEntity(leaderboardEntity);
 
-  updateLeaderboard(leaderboardUpdater);
+  updateLeaderboard(leaderboardUpdater)();
 
   return { leaderboardEntity, leaderBoardEntryEntities, leaderboardUpdater };
 }

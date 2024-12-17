@@ -15,6 +15,7 @@ export async function createAstronaut(
           color: "rgba(0,0,0,0.25)",
           radius: 15,
         },
+        opacity: 0
       }
     );
 
@@ -47,6 +48,16 @@ export async function createAstronaut(
       },
       loop: "pingpong",
       easing: animations.easeInOutBack,
+    },
+    {
+      startValue: 0,
+      endValue: 1,
+      elapsed: 0,
+      duration: 1000,
+      updateCallback: (value: number) => {
+        astronautRenderSource.renderEffects.opacity = value;
+      },
+      easing: animations.easeInOutSine,
     }
   ]);
 

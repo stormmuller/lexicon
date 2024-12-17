@@ -103,9 +103,7 @@ export class RenderSystem extends System {
       PositionComponent.symbol,
     );
 
-    const scale = entity.getComponent<ScaleComponent>(
-      ScaleComponent.symbol,
-    );
+    const scale = entity.getComponent<ScaleComponent>(ScaleComponent.symbol);
 
     const rotation = entity.getComponent<RotationComponent>(
       RotationComponent.symbol,
@@ -174,10 +172,12 @@ export class RenderSystem extends System {
     // reset glow
     this._layer.context.shadowColor = 'rgba(0, 0, 0, 0)';
     this._layer.context.shadowBlur = 0;
+    this._layer.context.globalAlpha = 1;
   }
 
   private _renderPreProcessingEffects(renderEffects: RenderEffects) {
     this._renderGlow(renderEffects.glow);
+    this._adjustOpacity(renderEffects.opacity);
   }
 
   private _renderGlow(glow?: GlowEffect) {
@@ -199,5 +199,13 @@ export class RenderSystem extends System {
 
     const hexColor = `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
     return hexColor;
+  }
+
+  private _adjustOpacity(opacity?: number) {
+    if (!opacity) {
+      return;
+    }
+
+    this._layer.context.globalAlpha = opacity;
   }
 }

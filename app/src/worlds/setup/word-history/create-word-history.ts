@@ -42,7 +42,7 @@ export async function createWordHistory(
     imageCache,
     "book.png",
     1,
-    { glow: { color: "rgba(0,0,0,0.6)", radius: 10 } }
+    { glow: { color: "rgba(0,0,0,0.6)", radius: 10 }, opacity: 0 }
   );
 
   const bookEntity = new ecs.Entity("book", [
@@ -53,7 +53,18 @@ export async function createWordHistory(
     new common.ScaleComponent(),
     new common.RotationComponent(0),
     new rendering.SpriteComponent(bookRenderSource, foregroundRenderLayer.name),
-    new animations.AnimationComponent()
+    new animations.AnimationComponent([
+      {
+        startValue: 0,
+        endValue: 1,
+        elapsed: 0,
+        duration: 1000,
+        updateCallback: (value: number) => {
+          bookRenderSource.renderEffects.opacity = value;
+        },
+        easing: animations.easeInOutSine,
+      },
+    ]),
   ]);
 
   world.addEntities([wordHistoryContainerEntity, bookEntity]);
