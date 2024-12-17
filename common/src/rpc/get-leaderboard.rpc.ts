@@ -1,4 +1,4 @@
-import { LeaderboardEntry, Tile } from "../types";
+import { LeaderboardEntry } from "../types";
 
 export type GetLeaderboardRpcRequest = null;
 

@@ -13,6 +13,12 @@ import { validateTile } from "../../validate-tile.ts";
 import { getLeaderboard } from "../../get-leaderboard.ts";
 import { checkIfRepeatSelection } from "../../check-if-repeat-selection.ts";
 import { saveTileSelection } from "../../save-tile-selection.ts";
+import { saveWordHistory } from "../../save-word-history.ts";
+import {
+  leaderboardKey,
+  userTilesKey,
+  userWordHistoryKey,
+} from "../../redis-keys.ts";
 
 export type ChainCompleteMessage = Rpc<ChainCompleteRpcRequest>;
 
@@ -33,8 +39,6 @@ export class ChainCompleteMessageHandler extends RpcHandler<
   ): Promise<ChainCompleteRpcResponse> {
     let { data, postId, username, userId } = message;
     const { tiles } = data;
-    const leaderboardKey = `leaderboard:${postId}`;
-    const userTilesKey = `user-tiles:${postId}:${userId}`;
 
     const board = await getBoard(this._redis, postId);
 
@@ -52,45 +56,66 @@ export class ChainCompleteMessageHandler extends RpcHandler<
       }
 
       const boardIndex = tile.x + tile.y * configuration.boardDimentions.x;
-      const sanitizedLetter = board[boardIndex];
-      word += sanitizedLetter;
+      word += board[boardIndex];
     }
+
+    word = word.toUpperCase();
 
     const wordRank = await this._redis.zRank(wordsKeyName, word.toLowerCase());
     const isInWordBank = wordRank !== undefined;
 
-    word = word.toUpperCase();
-
     if (!isInWordBank) {
       const leaderboard = await getLeaderboard(postId, username, this._redis);
+      await saveWordHistory(
+        userWordHistoryKey(postId, userId),
+        word,
+        0,
+        "notfound",
+        this._redis
+      );
       return { word, score: 0, leaderboard, reason: "notfound" };
     }
 
     const isRepeatSelection = await checkIfRepeatSelection(
-      userTilesKey,
+      userTilesKey(postId, userId),
       tiles,
       this._redis
     );
 
     if (isRepeatSelection) {
       const leaderboard = await getLeaderboard(postId, username, this._redis);
+      await saveWordHistory(
+        userWordHistoryKey(postId, userId),
+        word,
+        0,
+        "repeat",
+        this._redis
+      );
       return { word, score: 0, leaderboard, reason: "repeat" };
     }
 
-    await saveTileSelection(userTilesKey, tiles, this._redis);
+    await saveTileSelection(userTilesKey(postId, userId), tiles, this._redis);
 
     const wordScore = calculateWordScore(word);
 
-    let userScore = (await this._redis.zScore(leaderboardKey, username)) || 0;
+    let userScore =
+      (await this._redis.zScore(leaderboardKey(postId), username)) || 0;
     userScore += wordScore;
 
-    await this._redis.zAdd(leaderboardKey, {
+    await this._redis.zAdd(leaderboardKey(postId), {
       member: username,
       score: userScore,
     });
 
     const leaderboard = await getLeaderboard(postId, username, this._redis);
 
+    await saveWordHistory(
+      userWordHistoryKey(postId, userId),
+      word,
+      wordScore,
+      "new",
+      this._redis
+    );
     return { word, score: wordScore, leaderboard, reason: "new" };
   }
 }

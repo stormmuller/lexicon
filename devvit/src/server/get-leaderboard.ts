@@ -1,21 +1,20 @@
 import { RedisClient } from "@devvit/public-api";
+import { leaderboardKey } from "./redis-keys.ts";
 
 export async function getLeaderboard(
   postId: string,
   username: string,
   redis: RedisClient
 ) {
-  const leaderboardKey = `leaderboard:${postId}`;
+  let userScore = (await redis.zScore(leaderboardKey(postId), username)) || 0;
 
-  let userScore = (await redis.zScore(leaderboardKey, username)) || 0;
-
-  await redis.zAdd(leaderboardKey, {
+  await redis.zAdd(leaderboardKey(postId), {
     member: username,
     score: userScore,
   });
 
-  const rank = (await redis.zRank(leaderboardKey, username)) || 0;
-  const card = await redis.zCard(leaderboardKey);
+  const rank = (await redis.zRank(leaderboardKey(postId), username)) || 0;
+  const card = await redis.zCard(leaderboardKey(postId));
   const revRank = card - 1 - rank;
 
   if (rank === null || rank === undefined) {
@@ -53,7 +52,7 @@ export async function getLeaderboard(
   }
 
   // Fetch results with reverse = true so that index 0 = top score
-  const leaderboard = await redis.zRange(leaderboardKey, start, stop, {
+  const leaderboard = await redis.zRange(leaderboardKey(postId), start, stop, {
     by: "rank",
     reverse: true,
   });

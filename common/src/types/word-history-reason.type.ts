@@ -1,0 +1,1 @@
+export type WordHistoryReason = 'new' | 'repeat' | 'notfound';

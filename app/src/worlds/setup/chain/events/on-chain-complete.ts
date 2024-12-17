@@ -10,15 +10,15 @@ import { ChainComponent, OnChainCompleteCallback } from "../../../../chain";
 import { styles } from "../../../../styles";
 import { TileComponent } from "../../../../tile";
 import { LeaderboardUpdater } from "../../../../leaderboard";
+import { WordHistoryUpdater } from "../../../../word-history";
 
 export function onChainComplete(options: {
-  world: ecs.World;
   renderSource: rendering.RenderSource;
   renderLayer: rendering.RenderLayer;
   wordTextEntity: ecs.Entity;
   bookEntity: ecs.Entity;
-  wordsCollection: Array<ecs.Entity>;
   leaderboardUpdater: LeaderboardUpdater;
+  wordHistoryUpdater: WordHistoryUpdater;
 }): OnChainCompleteCallback {
   const wordComponent =
     options.wordTextEntity.getComponentRequired<WordComponent>(
@@ -125,46 +125,12 @@ export function onChainComplete(options: {
       rpc_chainComplete,
       { tiles },
       ({ word, score, reason, leaderboard }) => {
-        const date = new Date();
-
         options.leaderboardUpdater.update(leaderboard);
-
-        const wordTextRenderSource = new rendering.TextRenderSource(
+        options.wordHistoryUpdater.add({
           word,
-          styles.sidePanel.width - styles.sidePanel.padding.x * 2,
-          styles.sidePanel.width - styles.sidePanel.padding.x * 2 - 40,
-          "Share Tech Mono",
-          18,
-          reason === "new" ? styles.colors.primary : styles.colors.grey,
-          "start"
-        );
-
-        const scoreTextRenderSource = new rendering.TextRenderSource(
-          `+${score.toString()}`,
-          styles.sidePanel.width - styles.sidePanel.padding.x * 2,
-          styles.sidePanel.width - styles.sidePanel.padding.x,
-          "Share Tech Mono",
-          18,
-          reason === "new" ? styles.colors.white : styles.colors.grey,
-          "end"
-        );
-
-        const scoreHistoryRenderSource = new rendering.CompositeRenderSource({
-          word: wordTextRenderSource,
-          score: scoreTextRenderSource,
+          score,
+          reason,
         });
-
-        const wordEntity = new ecs.Entity(`word (${word},${score},${date})`, [
-          new rendering.SpriteComponent(
-            scoreHistoryRenderSource,
-            options.renderLayer.name,
-            { anchor: math.Vector2.zero() }
-          ),
-          new common.PositionComponent(),
-        ]);
-
-        options.wordsCollection.unshift(wordEntity);
-        options.world.addEntity(wordEntity);
       }
     );
   };

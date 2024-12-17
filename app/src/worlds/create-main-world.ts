@@ -71,12 +71,13 @@ export async function createMainWorld(
     backgroundRenderLayer
   );
 
-  const { words, bookEntity } = await createWordHistory(
+  const { bookEntity, wordHistoryUpdater } = await createWordHistory(
     world,
     backgroundRenderLayer,
     foregroundRenderLayer,
     imageCache
   );
+
   const { leaderboardUpdater } = createLeaderboard(
     world,
     backgroundRenderLayer,
@@ -84,13 +85,12 @@ export async function createMainWorld(
   );
 
   const onChainCompleteCallback = onChainComplete({
-    world,
     renderSource: tileImageRenderSource,
     renderLayer: foregroundRenderLayer,
     wordTextEntity,
     bookEntity,
-    wordsCollection: words,
     leaderboardUpdater,
+    wordHistoryUpdater
   });
 
   const onRemovedFromChainCallback = onRemovedFromChain({

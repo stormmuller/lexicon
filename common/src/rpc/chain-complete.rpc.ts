@@ -1,4 +1,4 @@
-import { LeaderboardEntry, Tile } from "../types";
+import { LeaderboardEntry, Tile, WordHistoryReason } from "../types";
 
 export type ChainCompleteRpcRequest = {
   tiles: Array<Tile>;
@@ -7,7 +7,7 @@ export type ChainCompleteRpcRequest = {
 export type ChainCompleteRpcResponse = {
   word: string;
   score: number;
-  reason: 'new' | 'repeat' | 'notfound';
+  reason: WordHistoryReason;
   leaderboard: Array<LeaderboardEntry>;
 };
 

@@ -1,5 +1,12 @@
 import { animations, common, ecs, math, rendering } from "@gameup/engine";
 import { styles } from "../../../styles";
+import { makeRpc } from "../../../rpc";
+import {
+  GetWordHistoryRpcRequest,
+  GetWordHistoryRpcResponse,
+  rpc_getWordHistory,
+} from "@lexicon/common";
+import { WordHistoryUpdater } from "../../../word-history";
 
 export async function createWordHistory(
   world: ecs.World,
@@ -67,7 +74,21 @@ export async function createWordHistory(
     ]),
   ]);
 
+  const wordHistoryUpdater = new WordHistoryUpdater(
+    words,
+    foregroundRenderLayer,
+    world
+  );
+
+  makeRpc<GetWordHistoryRpcRequest, GetWordHistoryRpcResponse>(
+    rpc_getWordHistory,
+    null,
+    ({ history }) => {
+      wordHistoryUpdater.set(history);
+    }
+  );
+
   world.addEntities([wordHistoryContainerEntity, bookEntity]);
 
-  return { wordHistoryContainerEntity, words, bookEntity };
+  return { wordHistoryUpdater, bookEntity };
 }

@@ -5,6 +5,7 @@ import {
   GetLeaderboardMessageHandler,
 } from "./rpc-handlers/index.ts";
 import { Rpc, RpcHandler } from "./rpc-handler.ts";
+import { GetWordHistoryMessageHandler } from "./rpc-handlers/get-word-history.handler.ts";
 
 export class RpcDispatcher {
   private _messageHandlers: Map<string, RpcHandler<any, any>>;
@@ -41,5 +42,6 @@ export class RpcDispatcher {
 export function createWebViewMessageDispatcher(context: Devvit.Context) {
   return new RpcDispatcher(context.ui.webView)
     .registerHandler(new ChainCompleteMessageHandler(context.redis))
-    .registerHandler(new GetLeaderboardMessageHandler(context.redis));
+    .registerHandler(new GetLeaderboardMessageHandler(context.redis))
+    .registerHandler(new GetWordHistoryMessageHandler(context.redis))
 }
