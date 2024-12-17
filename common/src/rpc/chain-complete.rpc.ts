@@ -7,6 +7,7 @@ export type ChainCompleteRpcRequest = {
 export type ChainCompleteRpcResponse = {
   word: string;
   score: number;
+  reason: 'new' | 'repeat' | 'notfound';
   leaderboard: Array<LeaderboardEntry>;
 };
 

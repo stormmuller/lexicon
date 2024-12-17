@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "turbo run dev --filter=@gameup/devvit",
-    "refresh": "turbo run check-types build copy-webview"
+    "build": "turbo run build",
+    "check-types": "turbo run turbo run check-types"
   },
   "workspaces": [
     "app",

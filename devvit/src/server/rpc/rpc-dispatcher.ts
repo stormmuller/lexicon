@@ -3,7 +3,7 @@ import { WebViewUIClient } from "@devvit/public-api/types/web-view-ui-client.js"
 import {
   ChainCompleteMessageHandler,
   GetLeaderboardMessageHandler,
-} from "../server/rpc-handlers/index.ts";
+} from "./rpc-handlers/index.ts";
 import { Rpc, RpcHandler } from "./rpc-handler.ts";
 
 export class RpcDispatcher {

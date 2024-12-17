@@ -9,8 +9,8 @@ import {
   useChannel,
 } from "@devvit/public-api";
 import { cacheWords } from "./server/cache-words.ts";
-import { createWebViewMessageDispatcher } from "./rpc/rpc-dispatcher.ts";
-import { Rpc } from "./rpc/rpc-handler.ts";
+import { createWebViewMessageDispatcher } from "./server/rpc/rpc-dispatcher.ts";
+import { Rpc } from "./server/rpc/rpc-handler.ts";
 import { configuration } from "./configuration.ts";
 
 Devvit.configure({

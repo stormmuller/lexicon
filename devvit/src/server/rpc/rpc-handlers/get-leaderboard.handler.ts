@@ -4,8 +4,8 @@ import {
   GetLeaderboardRpcResponse,
   rpc_getLeaderboard,
 } from "@lexicon/common";
-import { Rpc, RpcHandler } from "../../rpc/rpc-handler.ts";
-import { getLeaderboard } from "../get-leaderboard.ts";
+import { Rpc, RpcHandler } from "../rpc-handler.ts";
+import { getLeaderboard } from "../../get-leaderboard.ts";
 
 export type GetLeaderboardMessage = Rpc<GetLeaderboardRpcRequest>;
 
