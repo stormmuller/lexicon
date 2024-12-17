@@ -1,4 +1,5 @@
-import "./createPost.js";
+import "./createPost.tsx";
+import "./schedulePost.tsx";
 import { getOrCreateBoard } from "./server/get-board.ts";
 
 import {
@@ -64,6 +65,11 @@ Devvit.addCustomPostType({
     };
 
     useAsync(async () => {
+      if (webviewVisible) {
+        console.log('preventing re-init');
+        return true;
+      }
+
       setWebviewVisible(true);
 
       const board = await getOrCreateBoard(
