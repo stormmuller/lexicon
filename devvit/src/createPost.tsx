@@ -19,7 +19,7 @@ Devvit.addMenuItem({
       preview: (
         <vstack height="100%" width="100%" alignment="middle center">
           <image
-            url="images/lexicon-logo.png"
+            url="images/lexicon-logo-small.png"
             imageWidth={250}
             imageHeight={250}
             description="Lexicon Logo"

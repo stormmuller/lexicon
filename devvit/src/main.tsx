@@ -101,7 +101,7 @@ Devvit.addCustomPostType({
           alignment="center middle"
         >
           <image
-            url="images/lexicon-logo.png"
+            url="images/lexicon-logo-small.png"
             imageWidth={200}
             imageHeight={200}
             description="Lexicon Logo"
