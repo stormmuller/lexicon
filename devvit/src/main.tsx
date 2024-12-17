@@ -38,9 +38,8 @@ Devvit.addCustomPostType({
       return currUser?.username ?? "anon";
     });
 
-    const [snoovatar] = useState(async () => {
-      const currUser = await context.reddit.getCurrentUser();
-      return (await currUser?.getSnoovatarUrl()) ?? "anon";
+    const [postId] = useState(async () => {
+      return context.postId ?? "unknown";
     });
 
     // Load latest counter from redis with `useAsync` hook
@@ -64,12 +63,11 @@ Devvit.addCustomPostType({
       });
     };
 
-    // When the button is clicked, send initial data to web view and show it
-    const onShowWebviewClick = async (redis: RedisClient, postId: string) => {
+    useAsync(async () => {
       setWebviewVisible(true);
 
       const board = await getOrCreateBoard(
-        redis,
+        context.redis,
         postId,
         configuration.boardDimentions
       );
@@ -82,7 +80,9 @@ Devvit.addCustomPostType({
           board,
         },
       });
-    };
+
+      return true;
+    });
 
     context.ui.webView.postMessage("myWebView", {
       type: "window-resize",
@@ -95,41 +95,6 @@ Devvit.addCustomPostType({
     // Render the custom post type
     return (
       <vstack grow>
-        <vstack
-          grow={!webviewVisible}
-          height={webviewVisible ? "0%" : "100%"}
-          alignment="center middle"
-        >
-          <image
-            url="images/lexicon-logo-small.png"
-            imageWidth={200}
-            imageHeight={200}
-            description="Lexicon Logo"
-          />
-          <vstack alignment="center bottom">
-            <image
-              url={snoovatar}
-              imageWidth={100}
-              imageHeight={100}
-              description="snoovatar"
-            />{" "}
-            <text size="medium" weight="bold">
-              {username ?? ""}
-            </text>
-            <spacer />
-            <button
-              onPress={() =>
-                onShowWebviewClick(context.redis, context.postId ?? "anon")
-              }
-              appearance="success"
-              icon="topic-videogaming-fill"
-              size="large"
-              minWidth="300px"
-            >
-              Play!
-            </button>
-          </vstack>
-        </vstack>
         <vstack height={webviewVisible ? "100%" : "0%"} grow>
           <webview
             id="myWebView"
