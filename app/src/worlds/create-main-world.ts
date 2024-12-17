@@ -1,4 +1,11 @@
-import { animations, common, ecs, game, rendering, timer } from "@gameup/engine";
+import {
+  animations,
+  common,
+  ecs,
+  game,
+  rendering,
+  timer,
+} from "@gameup/engine";
 import { styles } from "../styles";
 import {
   createArt,
@@ -64,7 +71,12 @@ export async function createMainWorld(
     backgroundRenderLayer
   );
 
-  const { words } = createWordHistory(world, backgroundRenderLayer);
+  const { words, bookEntity } = await createWordHistory(
+    world,
+    backgroundRenderLayer,
+    foregroundRenderLayer,
+    imageCache
+  );
   const { leaderboardUpdater } = createLeaderboard(
     world,
     backgroundRenderLayer,
@@ -76,6 +88,7 @@ export async function createMainWorld(
     renderSource: tileImageRenderSource,
     renderLayer: foregroundRenderLayer,
     wordTextEntity,
+    bookEntity,
     wordsCollection: words,
     leaderboardUpdater,
   });

@@ -11,6 +11,7 @@ export interface AnimatedProperty {
   easing: (t: number) => number;
   loop?: LoopMode;
   loopCount?: number;
+  finishedCallback?: () => void
 }
 
 export class AnimationComponent implements Component {

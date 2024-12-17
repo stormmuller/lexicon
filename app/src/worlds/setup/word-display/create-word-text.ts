@@ -1,4 +1,4 @@
-import { common, ecs, math, rendering } from "@gameup/engine";
+import { animations, common, ecs, math, rendering } from "@gameup/engine";
 import { WordComponent, WordDisplaySystem } from "../../../word";
 import { styles } from "../../../styles";
 
@@ -6,32 +6,37 @@ export function createWordText(
   world: ecs.World,
   renderLayer: rendering.RenderLayer
 ) {
-  const textRenderSource = new rendering.TextRenderSource(
+const textRenderSource = new rendering.TextRenderSource(
     "",
-    styles.wordHistoryPanel.width,
-    styles.wordHistoryPanel.width,
+    styles.wordDisplayPanel.width,
+    styles.wordDisplayPanel.width,
     "Share Tech Mono",
-    60,
-    "white"
+    styles.wordDisplayPanel.fontSize,
+    "white",
+    "center",
+    "middle",
+    { glow: { color: "rgba(0,0,0,0.6)", radius: 4 } }
   );
 
   const spriteComponent = new rendering.SpriteComponent(
     textRenderSource,
     renderLayer.name,
-    { anchor: math.Vector2.zero() }    
+    { anchor: math.Vector2.zero() }
   );
   const wordComponent = new WordComponent();
   const positionComponent = new common.PositionComponent(
-    window.innerWidth / 2,
-    styles.wordHistoryPanel.margin + styles.wordHistoryPanel.height / 2
+    styles.wordDisplayPanel.position.x,
+    styles.wordDisplayPanel.position.y
   );
   const scaleComponent = new common.ScaleComponent();
+  const animationComponent = new animations.AnimationComponent();
 
   const entity = new ecs.Entity("word display", [
     positionComponent,
     scaleComponent,
     spriteComponent,
-    wordComponent
+    wordComponent,
+    animationComponent,
   ]);
 
   const wordDisplaySystem = new WordDisplaySystem();

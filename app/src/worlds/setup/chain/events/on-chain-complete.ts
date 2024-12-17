@@ -1,4 +1,4 @@
-import { common, ecs, math, rendering } from "@gameup/engine";
+import { animations, common, ecs, math, rendering } from "@gameup/engine";
 import {
   ChainCompleteRpcRequest,
   ChainCompleteRpcResponse,
@@ -16,12 +16,41 @@ export function onChainComplete(options: {
   renderSource: rendering.RenderSource;
   renderLayer: rendering.RenderLayer;
   wordTextEntity: ecs.Entity;
+  bookEntity: ecs.Entity;
   wordsCollection: Array<ecs.Entity>;
   leaderboardUpdater: LeaderboardUpdater;
 }): OnChainCompleteCallback {
   const wordComponent =
     options.wordTextEntity.getComponentRequired<WordComponent>(
       WordComponent.symbol
+    );
+
+  const wordTextSpriteComponent =
+    options.wordTextEntity.getComponentRequired<rendering.SpriteComponent>(
+      rendering.SpriteComponent.symbol
+    );
+
+  const wordTextPositionComponent =
+    options.wordTextEntity.getComponentRequired<common.PositionComponent>(
+      common.PositionComponent.symbol
+    );
+
+  const wordTextRenderSource =
+    wordTextSpriteComponent.renderSource as rendering.TextRenderSource;
+
+  const wordTextAnimationComponent =
+    options.wordTextEntity.getComponentRequired<animations.AnimationComponent>(
+      animations.AnimationComponent.symbol
+    );
+
+  const bookScaleComponent =
+    options.bookEntity.getComponentRequired<common.ScaleComponent>(
+      common.ScaleComponent.symbol
+    );
+
+  const bookAnimationComponent =
+    options.bookEntity.getComponentRequired<animations.AnimationComponent>(
+      animations.AnimationComponent.symbol
     );
 
   return async (chainComponent: ChainComponent) => {
@@ -45,12 +74,57 @@ export function onChainComplete(options: {
     }
 
     chainComponent.clearChain();
-    wordComponent.word = "";
+
+    const bookConsumeAnimation: animations.AnimatedProperty = {
+      startValue: 0,
+      endValue: 1,
+      elapsed: 0,
+      duration: 600,
+      loop: "pingpong",
+      loopCount: 2,
+      easing: animations.easeInOutElastic,
+      updateCallback: (t: number) => {
+        bookScaleComponent.x = math.lerp(1, 1.2, t);
+        bookScaleComponent.y = math.lerp(1, 1.2, t);
+      },
+    };
+
+    wordTextAnimationComponent.addAnimation({
+      startValue: 0,
+      endValue: 1,
+      elapsed: 0,
+      duration: 600,
+      updateCallback: (t: number) => {
+        wordTextRenderSource.fontSize = math.lerp(
+          styles.wordDisplayPanel.fontSize,
+          0,
+          t
+        );
+        wordTextPositionComponent.x = math.lerp(
+          styles.wordDisplayPanel.position.x,
+          styles.book.position.x,
+          t
+        );
+        wordTextPositionComponent.y = math.lerp(
+          styles.wordDisplayPanel.position.y,
+          styles.book.position.y,
+          t
+        );
+      },
+      easing: animations.easeInBack,
+      finishedCallback: () => {
+        wordTextRenderSource.fontSize = 60;
+        wordTextPositionComponent.x = styles.wordDisplayPanel.position.x;
+        wordTextPositionComponent.y = styles.wordDisplayPanel.position.y;
+        wordComponent.word = "";
+        bookAnimationComponent.addAnimation(bookConsumeAnimation);
+      },
+    });
 
     makeRpc<ChainCompleteRpcRequest, ChainCompleteRpcResponse>(
       rpc_chainComplete,
       { tiles },
-      ({ word, score, leaderboard }) => {
+      ({ word, score, reason, leaderboard }) => {
         const date = new Date();
 
         options.leaderboardUpdater.update(leaderboard);
@@ -61,7 +135,7 @@ export function onChainComplete(options: {
           styles.sidePanel.width - styles.sidePanel.padding.x * 2 - 40,
           "Share Tech Mono",
           18,
-          styles.colors.primary,
+          reason === "new" ? styles.colors.primary : styles.colors.grey,
           "start"
         );
 
@@ -71,7 +145,7 @@ export function onChainComplete(options: {
           styles.sidePanel.width - styles.sidePanel.padding.x,
           "Share Tech Mono",
           18,
-          styles.colors.white,
+          reason === "new" ? styles.colors.white : styles.colors.grey,
           "end"
         );
 

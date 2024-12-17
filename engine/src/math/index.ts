@@ -5,3 +5,4 @@ export * from './random';
 export * from './scale-relative-to-point';
 export * from './types';
 export * from './vector-to-radians';
+export * from './lerp';
