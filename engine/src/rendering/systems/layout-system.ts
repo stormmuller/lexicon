@@ -32,19 +32,16 @@ export class LayoutSystem extends System {
     const maxHeight = layoutRenderSource.boundingBox.maxY;
     const margin = layoutBoxComponent.margin;
     const spaceBetween = layoutBoxComponent.spaceBetween;
-
     const count = sortedEntities.length;
 
-    // We want to ensure that we display as many of the last entities as possible,
-    // starting from the bottom and working upwards until we run out of space.
+    // We measure from the top (start of the array) and determine how many entities fit.
     let totalHeightUsed = 0;
     let visibleCount = 0;
 
-    // Measure from the bottom (end of the array) upwards to determine how many fit.
-    for (let i = count - 1; i >= 0; i--) {
+    for (let i = 0; i < count; i++) {
       const entity = sortedEntities[i];
       const sprite = entity.getComponentRequired<SpriteComponent>(
-        SpriteComponent.symbol,
+        SpriteComponent.symbol
       );
       const entityHeight = sprite.renderSource.boundingBox.maxY + spaceBetween;
 
@@ -56,15 +53,7 @@ export class LayoutSystem extends System {
       visibleCount++;
     }
 
-    // Now we know how many entities from the bottom can be visible.
-    // Layout only those last 'visibleCount' entities, disabling the rest.
-
-    // Calculate the starting position from the top, but we will
-    // skip rendering the first (count - visibleCount) entities.
-    const startIndex = count - visibleCount;
-
-    // Place entities starting from the top. The offset accumulates downward.
-    // Initially offset is just margin.y for the top spacing.
+    // Only the first 'visibleCount' entities will be visible; the rest will be hidden.
     let offsetY = margin.y;
 
     for (let i = 0; i < count; i++) {
@@ -76,35 +65,35 @@ export class LayoutSystem extends System {
         PositionComponent.symbol,
       );
 
-      if (i < startIndex) {
-        // These entities won't fit in the current layout height, so hide them
+      if (i >= visibleCount) {
+        // These entities do not fit, hide them.
         spriteComponent.enabled = false;
         continue;
       }
 
-      // These entities are visible
+      // These entities are visible.
       spriteComponent.enabled = true;
 
       const entityHeight = spriteComponent.renderSource.boundingBox.maxY;
+
       const alignmentOffset =
         layoutBoxComponent.alignChildren === 'start'
           ? -(layoutRenderSource.boundingBox.maxX / 2)
           : layoutBoxComponent.alignChildren === 'end'
-            ? layoutRenderSource.boundingBox.maxX / 2
-            : 0;
+          ? layoutRenderSource.boundingBox.maxX / 2
+          : 0;
 
-      const baselineOffset = 
+      const baselineOffset =
         layoutBoxComponent.baselineChildren === 'top'
           ? -(entityHeight / 2)
           : layoutBoxComponent.baselineChildren === 'bottom'
-            ? entityHeight / 2
-            : 0;
+          ? entityHeight / 2
+          : 0;
 
       const newY =
         layoutPositionComponent.y -
         layoutSpriteComponent.anchor.y +
         offsetY + baselineOffset;
-        // entityHeight;
 
       const newX = layoutPositionComponent.x + margin.x + alignmentOffset;
 

@@ -116,7 +116,6 @@ Devvit.addCustomPostType({
             <text size="medium" weight="bold">
               {username ?? ""}
             </text>
-            <text size="medium">Current score: {counter ?? ""}</text>
             <spacer />
             <button
               onPress={() =>

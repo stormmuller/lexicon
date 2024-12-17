@@ -5,7 +5,7 @@
   "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
-    "dev": "devvit playtest makesomenoisedevvit",
+    "dev": "devvit playtest r/lexicon_game",
     "copy-webview": "bash scripts/copy-webview.sh",
     "check-types": "tsc --noEmit"
   },
