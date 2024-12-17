@@ -53,8 +53,6 @@ export function onChainComplete(options: {
       ({ word, score, leaderboard }) => {
         const date = new Date();
 
-        console.log(`💯leaderboard: ${JSON.stringify(leaderboard, null, 2)}`);
-
         options.leaderboardUpdater.update(leaderboard);
 
         const wordTextRenderSource = new rendering.TextRenderSource(
@@ -91,7 +89,7 @@ export function onChainComplete(options: {
           new common.PositionComponent(),
         ]);
 
-        options.wordsCollection.push(wordEntity);
+        options.wordsCollection.unshift(wordEntity);
         options.world.addEntity(wordEntity);
       }
     );

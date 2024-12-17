@@ -10,6 +10,7 @@ export type InitialDataMessage = {
 export function initialDataMessageHandler(message: InitialDataMessage) {
   gameState.boardLetters = message.board;
   gameState.score = message.score;
+  gameState.username = message.username;
   
   startGame();
 }

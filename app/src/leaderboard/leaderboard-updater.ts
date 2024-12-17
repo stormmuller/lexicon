@@ -1,5 +1,7 @@
 import { ecs, rendering } from "@gameup/engine";
 import { LeaderboardEntry } from "@lexicon/common";
+import { gameState } from "../game-state";
+import { styles } from "../styles";
 
 export class LeaderboardUpdater {
   private _leaderboardEntryEntities: Array<ecs.Entity>;
@@ -17,12 +19,19 @@ export class LeaderboardUpdater {
   }
 
   updateEntry(index: number, entry?: LeaderboardEntry) {
+    const isUserEntry = entry?.username === gameState.username;
+
     const entity = this._leaderboardEntryEntities[index];
 
     const layoutBoxComponentComponent =
       entity.getComponentRequired<rendering.LayoutBoxComponent>(
         rendering.LayoutBoxComponent.symbol
       );
+
+    const entryBoxRenderSource =
+      entity.getComponentRequired<rendering.SpriteComponent>(
+        rendering.SpriteComponent.symbol
+      ).renderSource as rendering.RoundedRectangleRenderSource;
 
     const nameAndRankEntity = layoutBoxComponentComponent.sortedEntities[0];
     const scoreEntity = layoutBoxComponentComponent.sortedEntities[1];
@@ -51,9 +60,21 @@ export class LeaderboardUpdater {
       nameTextRenderSource.text = entry.username;
       rankTextRenderSource.text = (entry.rank + 1).toString();
     } else {
-      scoreTextRenderSource.text = "-";
+      scoreTextRenderSource.text = "";
       nameTextRenderSource.text = "";
       rankTextRenderSource.text = "";
+    }
+
+    if (isUserEntry) {
+      scoreTextRenderSource.color = styles.colors.darkgrey;
+      nameTextRenderSource.color = styles.colors.darkgrey;
+      rankTextRenderSource.color = styles.colors.white;
+      entryBoxRenderSource.color = styles.colors.accent;
+    } else {
+      scoreTextRenderSource.color = styles.colors.primary;
+      nameTextRenderSource.color = styles.colors.primary;
+      rankTextRenderSource.color = styles.colors.grey;
+      entryBoxRenderSource.color = "transparent";
     }
   }
 }

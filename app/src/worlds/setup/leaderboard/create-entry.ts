@@ -15,19 +15,14 @@ export function createEntries(
 
   const entries = Array<ecs.Entity>();
 
-  const playerIndex = Math.floor(amount / 2);
-
   for (let index = 0; index < amount; index++) {
-    const type = index === playerIndex ? "player" : "normal";
-
     entries.push(
       createEntry(
         index,
         amount,
         foregroundRenderLayer,
         backgroundRenderLayer,
-        world,
-        type
+        world
       )
     );
   }
@@ -40,16 +35,15 @@ export function createEntry(
   total: number,
   foregroundRenderLayer: rendering.RenderLayer,
   backgroundRenderLayer: rendering.RenderLayer,
-  world: ecs.World,
-  type: "normal" | "player" = "normal"
+  world: ecs.World
 ) {
   const rankTextRenderSource = new rendering.TextRenderSource(
     "",
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
-    type === "player" ? 16 : 14,
-    type === "player" ? styles.colors.white : styles.colors.grey,
+    14,
+    styles.colors.grey,
     "start"
   );
 
@@ -59,7 +53,7 @@ export function createEntry(
     styles.sidePanel.width - styles.sidePanel.padding.x * 2 - 20,
     "Share Tech Mono",
     12,
-    type === "player" ? styles.colors.darkgrey : styles.colors.primary,
+    styles.colors.primary,
     "end"
   );
 
@@ -78,12 +72,12 @@ export function createEntry(
   ]);
 
   const scoreTextRenderSource = new rendering.TextRenderSource(
-    "-",
+    "",
     styles.sidePanel.width - styles.sidePanel.padding.x * 2,
     styles.sidePanel.width - styles.sidePanel.padding.x,
     "Share Tech Mono",
-    type === "player" ? 25 : 20,
-    type === "player" ? styles.colors.darkgrey : styles.colors.primary,
+    20,
+    styles.colors.primary,
     "end"
   );
 
@@ -102,7 +96,7 @@ export function createEntry(
       (styles.sidePanel.height - styles.sidePanel.padding.y * 2) / total
     ),
     0,
-    type === "player" ? styles.colors.accent : "transparent"
+    "transparent"
   );
 
   const leaderboardEntryContainerEntity = new ecs.Entity(
